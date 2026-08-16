@@ -37,7 +37,7 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
 * { -webkit-tap-highlight-color: transparent; }
-body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B3A; color: #E2E8F0; -webkit-font-smoothing: antialiased; }
+body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B3A; color: #F1F5F9; -webkit-font-smoothing: antialiased; }
 
 /* Tech grid background */
 .tech-grid {
@@ -1178,7 +1178,7 @@ function RecordButton(props) {
       {recordedUrl && !recording && !transcribing && (
         <button onClick={onPlay} className="w-full rounded-xl py-4 flex items-center justify-center mt-3 transition-all active:scale-[0.98]"
           style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
-          {playing ? <Pause size={14} color="#CBD5E1" /> : <Play size={14} color="#CBD5E1" />}
+          {playing ? <Pause size={14} color="#E2E8F0" /> : <Play size={14} color="#E2E8F0" />}
           <span className="text-stone-300 font-semibold ml-2">{playing ? '暂停播放' : '播放我的录音'}</span>
         </button>
       )}
@@ -1194,7 +1194,7 @@ function ResultCard(props) {
         <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ backgroundColor: color + '22' }}>
           <Icon size={10} color={color} />
         </div>
-        <span className="text-xs font-bold ml-2 uppercase tracking-wider" style={{ color: '#CBD5E1' }}>{label}</span>
+        <span className="text-xs font-bold ml-2 uppercase tracking-wider" style={{ color: '#E2E8F0' }}>{label}</span>
       </div>
       {children}
     </div>
@@ -1248,10 +1248,10 @@ function PracticeList(props) {
      <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-6 pt-12 pb-8 tech-grid" style={{ background: config.gradient, boxShadow: '0 8px 32px ' + config.color + '30', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <span className="text-white text-2xl font-extrabold block">{config.label}</span>
-          <span className="text-white/70 text-sm mt-1 block">{config.subtitle}</span>
+          <span className="text-white/90 text-sm mt-1 block">{config.subtitle}</span>
          <div className="flex items-center mt-4">
             <span className="text-white/90 text-sm font-medium">共 {questions.length} 题</span>
-            <span className="text-white/50 text-sm ml-3">已答 {answeredIds.size}</span>
+            <span className="text-white/90 text-sm ml-3">已答 {answeredIds.size}</span>
           </div>
         </div>
         {!isFlatList && paperIds.length > 0 && (
@@ -1264,7 +1264,7 @@ function PracticeList(props) {
                 return (
                   <button key={pid} onClick={function(){setSelectedPaper(pid);}}
                    className="rounded-xl px-4 py-2.5 whitespace-nowrap transition-all"
-                   style={{ background: isActive ? config.gradient : 'rgba(255,255,255,0.10)', border: isActive ? 'none' : '1px solid rgba(255,255,255,0.14)', color: isActive ? '#FFFFFF' : '#CBD5E1',
+                   style={{ background: isActive ? config.gradient : 'rgba(255,255,255,0.10)', border: isActive ? 'none' : '1px solid rgba(255,255,255,0.14)', color: isActive ? '#FFFFFF' : '#E2E8F0',
                       fontWeight: 600, fontSize: 14, boxShadow: isActive ? '0 4px 12px ' + config.color + '30' : 'none' }}>
                     试卷 {pid}<span style={{ fontSize: 12, marginLeft: 4, opacity: 0.7 }}>{answeredCount}/{paperQs.length}</span>
                   </button>
@@ -1279,14 +1279,14 @@ function PracticeList(props) {
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: config.color + '22', borderRadius: 16 }}>
                 <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: config.color, borderTopColor: 'transparent' }} />
               </div>
-              <span className="text-stone-400 text-sm">加载题目中...</span>
+              <span className="text-stone-300 text-sm">加载题目中...</span>
             </div>
           ) : displayQuestions.length === 0 ? (
             <div className="flex flex-col items-center py-20">
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
                 <BookOpen size={28} color="#E7E5E4" />
               </div>
-              <span className="text-stone-400 text-base font-medium">暂无题目</span>
+              <span className="text-stone-300 text-base font-medium">暂无题目</span>
             </div>
           ) : (
             <div className="flex flex-wrap" style={{ gap: 12 }}>
@@ -1393,7 +1393,7 @@ function PracticeAnswer(props) {
     </div>;
   }
   if (!question) {
-    return <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}><span className="text-stone-400">题目不存在</span></div>;
+    return <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}><span className="text-stone-300">题目不存在</span></div>;
   }
  var ms = question.max_score, ratio = result ? result.score / ms : 0, scoreColor = getScoreColor(ratio);
  var fb = (result && result.feedback) || {};
@@ -1424,7 +1424,7 @@ function PracticeAnswer(props) {
           )}
           <div className="flex items-center mt-3">
             <span className="text-white/80 text-sm">{currentIdx >= 0 ? '第 ' + (currentIdx + 1) + ' / ' + siblingQuestions.length + ' 题' : ''}</span>
-            <span className="text-white/60 text-xs ml-3">满分 {ms} 分</span>
+            <span className="text-white/80 text-xs ml-3">满分 {ms} 分</span>
           </div>
         </div>
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 12, paddingBottom: 80 }}>
@@ -1435,7 +1435,7 @@ function PracticeAnswer(props) {
                 <span className="text-white text-sm font-bold">朗读以下短文</span>
                 <button onClick={function(){navigate('/scoring-guide?type=read_aloud');}} className="text-xs font-medium" style={{ color: config.color }}>评分标准</button>
               </div>
-              <p className="en-passage" style={{ color: "#E2E8F0" }}>
+              <p className="en-passage" style={{ color: "#F1F5F9" }}>
                 {passageWords.map(function(word, idx) {
                   return <span key={idx} style={{ backgroundColor: idx === currentWordIndex ? config.color + '30' : 'transparent', borderRadius: 3, padding: '0 1px', transition: 'background-color 0.15s' }}>{word} </span>;
                 })}
@@ -1453,7 +1453,7 @@ function PracticeAnswer(props) {
                   var showResult = !!result;
                   var isCorrect = idx === correctIdx;
                   var isWrong = showResult && isSelected && !isCorrect;
-                  var bg = 'rgba(255,255,255,0.04)', border = 'rgba(255,255,255,0.14)', textColor = '#E2E8F0';
+                  var bg = 'rgba(255,255,255,0.06)', border = 'rgba(255,255,255,0.18)', textColor = '#F8FAFC';
                   if (showResult) {
                     if (isCorrect) { bg = '#10B98122'; border = '#10B981'; textColor = '#10B981'; }
                     else if (isWrong) { bg = '#EF444422'; border = '#EF4444'; textColor = '#DC2626'; }
@@ -1463,7 +1463,7 @@ function PracticeAnswer(props) {
                       className="rounded-xl p-4 flex items-center transition-all text-left" style={{ background: bg, border: '1.5px solid ' + border }}>
                       <span className="rounded-lg flex items-center justify-center font-bold flex-shrink-0"
                         style={{ width: 28, height: 28, backgroundColor: showResult && isCorrect ? '#10B981' : showResult && isWrong ? '#EF4444' : isSelected ? config.color : '#F3F4F6',
-                          color: showResult && (isCorrect || isWrong) ? '#FFFFFF' : isSelected ? '#FFFFFF' : '#CBD5E1', fontSize: 14 }}>{OPTION_LABELS[idx]}</span>
+                          color: showResult && (isCorrect || isWrong) ? '#FFFFFF' : isSelected ? '#FFFFFF' : '#F1F5F9', fontSize: 14 }}>{OPTION_LABELS[idx]}</span>
                       <span className="ml-3 text-base font-medium flex-1" style={{ color: textColor }}>{opt}</span>
                       {showResult && isCorrect && <CheckCircle size={18} color="#10B981" />}
                       {showResult && isWrong && <XCircle size={18} color="#EF4444" />}
@@ -1475,20 +1475,20 @@ function PracticeAnswer(props) {
           )}
           {rType === 'listen_answer' && (
             <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <span className="text-stone-400 text-xs font-bold block mb-2">问题</span>
+              <span className="text-stone-300 text-xs font-bold block mb-2">问题</span>
               <span className="text-white text-base font-medium block">{question.content.question}</span>
             </div>
           )}
           {rType === 'listen_retell' && (
             <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <span className="text-stone-400 text-xs font-bold block mb-1">转述主题</span>
+              <span className="text-stone-300 text-xs font-bold block mb-1">转述主题</span>
               <span className="text-white text-base font-bold block mb-3">{question.content.topic}</span>
-              {question.content.intro && <p className="text-stone-400 text-sm mb-4">{question.content.intro}</p>}
+              {question.content.intro && <p className="text-stone-300 text-sm mb-4">{question.content.intro}</p>}
               <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
                 {(question.content.info_points || []).map(function(point, idx) {
                   return <div key={idx} className="flex items-start p-3" style={{ background: idx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(255,255,255,0.14)' : 'none' }}>
                     <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0" style={{ backgroundColor: config.color + '22', color: config.color }}>{point.label}</span>
-                    <span className="text-stone-200 text-sm ml-3 flex-1">{point.answer}</span>
+                    <span className="text-stone-100 text-sm ml-3 flex-1">{point.answer}</span>
                   </div>;
                 })}
               </div>
@@ -1502,15 +1502,15 @@ function PracticeAnswer(props) {
               {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#FCA5A5' }}>{recorder.error}</div>}
               {recorder.recording && recorder.interimText && (
                 <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                  <span className="text-stone-400 text-xs block mb-1">实时识别</span>
-                  <span className="text-stone-200 text-sm">{recorder.interimText}</span>
+                  <span className="text-stone-300 text-xs block mb-1">实时识别</span>
+                  <span className="text-stone-100 text-sm">{recorder.interimText}</span>
                 </div>
               )}
               <div className="mt-3">
-                <span className="text-stone-400 text-xs font-bold block mb-2">{rType === 'read_aloud' ? '朗读文本（语音识别结果）' : '回答文本（可手动编辑）'}</span>
+                <span className="text-stone-300 text-xs font-bold block mb-2">{rType === 'read_aloud' ? '朗读文本（语音识别结果）' : '回答文本（可手动编辑）'}</span>
                 <textarea value={textAnswer} onChange={function(e){setTextAnswer(e.target.value);}}
                   placeholder="录音后自动填入识别文本，也可手动输入" rows={3}
-                  className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#E2E8F0', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
+                  className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
               </div>
             </div>
           )}
@@ -1529,21 +1529,21 @@ function PracticeAnswer(props) {
                   <span className="text-3xl font-bold" style={{ color: scoreColor }}>{result.score}</span>
                   <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
                 </div>
-                <span className="text-stone-400 text-sm mt-3 block">{ratio >= 0.8 ? '优秀' : ratio >= 0.6 ? '及格' : '不及格'}</span>
+                <span className="text-stone-300 text-sm mt-3 block">{ratio >= 0.8 ? '优秀' : ratio >= 0.6 ? '及格' : '不及格'}</span>
               </div>
               {rType === 'listen_choose' && (
                 <ResultCard icon={fb.isCorrect ? CheckCircle : XCircle} label="答题结果" color={config.color}>
-                  <span className="text-stone-200 text-sm leading-6 block mb-2">{fb.explanation}</span>
-                  <span className="text-stone-400 text-sm">正确答案：{OPTION_LABELS[question.content.correct_answer]}</span>
+                  <span className="text-stone-100 text-sm leading-6 block mb-2">{fb.explanation}</span>
+                  <span className="text-stone-300 text-sm">正确答案：{OPTION_LABELS[question.content.correct_answer]}</span>
                 </ResultCard>
               )}
-              {result.transcription && <ResultCard icon={FileText} label="语音转写" color={config.color}><span className="text-stone-200 text-sm leading-6">{result.transcription}</span></ResultCard>}
-              {fb.analysis && <ResultCard icon={BarChart3} label="评分分析" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.analysis}</span></ResultCard>}
-              {fb.accuracyAnalysis && <ResultCard icon={BarChart3} label="准确性分析" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.accuracyAnalysis}</span></ResultCard>}
-              {fb.languageAnalysis && <ResultCard icon={BarChart3} label="语言分析" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.languageAnalysis}</span></ResultCard>}
-              {fb.fluencyAnalysis && <ResultCard icon={BarChart3} label="流利度分析" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.fluencyAnalysis}</span></ResultCard>}
-              {fb.coherenceAnalysis && <ResultCard icon={BarChart3} label="连贯性分析" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.coherenceAnalysis}</span></ResultCard>}
-              {fb.completenessAnalysis && <ResultCard icon={BarChart3} label="完整性分析" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.completenessAnalysis}</span></ResultCard>}
+              {result.transcription && <ResultCard icon={FileText} label="语音转写" color={config.color}><span className="text-stone-100 text-sm leading-6">{result.transcription}</span></ResultCard>}
+              {fb.analysis && <ResultCard icon={BarChart3} label="评分分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.analysis}</span></ResultCard>}
+              {fb.accuracyAnalysis && <ResultCard icon={BarChart3} label="准确性分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.accuracyAnalysis}</span></ResultCard>}
+              {fb.languageAnalysis && <ResultCard icon={BarChart3} label="语言分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.languageAnalysis}</span></ResultCard>}
+              {fb.fluencyAnalysis && <ResultCard icon={BarChart3} label="流利度分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.fluencyAnalysis}</span></ResultCard>}
+              {fb.coherenceAnalysis && <ResultCard icon={BarChart3} label="连贯性分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.coherenceAnalysis}</span></ResultCard>}
+              {fb.completenessAnalysis && <ResultCard icon={BarChart3} label="完整性分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.completenessAnalysis}</span></ResultCard>}
               {rType === 'listen_retell' && fb.coveredPoints && (
                 <ResultCard icon={CheckCircle} label="信息点覆盖" color={config.color}>
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -1556,10 +1556,10 @@ function PracticeAnswer(props) {
                   )}
                 </ResultCard>
               )}
-              {fb.specificIssues && <ResultCard icon={BarChart3} label="具体问题" color={config.color}><span className="text-stone-200 text-sm leading-6">{fb.specificIssues}</span></ResultCard>}
-              {result.suggestions && <ResultCard icon={Lightbulb} label="改进建议" color={config.color}><span className="text-stone-200 text-sm leading-6">{result.suggestions}</span></ResultCard>}
-              {rType === 'listen_answer' && <ResultCard icon={FileText} label="参考答案" color={config.color}><span className="text-stone-200 text-sm leading-6">{question.content.sample_answer}</span></ResultCard>}
-              {rType === 'listen_retell' && <ResultCard icon={FileText} label="参考转述" color={config.color}><span className="text-stone-200 text-sm leading-6">{(question.content.info_points || []).map(function(p){return p.answer;}).join('. ')}</span></ResultCard>}
+              {fb.specificIssues && <ResultCard icon={BarChart3} label="具体问题" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.specificIssues}</span></ResultCard>}
+              {result.suggestions && <ResultCard icon={Lightbulb} label="改进建议" color={config.color}><span className="text-stone-100 text-sm leading-6">{result.suggestions}</span></ResultCard>}
+              {rType === 'listen_answer' && <ResultCard icon={FileText} label="参考答案" color={config.color}><span className="text-stone-100 text-sm leading-6">{question.content.sample_answer}</span></ResultCard>}
+              {rType === 'listen_retell' && <ResultCard icon={FileText} label="参考转述" color={config.color}><span className="text-stone-100 text-sm leading-6">{(question.content.info_points || []).map(function(p){return p.answer;}).join('. ')}</span></ResultCard>}
               <div className="flex gap-3 mt-4">
                 <button onClick={function(){setResult(null);setSelectedAnswer(null);setTextAnswer('');recorder.reset();}}
                   className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -1644,12 +1644,12 @@ function ExamMock() {
             </div>
             <div className="ml-3">
               <span className="text-white text-2xl font-extrabold block">考试模拟</span>
-              <span className="text-white/70 text-sm block">综合考试 · 总分 40 分</span>
+              <span className="text-white/90 text-sm block">综合考试 · 总分 40 分</span>
             </div>
           </div>
           <div className="flex items-center mt-4">
             <span className="text-white/90 text-sm font-medium">共 {papers.length} 套试卷</span>
-            <span className="text-white/50 text-sm ml-3">已完成 {completedCount}</span>
+            <span className="text-white/90 text-sm ml-3">已完成 {completedCount}</span>
           </div>
         </div>
 
@@ -1664,7 +1664,7 @@ function ExamMock() {
                       <Icon size={16} color={s.color} />
                     </div>
                     <span className="text-white text-xs font-bold">{s.label}</span>
-                    <span className="text-stone-400 text-xs mt-0.5">{s.count}题 · {s.maxScore}分</span>
+                    <span className="text-stone-300 text-xs mt-0.5">{s.count}题 · {s.maxScore}分</span>
                   </div>
                 );
               })}
@@ -1678,7 +1678,7 @@ function ExamMock() {
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: EXAM_HEADER_COLOR + '22', borderRadius: 16 }}>
                 <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: EXAM_HEADER_COLOR, borderTopColor: 'transparent' }} />
               </div>
-              <span className="text-stone-400 text-sm">加载试卷中...</span>
+              <span className="text-stone-300 text-sm">加载试卷中...</span>
             </div>
           ) : (
             <div className="flex flex-wrap" style={{ gap: 12 }}>
@@ -1711,7 +1711,7 @@ function ExamMock() {
                         )}
                       </div>
                       <span className="text-slate-100 text-sm font-medium block truncate">试卷 {paper.paperId}</span>
-                      <span className="text-stone-400 text-xs mt-0.5 block">{paper.questionCount} 题 · 总分 {paper.totalScore} 分</span>
+                      <span className="text-stone-300 text-xs mt-0.5 block">{paper.questionCount} 题 · 总分 {paper.totalScore} 分</span>
                     </div>
                     <ChevronRight size={14} color="#E7E5E4" style={{ flexShrink: 0, marginLeft: 4 }} />
                   </button>
@@ -1883,7 +1883,7 @@ function ExamFlow(props) {
   if (!flatQuestions.length) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-        <span className="text-stone-400">试卷不存在</span>
+        <span className="text-stone-300">试卷不存在</span>
       </div>
     );
   }
@@ -1910,7 +1910,7 @@ function ExamFlow(props) {
               </button>
               <span className="text-white text-xl font-bold">考试结果</span>
             </div>
-            <span className="text-white/70 text-sm">试卷 {paperId}</span>
+            <span className="text-white/90 text-sm">试卷 {paperId}</span>
           </div>
 
           <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 16 }}>
@@ -1924,7 +1924,7 @@ function ExamFlow(props) {
               </span>
               <div className="flex items-center justify-center mt-2">
                 <Award size={14} color={scoreColor} />
-                <span className="text-stone-400 text-sm ml-1">正确率 {Math.round(ratio * 100)}%</span>
+                <span className="text-stone-300 text-sm ml-1">正确率 {Math.round(ratio * 100)}%</span>
               </div>
             </div>
 
@@ -1959,7 +1959,7 @@ function ExamFlow(props) {
                           <span className="text-stone-300 text-xs ml-2 flex-1">
                             第 {idx + 1} 题
                             {q && q.type === 'listen_choose' && (
-                              <span className="text-stone-400 ml-1">
+                              <span className="text-stone-300 ml-1">
                                 {r.user_answer ? OPTION_LABELS[Number(r.user_answer)] : '-'}
                                 {q.content.correct_answer !== undefined && (
                                   <span>{' -> '}{OPTION_LABELS[q.content.correct_answer]}</span>
@@ -2035,7 +2035,7 @@ function ExamFlow(props) {
                   <currentSectionConfig.icon size={14} color={currentSectionConfig.color} />
                 </div>
                 <span className="text-white text-sm font-bold ml-2">{currentSectionConfig.label}</span>
-                <span className="text-stone-400 text-xs ml-2">第 {currentIdx + 1} / {totalQuestions} 题 · {currentQuestion.max_score}分</span>
+                <span className="text-stone-300 text-xs ml-2">第 {currentIdx + 1} / {totalQuestions} 题 · {currentQuestion.max_score}分</span>
               </div>
 
               {currentQuestion.type !== 'read_aloud' && (
@@ -2045,7 +2045,7 @@ function ExamFlow(props) {
               {currentQuestion.type === 'read_aloud' && (
                 <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
                   <span className="text-white text-sm font-bold block mb-3">朗读以下短文</span>
-                  <p className="text-stone-200 text-base" style={{ lineHeight: 1.8 }}>{currentQuestion.content.passage}</p>
+                  <p className="text-stone-100 text-base" style={{ lineHeight: 1.8 }}>{currentQuestion.content.passage}</p>
                   <div className="mt-4">
                     <TTSPlayer text={currentQuestion.audio_script} color={currentSectionConfig.color} label="播放标准朗读" playCount={1} questionId={currentQuestion.id} />
                   </div>
@@ -2063,8 +2063,8 @@ function ExamFlow(props) {
                         <button key={idx} onClick={function() { handleSelectAnswer(idx); }} className="rounded-xl p-3 flex items-center transition-all text-left"
                           style={{ background: isSelected ? currentSectionConfig.color + '20' : 'rgba(255,255,255,0.04)', border: '1.5px solid ' + (isSelected ? currentSectionConfig.color : 'rgba(255,255,255,0.14)') }}>
                           <span className="rounded-md flex items-center justify-center font-bold flex-shrink-0"
-                            style={{ width: 24, height: 24, backgroundColor: isSelected ? currentSectionConfig.color : 'rgba(255,255,255,0.14)', color: isSelected ? '#FFFFFF' : '#D1D5DB', fontSize: 13 }}>{OPTION_LABELS[idx]}</span>
-                          <span className="ml-2 text-base font-medium flex-1" style={{ color: isSelected ? currentSectionConfig.color : '#E2E8F0' }}>{opt}</span>
+                            style={{ width: 24, height: 24, backgroundColor: isSelected ? currentSectionConfig.color : 'rgba(255,255,255,0.14)', color: isSelected ? '#FFFFFF' : '#F1F5F9', fontSize: 13 }}>{OPTION_LABELS[idx]}</span>
+                          <span className="ml-2 text-base font-medium flex-1" style={{ color: isSelected ? currentSectionConfig.color : '#F8FAFC' }}>{opt}</span>
                         </button>
                       );
                     })}
@@ -2074,17 +2074,17 @@ function ExamFlow(props) {
 
               {currentQuestion.type === 'listen_answer' && (
                 <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-                  <span className="text-stone-400 text-xs font-bold block mb-2">问题</span>
+                  <span className="text-stone-300 text-xs font-bold block mb-2">问题</span>
                   <span className="text-white text-base font-medium block">{currentQuestion.content.question}</span>
                 </div>
               )}
 
               {currentQuestion.type === 'listen_retell' && (
                 <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-                  <span className="text-stone-400 text-xs font-bold block mb-1">转述主题</span>
+                  <span className="text-stone-300 text-xs font-bold block mb-1">转述主题</span>
                   <span className="text-white text-sm font-bold block mb-3">{currentQuestion.content.topic}</span>
                   {currentQuestion.content.intro && (
-                    <p className="text-stone-400 text-xs mb-4">{currentQuestion.content.intro}</p>
+                    <p className="text-stone-300 text-xs mb-4">{currentQuestion.content.intro}</p>
                   )}
                   <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.14)' }}>
                     {currentQuestion.content.info_points.map(function(point, idx) {
@@ -2093,7 +2093,7 @@ function ExamFlow(props) {
                           style={{ background: idx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(255,255,255,0.14)' : 'none' }}>
                           <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0"
                             style={{ backgroundColor: currentSectionConfig.color + '22', color: currentSectionConfig.color }}>{point.label}</span>
-                          <span className="text-stone-200 text-xs ml-3 flex-1">{point.answer}</span>
+                          <span className="text-stone-100 text-xs ml-3 flex-1">{point.answer}</span>
                         </div>
                       );
                     })}
@@ -2109,12 +2109,12 @@ function ExamFlow(props) {
                   )}
                   {recorder.recording && recorder.interimText && (
                     <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                      <span className="text-stone-400 text-xs block mb-1">实时识别</span>
-                      <span className="text-stone-200 text-sm">{recorder.interimText}</span>
+                      <span className="text-stone-300 text-xs block mb-1">实时识别</span>
+                      <span className="text-stone-100 text-sm">{recorder.interimText}</span>
                     </div>
                   )}
                   <div className="mt-3">
-                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder="录音后自动填入识别文本，也可手动输入" rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#E2E8F0', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
+                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder="录音后自动填入识别文本，也可手动输入" rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
                   </div>
                 </div>
               )}
@@ -2163,7 +2163,7 @@ function ExamFlow(props) {
               </div>
             </div>
             <span className="text-white text-lg font-bold text-center block mb-2">确认退出</span>
-            <span className="text-stone-400 text-sm text-center block mb-6">{answeredCount > 0 ? '已答 ' + answeredCount + '/' + totalQuestions + ' 题，退出后答题记录不会保存。确定要退出吗？' : '退出后答题记录不会保存。确定要退出吗？'}</span>
+            <span className="text-stone-300 text-sm text-center block mb-6">{answeredCount > 0 ? '已答 ' + answeredCount + '/' + totalQuestions + ' 题，退出后答题记录不会保存。确定要退出吗？' : '退出后答题记录不会保存。确定要退出吗？'}</span>
             <div className="flex gap-3">
               <button onClick={function() { setShowExitConfirm(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
                 <span className="text-white font-semibold">继续考试</span>
@@ -2214,7 +2214,7 @@ function StatItem(props) {
         <Icon size={15} color={color} />
       </div>
       <span className="text-white text-lg font-bold">{value}{suffix}</span>
-      <span className="text-stone-400 text-xs mt-0.5">{label}</span>
+      <span className="text-stone-300 text-xs mt-0.5">{label}</span>
     </div>
   );
 }
@@ -2279,7 +2279,7 @@ function History() {
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <span className="text-white text-2xl font-extrabold block">历史记录</span>
-              <span className="text-white/60 text-sm mt-1 block">各项练习和考试成绩</span>
+              <span className="text-white/80 text-sm mt-1 block">各项练习和考试成绩</span>
             </div>
             {records.length > 0 && (
               <button onClick={function() { setClearModalVisible(true); }} className="rounded-xl px-4 py-2.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
@@ -2308,14 +2308,14 @@ function History() {
               return (
                 <button key={ft.value} onClick={function() { setFilterType(ft.value); }}
                   className="rounded-full px-4 py-2 whitespace-nowrap transition-all"
-                  style={{ background: filterType === ft.value ? HISTORY_HEADER_GRADIENT : 'rgba(255,255,255,0.10)', border: filterType === ft.value ? 'none' : '1px solid rgba(255,255,255,0.14)', color: filterType === ft.value ? '#FFFFFF' : '#CBD5E1', fontWeight: 600, fontSize: 14 }}>
+                  style={{ background: filterType === ft.value ? HISTORY_HEADER_GRADIENT : 'rgba(255,255,255,0.10)', border: filterType === ft.value ? 'none' : '1px solid rgba(255,255,255,0.14)', color: filterType === ft.value ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
                   {ft.label}
                 </button>
               );
             })}
             <button onClick={function() { setWrongOnly(!wrongOnly); }}
               className="rounded-full px-4 py-2 whitespace-nowrap transition-all flex items-center"
-              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.10)', border: wrongOnly ? 'none' : '1px solid rgba(255,255,255,0.14)', color: wrongOnly ? '#FFFFFF' : '#CBD5E1', fontWeight: 600, fontSize: 14 }}>
+              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.10)', border: wrongOnly ? 'none' : '1px solid rgba(255,255,255,0.14)', color: wrongOnly ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
               <XCircle size={12} style={{ marginRight: 4 }} />
               只看错题
             </button>
@@ -2328,15 +2328,15 @@ function History() {
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: HISTORY_HEADER_COLOR + '22', borderRadius: 16 }}>
                 <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: HISTORY_HEADER_COLOR, borderTopColor: 'transparent' }} />
               </div>
-              <span className="text-stone-400 text-sm">加载记录中...</span>
+              <span className="text-stone-300 text-sm">加载记录中...</span>
             </div>
           ) : filteredRecords.length === 0 ? (
             <div className="flex flex-col items-center py-20">
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
                 <ClockRotateLeft size={28} color="#E7E5E4" />
               </div>
-              <span className="text-stone-400 text-base font-medium">暂无历史记录</span>
-              <span className="text-stone-400 mt-1 text-sm">完成练习后这里会显示成绩</span>
+              <span className="text-stone-300 text-base font-medium">暂无历史记录</span>
+              <span className="text-stone-300 mt-1 text-sm">完成练习后这里会显示成绩</span>
             </div>
           ) : (
             <div className="flex flex-wrap" style={{ gap: 12 }}>
@@ -2365,7 +2365,7 @@ function History() {
                         </span>
                       </div>
                       <span className="text-slate-100 text-sm font-medium mt-1.5 block truncate">{item.question_title || '练习记录'}</span>
-                      <span className="text-stone-400 text-xs mt-0.5 block">{item.created_at ? new Date(item.created_at).toLocaleString('zh-CN') : ''}</span>
+                      <span className="text-stone-300 text-xs mt-0.5 block">{item.created_at ? new Date(item.created_at).toLocaleString('zh-CN') : ''}</span>
                     </div>
                     <ChevronRight size={12} color="#E7E5E4" style={{ flexShrink: 0, marginLeft: 4 }} />
                   </button>
@@ -2385,7 +2385,7 @@ function History() {
               </div>
             </div>
             <span className="text-white text-lg font-bold text-center block mb-2">确认清空</span>
-            <span className="text-stone-400 text-sm text-center block mb-6">将删除所有历史记录，此操作不可恢复。确定要清空吗？</span>
+            <span className="text-stone-300 text-sm text-center block mb-6">将删除所有历史记录，此操作不可恢复。确定要清空吗？</span>
             <div className="flex gap-3">
               <button onClick={function() { setClearModalVisible(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
                 <span className="text-white font-semibold">取消</span>
@@ -2445,7 +2445,7 @@ function HistoryDetail(props) {
   if (!record) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-        <span className="text-stone-400">记录不存在</span>
+        <span className="text-stone-300">记录不存在</span>
       </div>
     );
   }
@@ -2486,44 +2486,44 @@ function HistoryDetail(props) {
             <span className="text-3xl font-bold" style={{ color: scoreColor }}>{record.score}</span>
             <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
           </div>
-          <span className="text-stone-400 text-sm mt-3 block">{HD_TYPE_LABEL[typeKey] || record.question_type} · {isPass ? '及格' : '不及格'}</span>
+          <span className="text-stone-300 text-sm mt-3 block">{HD_TYPE_LABEL[typeKey] || record.question_type} · {isPass ? '及格' : '不及格'}</span>
           <span className="text-stone-300 text-xs mt-1 block">{record.created_at ? new Date(record.created_at).toLocaleString('zh-CN') : ''}</span>
         </div>
 
         {record.question_title && (
           <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-            <span className="text-stone-400 text-xs font-bold block mb-1">题目</span>
+            <span className="text-stone-300 text-xs font-bold block mb-1">题目</span>
             <span className="text-slate-100 text-sm font-medium">{record.question_title}</span>
           </div>
         )}
 
         {record.transcription && (
           <ResultCard icon={FileText} label="语音转写" color={typeColor}>
-            <span className="text-stone-200 text-sm leading-6">{record.transcription}</span>
+            <span className="text-stone-100 text-sm leading-6">{record.transcription}</span>
           </ResultCard>
         )}
 
         {analysisText && (
           <ResultCard icon={BarChart3} label="评分分析" color={typeColor}>
-            <span className="text-stone-200 text-sm leading-6">{analysisText}</span>
+            <span className="text-stone-100 text-sm leading-6">{analysisText}</span>
           </ResultCard>
         )}
 
         {fluencyText && (
           <ResultCard icon={BarChart3} label="流利度分析" color={typeColor}>
-            <span className="text-stone-200 text-sm leading-6">{fluencyText}</span>
+            <span className="text-stone-100 text-sm leading-6">{fluencyText}</span>
           </ResultCard>
         )}
 
         {completenessText && (
           <ResultCard icon={BarChart3} label="完整性分析" color={typeColor}>
-            <span className="text-stone-200 text-sm leading-6">{completenessText}</span>
+            <span className="text-stone-100 text-sm leading-6">{completenessText}</span>
           </ResultCard>
         )}
 
         {suggestionsText && (
           <ResultCard icon={Lightbulb} label="改进建议" color={typeColor}>
-            <span className="text-stone-200 text-sm leading-6">{suggestionsText}</span>
+            <span className="text-stone-100 text-sm leading-6">{suggestionsText}</span>
           </ResultCard>
         )}
 
@@ -2574,7 +2574,7 @@ function ScoringGuide(props) {
           </button>
           <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
         </div>
-        <span className="text-stone-400 text-sm">参考北京市中考英语听说考试评分标准</span>
+        <span className="text-stone-300 text-sm">参考北京市中考英语听说考试评分标准</span>
       </div>
 
       <div className="p-6 pb-20">
@@ -2589,13 +2589,13 @@ function ScoringGuide(props) {
                 return (
                   <div key={s.type} className="items-center flex-1 text-center">
                     <span className="text-2xl font-bold block" style={{ color: s.color }}>{s.maxScore}</span>
-                    <span className="text-stone-400 text-xs">{s.label}</span>
+                    <span className="text-stone-300 text-xs">{s.label}</span>
                   </div>
                 );
               })}
               <div className="items-center flex-1 text-center">
                 <span className="text-2xl font-bold text-white block">40</span>
-                <span className="text-stone-400 text-xs">总分</span>
+                <span className="text-stone-300 text-xs">总分</span>
               </div>
             </div>
           </div>
@@ -2644,8 +2644,8 @@ function ScoringGuide(props) {
         )}
 
         <div className="flex items-center justify-center mt-2">
-          <Lightbulb size={12} color="#CBD5E1" />
-         <span className="text-stone-400 text-xs ml-1">评分标准参考北京市中考英语听说机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
+          <Lightbulb size={12} color="#E2E8F0" />
+         <span className="text-stone-300 text-xs ml-1">评分标准参考北京市中考英语听说机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
         </div>
       </div>
     </div>
