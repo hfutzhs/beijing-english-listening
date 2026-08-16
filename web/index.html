@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>北京市中考英语听说练习</title>
-<meta name="theme-color" content="#1B1B3A">
+<meta name="theme-color" content="#1E293B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="英语听说">
@@ -37,7 +37,7 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
 * { -webkit-tap-highlight-color: transparent; }
-body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B3A; color: #F1F5F9; -webkit-font-smoothing: antialiased; }
+body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1E293B; color: #F1F5F9; -webkit-font-smoothing: antialiased; }
 
 /* Tech grid background */
 .tech-grid {
@@ -47,9 +47,9 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B
   background-size: 24px 24px;
 }
 .tech-glow-card {
-  background: rgba(255,255,255,0.92);
+  background: #FFFFFF;
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(99,102,241,0.12);
   box-shadow: 0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04);
   transition: box-shadow 0.3s, transform 0.2s;
 }
@@ -58,7 +58,7 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B
   box-shadow: 0 2px 12px rgba(99,102,241,0.12);
 }
 .tech-gradient-text {
-  background: linear-gradient(135deg, #6366F1, #818CF8);
+  background: linear-gradient(135deg, #6366F1, #4F46E5);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -78,13 +78,13 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B
 @keyframes tab-glow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.5)} 50%{box-shadow:0 0 20px rgba(99,102,241,0.8),0 0 4px rgba(99,102,241,0.4)} }
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
 .aurora-blob{position:absolute;border-radius:50%;filter:blur(70px)}
-.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.55),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
-.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.35),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
-.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.25),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
+.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.10),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
+.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.07),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
+.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.05),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
 .card-fade-in{animation:card-fade-in .5s cubic-bezier(0.16,1,0.3,1)}
 .animate-pulse-soft{animation:pulse-soft 2s ease-in-out infinite}
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
-.neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.25),0 0 16px rgba(99,102,241,.15)}
+.neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.05),0 0 16px rgba(99,102,241,.15)}
 .en-text{font-family:var(--font-en);letter-spacing:.01em}
 .en-passage{font-family:var(--font-en);letter-spacing:.015em;line-height:1.9;font-size:17px}
 .label-cn{font-family:var(--font-cn);letter-spacing:.02em}
@@ -1111,10 +1111,10 @@ function TabBar() {
     { path: '/history', label: '历史', icon: Clock },
   ];
   return (
-   <nav className="fixed bottom-0 left-0 right-0 z-50"
-     style={{ background: 'rgba(27,27,58,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-       boxShadow: '0 -4px 24px rgba(99,102,241,0.12), 0 -1px 0 rgba(255,255,255,0.14)',
-       paddingBottom: 'env(safe-area-inset-bottom, 0px)', borderTop: '1px solid rgba(255,255,255,0.14)' }}>
+  <nav className="fixed bottom-0 left-0 right-0 z-50"
+     style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+      boxShadow: '0 -4px 24px rgba(99,102,241,0.12), 0 -1px 0 rgba(99,102,241,0.10)',
+       paddingBottom: 'env(safe-area-inset-bottom, 0px)', borderTop: '1px solid rgba(99,102,241,0.10)' }}>
      <div className="mx-auto flex items-center justify-around" style={{ maxWidth: isDesktop ? 600 : 480, height: 60 }}>
        {TABS.map(function(tab) {
          var Icon = tab.icon;
@@ -1123,9 +1123,9 @@ function TabBar() {
            <a key={tab.path} href={'#' + tab.path}
              className="flex flex-col items-center justify-center"
             style={{ flex: 1, paddingTop: 8, paddingBottom: 8, gap: 3, textDecoration: 'none', position: 'relative' }}>
-             {isActive && <div className="tab-glow" style={{ position: 'absolute', top: 0, width: 28, height: 3, borderRadius: 2, background: 'linear-gradient(90deg, #818CF8, #6366F1)' }} />}
-            <Icon size={isDesktop ? 22 : 21} strokeWidth={isActive ? 2.5 : 2} color={isActive ? '#818CF8' : '#A5B4FC'} />
-             <span style={{ fontSize: isDesktop ? 11 : 10, fontWeight: 700, color: isActive ? '#818CF8' : '#A5B4FC' }}>{tab.label}</span>
+             {isActive && <div className="tab-glow" style={{ position: 'absolute', top: 0, width: 28, height: 3, borderRadius: 2, background: 'linear-gradient(90deg, #4F46E5, #6366F1)' }} />}
+            <Icon size={isDesktop ? 22 : 21} strokeWidth={isActive ? 2.5 : 2} color={isActive ? '#4F46E5' : '#94A3B8'} />
+             <span style={{ fontSize: isDesktop ? 11 : 10, fontWeight: 700, color: isActive ? '#4F46E5' : '#94A3B8' }}>{tab.label}</span>
            </a>
          );
        })}
@@ -1252,9 +1252,9 @@ function RecordButton(props) {
       </button>
       {recordedUrl && !recording && !transcribing && (
         <button onClick={onPlay} className="w-full rounded-xl py-4 flex items-center justify-center mt-3 transition-all active:scale-[0.98]"
-          style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
-          {playing ? <Pause size={14} color="#E2E8F0" /> : <Play size={14} color="#E2E8F0" />}
-          <span className="text-stone-300 font-semibold ml-2">{playing ? '暂停播放' : '播放我的录音'}</span>
+          style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
+          {playing ? <Pause size={14} color="#475569" /> : <Play size={14} color="#475569" />}
+          <span className="text-slate-500 font-semibold ml-2">{playing ? '暂停播放' : '播放我的录音'}</span>
         </button>
       )}
     </div>
@@ -1269,8 +1269,8 @@ function AsrStatusBanner() {
     <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.25)' }}>
       <AlertCircle size={16} color="#FBBF24" style={{ flexShrink: 0, marginTop: 1 }} />
       <div className="ml-2 flex-1">
-        <span className="text-amber-300 text-xs font-bold block">当前环境不支持语音识别</span>
-        <span className="text-amber-200/80 text-xs block mt-1">安装版 App 内无法自动识别朗读内容。请用 Chrome 浏览器打开本页面以获得自动识别功能，或在下方文本框手动输入朗读内容后提交评分。</span>
+        <span className="text-amber-700 text-xs font-bold block">当前环境不支持语音识别</span>
+        <span className="text-amber-600/80 text-xs block mt-1">安装版 App 内无法自动识别朗读内容。请用 Chrome 浏览器打开本页面以获得自动识别功能，或在下方文本框手动输入朗读内容后提交评分。</span>
       </div>
     </div>
   );
@@ -1279,12 +1279,12 @@ function AsrStatusBanner() {
 function ResultCard(props) {
   var Icon = props.icon, label = props.label, color = props.color, children = props.children;
   return (
-    <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+    <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
       <div className="flex items-center mb-2">
         <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ backgroundColor: color + '22' }}>
           <Icon size={10} color={color} />
         </div>
-        <span className="text-xs font-bold ml-2 uppercase tracking-wider" style={{ color: '#E2E8F0' }}>{label}</span>
+        <span className="text-xs font-bold ml-2 uppercase tracking-wider" style={{ color: '#475569' }}>{label}</span>
       </div>
       {children}
     </div>
@@ -1334,7 +1334,7 @@ function PracticeList(props) {
     }
   }
   return (
-    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
      <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: config.gradient, boxShadow: '0 8px 32px ' + config.color + '30', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <span className="text-white text-xl font-extrabold block">{config.label}</span>
@@ -1354,7 +1354,7 @@ function PracticeList(props) {
                 return (
                   <button key={pid} onClick={function(){setSelectedPaper(pid);}}
                    className="rounded-xl px-4 py-2.5 whitespace-nowrap transition-all"
-                   style={{ background: isActive ? config.gradient : 'rgba(255,255,255,0.10)', border: isActive ? 'none' : '1px solid rgba(255,255,255,0.14)', color: isActive ? '#FFFFFF' : '#E2E8F0',
+                   style={{ background: isActive ? config.gradient : 'rgba(255,255,255,0.95)', border: isActive ? 'none' : '1px solid rgba(99,102,241,0.10)', color: isActive ? '#FFFFFF' : '#E2E8F0',
                       fontWeight: 600, fontSize: 14, boxShadow: isActive ? '0 4px 12px ' + config.color + '30' : 'none' }}>
                     试卷 {pid}<span style={{ fontSize: 12, marginLeft: 4, opacity: 0.7 }}>{answeredCount}/{paperQs.length}</span>
                   </button>
@@ -1369,14 +1369,14 @@ function PracticeList(props) {
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: config.color + '22', borderRadius: 16 }}>
                 <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: config.color, borderTopColor: 'transparent' }} />
               </div>
-              <span className="text-stone-300 text-sm">加载题目中...</span>
+              <span className="text-slate-500 text-sm">加载题目中...</span>
             </div>
           ) : displayQuestions.length === 0 ? (
             <div className="flex flex-col items-center py-20">
-              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                <BookOpen size={28} color="#E7E5E4" />
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+                <BookOpen size={28} color="#6366F1" />
               </div>
-              <span className="text-stone-300 text-base font-medium">暂无题目</span>
+              <span className="text-slate-500 text-base font-medium">暂无题目</span>
             </div>
           ) : (
             <div className="flex flex-wrap" style={{ gap: 12 }}>
@@ -1387,7 +1387,7 @@ function PracticeList(props) {
                   <button key={q.id} onClick={function(){navigate('/practice-answer?questionId=' + q.id + '&type=' + q.type);}}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
                     style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)',
-                      background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
+                      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
                     <div className="rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ width: 44, height: 44, backgroundColor: answered ? '#10B98122' : config.color + '22' }}>
                       {answered ? <CheckCircle size={18} color="#10B981" /> : <span className="text-base font-bold" style={{ color: config.color }}>{idx + 1}</span>}
@@ -1395,11 +1395,11 @@ function PracticeList(props) {
                     <div className="flex-1 ml-3 overflow-hidden">
                       <div className="flex items-center mb-1">
                         <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ backgroundColor: config.color + '22', color: config.color }}>试卷 {q.paper_id}</span>
-                        <span className="text-stone-300 text-xs ml-2">{q.max_score}分</span>
+                        <span className="text-slate-500 text-xs ml-2">{q.max_score}分</span>
                       </div>
-                      <span className="text-slate-100 text-sm font-medium block truncate">{preview || '第 ' + (idx + 1) + ' 题'}</span>
+                      <span className="text-slate-700 text-sm font-medium block truncate">{preview || '第 ' + (idx + 1) + ' 题'}</span>
                     </div>
-                    <ChevronRight size={14} color="#E7E5E4" style={{ flexShrink: 0, marginLeft: 4 }} />
+                    <ChevronRight size={14} color="#94A3B8" style={{ flexShrink: 0, marginLeft: 4 }} />
                   </button>
                 );
               })}
@@ -1423,16 +1423,19 @@ function PracticeAnswer(props) {
   var loadState = useState(true), loading = loadState[0], setLoading = loadState[1];
   var subState = useState(false), submitting = subState[0], setSubmitting = subState[1];
   var resState = useState(null), result = resState[0], setResult = resState[1];
-  var selState = useState(null), selectedAnswer = selState[0], setSelectedAnswer = selState[1];
-  var txtState = useState(''), textAnswer = txtState[0], setTextAnswer = txtState[1];
-  var wIdxState = useState(-1), currentWordIndex = wIdxState[0], setCurrentWordIndex = wIdxState[1];
-  var resultRef = useRef(null);
-  var config = TYPE_CONFIG[qType] || TYPE_CONFIG.listen_choose;
-  var contentWidth = isTablet ? maxContentWidth : '100%';
-  var loadData = useCallback(async function() {
-    if (!questionId) return;
-    setLoading(true); setResult(null); setSelectedAnswer(null); setTextAnswer(''); setCurrentWordIndex(-1);
-    recorder.reset();
+ var selState = useState(null), selectedAnswer = selState[0], setSelectedAnswer = selState[1];
+ var txtState = useState(''), textAnswer = txtState[0], setTextAnswer = txtState[1];
+ var wIdxState = useState(-1), currentWordIndex = wIdxState[0], setCurrentWordIndex = wIdxState[1];
+ var resultRef = useRef(null);
+ var config = TYPE_CONFIG[qType] || TYPE_CONFIG.listen_choose;
+  var subErrState = useState(null), submitError = subErrState[0], setSubmitError = subErrState[1];
+  var recNoticeState = useState(''), recordingNotice = recNoticeState[0], setRecordingNotice = recNoticeState[1];
+ var contentWidth = isTablet ? maxContentWidth : '100%';
+ var loadData = useCallback(async function() {
+   if (!questionId) return;
+   setLoading(true); setResult(null); setSelectedAnswer(null); setTextAnswer(''); setCurrentWordIndex(-1);
+    setSubmitError(null); setRecordingNotice('');
+   recorder.reset();
     try {
       var q = await fetchQuestionDetail(questionId);
       setQuestion(q);
@@ -1445,27 +1448,32 @@ function PracticeAnswer(props) {
   useEffect(function() { if (result && resultRef.current) resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, [result]);
  var currentIdx = useMemo(function() { return siblingQuestions.findIndex(function(q){return q.id === questionId;}); }, [siblingQuestions, questionId]);
   function handleSwitchQuestion(newQid) { navigate('/practice-answer?questionId=' + newQid + '&type=' + (question ? question.type : qType)); }
- var handleStopRecording = useCallback(async function() {
-    var res = await recorder.stopRecording();
-    if (res.transcript) setTextAnswer(res.transcript);
-    return res;
-  }, [recorder]);
-  var handleSubmit = useCallback(async function() {
-   if (!question || !deviceId) return;
-   var transcription = textAnswer, audioUrl = null;
-    if (question.type !== 'listen_choose') {
-     if (recorder.recording) { var res = await handleStopRecording(); audioUrl = res.audioUrl; transcription = res.transcript || textAnswer; }
-      else if (recorder.recordedUrl) audioUrl = recorder.recordedUrl;
-    }
-    setSubmitting(true);
-    try {
-     var record = await submitPractice({ questionId: question.id, deviceId: deviceId, sessionId: 'practice',
-        transcription: question.type === 'listen_choose' ? undefined : transcription,
-       selectedAnswer: question.type === 'listen_choose' ? (selectedAnswer != null ? selectedAnswer : undefined) : undefined,
-       audioUrl: audioUrl });
-     setResult(record);
-   } catch(e) {} finally { setSubmitting(false); }
-  }, [question, deviceId, textAnswer, selectedAnswer, recorder, handleStopRecording]);
+var handleStopRecording = useCallback(async function() {
+   var res = await recorder.stopRecording();
+   if (res.transcript) setTextAnswer(res.transcript);
+    if (!res.transcript && question && question.type !== 'listen_choose') {
+      setRecordingNotice('录音完成，但未识别到语音内容。请在下方文本框手动输入朗读/回答内容后提交评分。');
+    } else { setRecordingNotice(''); }
+   return res;
+ }, [recorder]);
+ var handleSubmit = useCallback(async function() {
+  if (!question || !deviceId) return;
+   setSubmitError(null);
+  var transcription = textAnswer, audioUrl = null;
+   if (question.type !== 'listen_choose') {
+    if (!transcription.trim()) { setSubmitError('请先录音或手动输入回答内容后再提交评分。'); return; }
+    if (recorder.recording) { var res = await handleStopRecording(); audioUrl = res.audioUrl; transcription = res.transcript || textAnswer; }
+     else if (recorder.recordedUrl) audioUrl = recorder.recordedUrl;
+   }
+   setSubmitting(true);
+   try {
+    var record = await submitPractice({ questionId: question.id, deviceId: deviceId, sessionId: 'practice',
+       transcription: question.type === 'listen_choose' ? undefined : transcription,
+      selectedAnswer: question.type === 'listen_choose' ? (selectedAnswer != null ? selectedAnswer : undefined) : undefined,
+      audioUrl: audioUrl });
+    setResult(record);
+   } catch(e) { setSubmitError('提交评分失败：' + (e.message || e) + '。请刷新页面后重试。'); } finally { setSubmitting(false); }
+ }, [question, deviceId, textAnswer, selectedAnswer, recorder, handleStopRecording]);
  function handleNext() {
    if (currentIdx < siblingQuestions.length - 1) handleSwitchQuestion(siblingQuestions[currentIdx + 1].id);
     else navigate('/practice/' + (question ? question.type : qType));
@@ -1476,14 +1484,14 @@ function PracticeAnswer(props) {
     return question.content.passage.split(/\s+/);
   }, [question]);
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    return <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: config.color + '22', borderRadius: 16 }}>
         <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: config.color, borderTopColor: 'transparent' }} />
       </div>
     </div>;
   }
   if (!question) {
-    return <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}><span className="text-stone-300">题目不存在</span></div>;
+    return <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}><span className="text-slate-500">题目不存在</span></div>;
   }
  var ms = question.max_score, ratio = result ? result.score / ms : 0, scoreColor = getScoreColor(ratio);
  var fb = (result && result.feedback) || {};
@@ -1491,13 +1499,13 @@ function PracticeAnswer(props) {
   var rType = question.type;
   var canSubmit = rType === 'listen_choose' ? selectedAnswer !== null : true;
  return (
-    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <div className="flex items-center mb-1">
             <button onClick={function(){navigate('/practice/' + (question ? question.type : qType));}} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}><ArrowLeft size={22} color="#FFFFFF" /></button>
             <span className="text-white text-lg font-bold flex-1">{config.label}</span>
-            <button onClick={function(){navigate('/scoring-guide?type=' + rType);}} className="rounded-lg px-3 py-1.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+            <button onClick={function(){navigate('/scoring-guide?type=' + rType);}} className="rounded-lg px-3 py-1.5 flex items-center" style={{ backgroundColor: 'rgba(99,102,241,0.08)' }}>
               <BookMarked size={12} color="#FFFFFF" /><span className="text-white text-xs font-semibold ml-1">评分标准</span>
             </button>
           </div>
@@ -1507,7 +1515,7 @@ function PracticeAnswer(props) {
                 {siblingQuestions.map(function(q, idx) {
                   var isActive = q.id === questionId;
                   return <button key={q.id} onClick={function(){handleSwitchQuestion(q.id);}} className="rounded-full flex items-center justify-center transition-all"
-                    style={{ width: 38, height: 38, minWidth: 38, backgroundColor: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.2)', color: isActive ? config.color : '#FFFFFF', fontWeight: 700, fontSize: 14 }}>{idx + 1}</button>;
+                    style={{ width: 38, height: 38, minWidth: 38, backgroundColor: isActive ? '#FFFFFF' : 'rgba(99,102,241,0.10)', color: isActive ? config.color : '#FFFFFF', fontWeight: 700, fontSize: 14 }}>{idx + 1}</button>;
                 })}
               </div>
             </div>
@@ -1520,12 +1528,12 @@ function PracticeAnswer(props) {
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 12, paddingBottom: 80 }}>
          {rType !== 'read_aloud' && <TTSPlayer text={question.audio_script} color={config.color} label={rType === 'listen_retell' ? '播放听力原文（两遍）' : '播放听力原文'} playCount={rType === 'listen_retell' ? 2 : 1} questionId={question.id} />}
           {rType === 'read_aloud' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-white text-sm font-bold">朗读以下短文</span>
+                <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
                 <button onClick={function(){navigate('/scoring-guide?type=read_aloud');}} className="text-xs font-medium" style={{ color: config.color }}>评分标准</button>
               </div>
-              <p className="en-passage" style={{ color: "#F1F5F9" }}>
+              <p className="en-passage" style={{ color: "#1E293B" }}>
                 {passageWords.map(function(word, idx) {
                   return <span key={idx} style={{ backgroundColor: idx === currentWordIndex ? config.color + '30' : 'transparent', borderRadius: 3, padding: '0 1px', transition: 'background-color 0.15s' }}>{word} </span>;
                 })}
@@ -1534,8 +1542,8 @@ function PracticeAnswer(props) {
             </div>
           )}
           {rType === 'listen_choose' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <span className="text-white text-base font-bold block mb-4">{question.content.question}</span>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+              <span className="text-slate-800 text-base font-bold block mb-4">{question.content.question}</span>
               <div className="flex flex-col gap-3">
                 {(question.content.options || []).map(function(opt, idx) {
                   var isSelected = selectedAnswer === idx;
@@ -1543,7 +1551,7 @@ function PracticeAnswer(props) {
                   var showResult = !!result;
                   var isCorrect = idx === correctIdx;
                   var isWrong = showResult && isSelected && !isCorrect;
-                  var bg = 'rgba(255,255,255,0.06)', border = 'rgba(255,255,255,0.18)', textColor = '#F8FAFC';
+                  var bg = 'rgba(99,102,241,0.04)', border = 'rgba(99,102,241,0.15)', textColor = '#1E293B';
                   if (showResult) {
                     if (isCorrect) { bg = '#10B98122'; border = '#10B981'; textColor = '#10B981'; }
                     else if (isWrong) { bg = '#EF444422'; border = '#EF4444'; textColor = '#DC2626'; }
@@ -1564,21 +1572,21 @@ function PracticeAnswer(props) {
             </div>
           )}
           {rType === 'listen_answer' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <span className="text-stone-300 text-xs font-bold block mb-2">问题</span>
-              <span className="text-white text-base font-medium block">{question.content.question}</span>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+              <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
+              <span className="text-slate-800 text-base font-medium block">{question.content.question}</span>
             </div>
           )}
           {rType === 'listen_retell' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <span className="text-stone-300 text-xs font-bold block mb-1">转述主题</span>
-              <span className="text-white text-base font-bold block mb-3">{question.content.topic}</span>
-              {question.content.intro && <p className="text-stone-300 text-sm mb-4">{question.content.intro}</p>}
-              <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+              <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
+              <span className="text-slate-800 text-base font-bold block mb-3">{question.content.topic}</span>
+              {question.content.intro && <p className="text-slate-500 text-sm mb-4">{question.content.intro}</p>}
+              <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.08)' }}>
                 {(question.content.info_points || []).map(function(point, idx) {
-                  return <div key={idx} className="flex items-start p-3" style={{ background: idx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(255,255,255,0.14)' : 'none' }}>
+                  return <div key={idx} className="flex items-start p-3" style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
                     <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0" style={{ backgroundColor: config.color + '22', color: config.color }}>{point.label}</span>
-                    <span className="text-stone-100 text-sm ml-3 flex-1">{point.answer}</span>
+                    <span className="text-slate-700 text-sm ml-3 flex-1">{point.answer}</span>
                   </div>;
                 })}
               </div>
@@ -1589,52 +1597,64 @@ function PracticeAnswer(props) {
               <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing}
                 transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={config.color}
               onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
-              {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#FCA5A5' }}>{recorder.error}</div>}
-              {recorder.recording && recorder.interimText && (
-                <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                  <span className="text-stone-300 text-xs block mb-1">实时识别</span>
-                  <span className="text-stone-100 text-sm">{recorder.interimText}</span>
+             {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#FCA5A5' }}>{recorder.error}</div>}
+             {recorder.recording && recorder.interimText && (
+               <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+                 <span className="text-slate-500 text-xs block mb-1">实时识别</span>
+                 <span className="text-slate-700 text-sm">{recorder.interimText}</span>
+               </div>
+             )}
+              {recordingNotice && (
+                <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(56,189,248,0.10)', border: '1px solid rgba(56,189,248,0.20)' }}>
+                  <AlertCircle size={16} color="#0284C7" style={{ flexShrink: 0, marginTop: 1 }} />
+                  <span className="text-sky-700 text-xs ml-2 leading-5 block">{recordingNotice}</span>
                 </div>
               )}
-              <div className="mt-3">
+             <div className="mt-3">
                 <AsrStatusBanner />
-                <span className="text-stone-300 text-xs font-bold block mb-2">{rType === 'read_aloud' ? (ASR_SUPPORTED ? '朗读文本（语音识别结果）' : '朗读文本（请手动输入朗读内容）') : (ASR_SUPPORTED ? '回答文本（可手动编辑）' : '回答文本（请手动输入回答内容）')}</span>
+                <span className="text-slate-500 text-xs font-bold block mb-2">{rType === 'read_aloud' ? (ASR_SUPPORTED ? '朗读文本（语音识别结果）' : '朗读文本（请手动输入朗读内容）') : (ASR_SUPPORTED ? '回答文本（可手动编辑）' : '回答文本（请手动输入回答内容）')}</span>
                 <textarea value={textAnswer} onChange={function(e){setTextAnswer(e.target.value);}}
                   placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的朗读内容，然后点击下方提交评分'} rows={3}
-                  className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
+                  className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
               </div>
             </div>
           )}
-          {!result && (
-            <button onClick={handleSubmit} disabled={!canSubmit || submitting}
-              className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-50"
-              style={{ background: config.gradient, boxShadow: '0 8px 24px ' + config.color + '40' }}>
-              {submitting ? (<><div className="w-4 h-4 border-2 rounded-full animate-spin mr-2" style={{ borderColor: '#FFFFFF', borderTopColor: 'transparent' }} /><span className="text-white text-base font-bold">评分中...</span></>)
-                : (<><Send size={16} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{rType === 'listen_choose' ? '提交答案' : '提交评分'}</span></>)}
-            </button>
+         {!result && (
+           <button onClick={handleSubmit} disabled={!canSubmit || submitting}
+             className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-50"
+             style={{ background: config.gradient, boxShadow: '0 8px 24px ' + config.color + '40' }}>
+             {submitting ? (<><div className="w-4 h-4 border-2 rounded-full animate-spin mr-2" style={{ borderColor: '#FFFFFF', borderTopColor: 'transparent' }} /><span className="text-white text-base font-bold">评分中...</span></>)
+               : (<><Send size={16} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{rType === 'listen_choose' ? '提交答案' : '提交评分'}</span></>)}
+           </button>
+         )}
+          {!result && submitError && (
+            <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.20)' }}>
+              <AlertCircle size={16} color="#DC2626" style={{ flexShrink: 0, marginTop: 1 }} />
+              <span className="text-red-700 text-xs ml-2 leading-5 block">{submitError}</span>
+            </div>
           )}
-          {result && (
+         {result && (
             <div ref={resultRef} className="animate-slide-up">
-              <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(37,38,90,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}>
+              <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}>
                 <div className="rounded-full mx-auto flex flex-col items-center justify-center" style={{ width: 80, height: 80, backgroundColor: scoreColor + '22', boxShadow: '0 0 24px ' + scoreColor + '20' }}>
                   <span className="text-3xl font-bold" style={{ color: scoreColor }}>{result.score}</span>
                   <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
                 </div>
-                <span className="text-stone-300 text-sm mt-3 block">{ratio >= 0.8 ? '优秀' : ratio >= 0.6 ? '及格' : '不及格'}</span>
+                <span className="text-slate-500 text-sm mt-3 block">{ratio >= 0.8 ? '优秀' : ratio >= 0.6 ? '及格' : '不及格'}</span>
               </div>
               {rType === 'listen_choose' && (
                 <ResultCard icon={fb.isCorrect ? CheckCircle : XCircle} label="答题结果" color={config.color}>
-                  <span className="text-stone-100 text-sm leading-6 block mb-2">{fb.explanation}</span>
-                  <span className="text-stone-300 text-sm">正确答案：{OPTION_LABELS[question.content.correct_answer]}</span>
+                  <span className="text-slate-700 text-sm leading-6 block mb-2">{fb.explanation}</span>
+                  <span className="text-slate-500 text-sm">正确答案：{OPTION_LABELS[question.content.correct_answer]}</span>
                 </ResultCard>
               )}
-              {result.transcription && <ResultCard icon={FileText} label="语音转写" color={config.color}><span className="text-stone-100 text-sm leading-6">{result.transcription}</span></ResultCard>}
-              {fb.analysis && <ResultCard icon={BarChart3} label="评分分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.analysis}</span></ResultCard>}
-              {fb.accuracyAnalysis && <ResultCard icon={BarChart3} label="准确性分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.accuracyAnalysis}</span></ResultCard>}
-              {fb.languageAnalysis && <ResultCard icon={BarChart3} label="语言分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.languageAnalysis}</span></ResultCard>}
-              {fb.fluencyAnalysis && <ResultCard icon={BarChart3} label="流利度分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.fluencyAnalysis}</span></ResultCard>}
-              {fb.coherenceAnalysis && <ResultCard icon={BarChart3} label="连贯性分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.coherenceAnalysis}</span></ResultCard>}
-              {fb.completenessAnalysis && <ResultCard icon={BarChart3} label="完整性分析" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.completenessAnalysis}</span></ResultCard>}
+              {result.transcription && <ResultCard icon={FileText} label="语音转写" color={config.color}><span className="text-slate-700 text-sm leading-6">{result.transcription}</span></ResultCard>}
+              {fb.analysis && <ResultCard icon={BarChart3} label="评分分析" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.analysis}</span></ResultCard>}
+              {fb.accuracyAnalysis && <ResultCard icon={BarChart3} label="准确性分析" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.accuracyAnalysis}</span></ResultCard>}
+              {fb.languageAnalysis && <ResultCard icon={BarChart3} label="语言分析" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.languageAnalysis}</span></ResultCard>}
+              {fb.fluencyAnalysis && <ResultCard icon={BarChart3} label="流利度分析" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.fluencyAnalysis}</span></ResultCard>}
+              {fb.coherenceAnalysis && <ResultCard icon={BarChart3} label="连贯性分析" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.coherenceAnalysis}</span></ResultCard>}
+              {fb.completenessAnalysis && <ResultCard icon={BarChart3} label="完整性分析" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.completenessAnalysis}</span></ResultCard>}
               {rType === 'listen_retell' && fb.coveredPoints && (
                 <ResultCard icon={CheckCircle} label="信息点覆盖" color={config.color}>
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -1647,14 +1667,14 @@ function PracticeAnswer(props) {
                   )}
                 </ResultCard>
               )}
-              {fb.specificIssues && <ResultCard icon={BarChart3} label="具体问题" color={config.color}><span className="text-stone-100 text-sm leading-6">{fb.specificIssues}</span></ResultCard>}
-              {result.suggestions && <ResultCard icon={Lightbulb} label="改进建议" color={config.color}><span className="text-stone-100 text-sm leading-6">{result.suggestions}</span></ResultCard>}
-              {rType === 'listen_answer' && <ResultCard icon={FileText} label="参考答案" color={config.color}><span className="text-stone-100 text-sm leading-6">{question.content.sample_answer}</span></ResultCard>}
-              {rType === 'listen_retell' && <ResultCard icon={FileText} label="参考转述" color={config.color}><span className="text-stone-100 text-sm leading-6">{(question.content.info_points || []).map(function(p){return p.answer;}).join('. ')}</span></ResultCard>}
+              {fb.specificIssues && <ResultCard icon={BarChart3} label="具体问题" color={config.color}><span className="text-slate-700 text-sm leading-6">{fb.specificIssues}</span></ResultCard>}
+              {result.suggestions && <ResultCard icon={Lightbulb} label="改进建议" color={config.color}><span className="text-slate-700 text-sm leading-6">{result.suggestions}</span></ResultCard>}
+              {rType === 'listen_answer' && <ResultCard icon={FileText} label="参考答案" color={config.color}><span className="text-slate-700 text-sm leading-6">{question.content.sample_answer}</span></ResultCard>}
+              {rType === 'listen_retell' && <ResultCard icon={FileText} label="参考转述" color={config.color}><span className="text-slate-700 text-sm leading-6">{(question.content.info_points || []).map(function(p){return p.answer;}).join('. ')}</span></ResultCard>}
               <div className="flex gap-3 mt-4">
                 <button onClick={function(){setResult(null);setSelectedAnswer(null);setTextAnswer('');recorder.reset();}}
-                  className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <span className="text-white font-semibold text-sm">重新作答</span>
+                  className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+                  <span className="text-indigo-600 font-semibold text-sm">重新作答</span>
                 </button>
                 <button onClick={handleNext} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ backgroundColor: config.color, boxShadow: '0 4px 10px rgba(0,0,0,0.10)' }}>
                   <span className="text-white font-bold text-sm">{currentIdx < siblingQuestions.length - 1 ? '下一题' : '完成'}</span>
@@ -1665,11 +1685,11 @@ function PracticeAnswer(props) {
           )}
           {!result && siblingQuestions.length > 1 && (
             <div className="flex gap-3 mt-4">
-              <button onClick={handlePrev} disabled={currentIdx <= 0} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <ChevronLeft size={16} color="#A5B4FC" /><span className="text-stone-300 font-semibold text-sm ml-1">上一题</span>
+              <button onClick={handlePrev} disabled={currentIdx <= 0} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+                <ChevronLeft size={16} color="#94A3B8" /><span className="text-slate-500 font-semibold text-sm ml-1">上一题</span>
               </button>
-              <button onClick={handleNext} disabled={currentIdx >= siblingQuestions.length - 1} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <span className="text-stone-300 font-semibold text-sm mr-1">下一题</span><ChevronRight size={16} color="#A5B4FC" />
+              <button onClick={handleNext} disabled={currentIdx >= siblingQuestions.length - 1} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+                <span className="text-slate-500 font-semibold text-sm mr-1">下一题</span><ChevronRight size={16} color="#94A3B8" />
               </button>
             </div>
           )}
@@ -1726,11 +1746,11 @@ function ExamMock() {
   }
 
   return (
-    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center">
-            <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, backgroundColor: 'rgba(255,255,255,0.15)' }}>
+            <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, backgroundColor: 'rgba(99,102,241,0.08)' }}>
               <FilePen size={18} color="#FFFFFF" />
             </div>
             <div className="ml-3">
@@ -1745,7 +1765,7 @@ function ExamMock() {
         </div>
 
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, marginTop: -4, marginBottom: 8 }}>
-          <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+          <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
             <div className="flex">
               {EXAM_SECTIONS.map(function(s) {
                 var Icon = s.icon;
@@ -1754,8 +1774,8 @@ function ExamMock() {
                     <div className="rounded-xl flex items-center justify-center mb-2" style={{ width: 36, height: 36, backgroundColor: s.color + '22' }}>
                       <Icon size={16} color={s.color} />
                     </div>
-                    <span className="text-white text-xs font-bold">{s.label}</span>
-                    <span className="text-stone-300 text-xs mt-0.5">{s.count}题 · {s.maxScore}分</span>
+                    <span className="text-slate-700 text-xs font-bold">{s.label}</span>
+                    <span className="text-slate-500 text-xs mt-0.5">{s.count}题 · {s.maxScore}分</span>
                   </div>
                 );
               })}
@@ -1769,7 +1789,7 @@ function ExamMock() {
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: EXAM_HEADER_COLOR + '22', borderRadius: 16 }}>
                 <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: EXAM_HEADER_COLOR, borderTopColor: 'transparent' }} />
               </div>
-              <span className="text-stone-300 text-sm">加载试卷中...</span>
+              <span className="text-slate-500 text-sm">加载试卷中...</span>
             </div>
           ) : (
             <div className="flex flex-wrap" style={{ gap: 12 }}>
@@ -1780,7 +1800,7 @@ function ExamMock() {
                 return (
                   <button key={paper.paperId} onClick={function() { handlePaperClick(paper.paperId); }}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
-                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
+                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
                     <div className="rounded-xl flex flex-col items-center justify-center flex-shrink-0"
                       style={{ width: 52, height: 52, backgroundColor: isCompleted ? '#10B98122' : EXAM_HEADER_COLOR + '22' }}>
                       {isCompleted ? (
@@ -1801,10 +1821,10 @@ function ExamMock() {
                           </span>
                         )}
                       </div>
-                      <span className="text-slate-100 text-sm font-medium block truncate">试卷 {paper.paperId}</span>
-                      <span className="text-stone-300 text-xs mt-0.5 block">{paper.questionCount} 题 · 总分 {paper.totalScore} 分</span>
+                      <span className="text-slate-700 text-sm font-medium block truncate">试卷 {paper.paperId}</span>
+                      <span className="text-slate-500 text-xs mt-0.5 block">{paper.questionCount} 题 · 总分 {paper.totalScore} 分</span>
                     </div>
-                    <ChevronRight size={14} color="#E7E5E4" style={{ flexShrink: 0, marginLeft: 4 }} />
+                    <ChevronRight size={14} color="#94A3B8" style={{ flexShrink: 0, marginLeft: 4 }} />
                   </button>
                 );
               })}
@@ -1837,8 +1857,9 @@ function ExamFlow(props) {
   var ciState = useState(0), currentIdx = ciState[0], setCurrentIdx = ciState[1];
   var anState = useState({}), answers = anState[0], setAnswers = anState[1];
   var subState = useState(false), submitting = subState[0], setSubmitting = subState[1];
-  var erState = useState(null), examResults = erState[0], setExamResults = erState[1];
-  var ecState = useState(false), showExitConfirm = ecState[0], setShowExitConfirm = ecState[1];
+ var erState = useState(null), examResults = erState[0], setExamResults = erState[1];
+ var eseState = useState(null), examSubmitError = eseState[0], setExamSubmitError = eseState[1];
+ var ecState = useState(false), showExitConfirm = ecState[0], setShowExitConfirm = ecState[1];
   var tiState = useState(''), textInput = tiState[0], setTextInput = tiState[1];
   var scrollRef = useRef(null);
 
@@ -1847,6 +1868,7 @@ function ExamFlow(props) {
   var loadData = useCallback(async function() {
     if (!paperId) return;
     setLoading(true);
+    setExamSubmitError(null);
     try {
       var data = await fetchExamPaperDetail(paperId);
       var qs = data.questions;
@@ -1937,33 +1959,40 @@ function ExamFlow(props) {
   var totalQuestions = flatQuestions.length;
   var allAnswered = answeredCount >= totalQuestions;
 
-  var handleSubmitExam = useCallback(async function() {
-    if (!deviceId || !flatQuestions.length) return;
-    setSubmitting(true);
-    try {
-      if (recorder.recording) await handleStopRecording();
-      var results = [];
-      for (var i = 0; i < flatQuestions.length; i++) {
-        var q = flatQuestions[i];
-        var ans = answers[q.id];
-        if (!ans || !ans.answered) continue;
-        try {
-          var record = await submitPractice({
-            questionId: q.id, deviceId: deviceId, sessionId: 'exam',
-            transcription: q.type === 'listen_choose' ? undefined : (ans.transcription || ''),
-            selectedAnswer: q.type === 'listen_choose' ? ans.selectedAnswer : undefined,
-            audioUrl: ans.audioUrl || null,
-          });
-          results.push(record);
-        } catch(e2) {}
-      }
-      setExamResults(results);
-    } catch(e3) {} finally { setSubmitting(false); }
-  }, [deviceId, flatQuestions, answers, recorder, handleStopRecording]);
+var handleSubmitExam = useCallback(async function() {
+  if (!deviceId || !flatQuestions.length) return;
+  setExamSubmitError(null);
+  setSubmitting(true);
+  var failedCount = 0;
+  try {
+    if (recorder.recording) await handleStopRecording();
+    var results = [];
+    for (var i = 0; i < flatQuestions.length; i++) {
+      var q = flatQuestions[i];
+      var ans = answers[q.id];
+      if (!ans || !ans.answered) continue;
+      try {
+        var record = await submitPractice({
+          questionId: q.id, deviceId: deviceId, sessionId: 'exam',
+          transcription: q.type === 'listen_choose' ? undefined : (ans.transcription || ''),
+          selectedAnswer: q.type === 'listen_choose' ? ans.selectedAnswer : undefined,
+          audioUrl: ans.audioUrl || null,
+        });
+        results.push(record);
+      } catch(e2) { failedCount++; }
+    }
+    setExamResults(results);
+   if (failedCount > 0 && results.length === 0) {
+      setExamSubmitError('全部 ' + failedCount + ' 题提交失败，可能是网络或服务异常。请检查网络后重试。');
+   } else if (failedCount > 0) {
+      setExamSubmitError('有 ' + failedCount + ' 题提交失败，已成功提交 ' + results.length + ' 题。请重试或联系管理员。');
+    }
+  } catch(e3) { setExamSubmitError('交卷失败：' + (e3.message || e3) + '。请刷新页面后重试。'); } finally { setSubmitting(false); }
+}, [deviceId, flatQuestions, answers, recorder, handleStopRecording]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: EXAM_HEADER_COLOR + '22', borderRadius: 16 }}>
           <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: EXAM_HEADER_COLOR, borderTopColor: 'transparent' }} />
         </div>
@@ -1973,8 +2002,8 @@ function ExamFlow(props) {
 
   if (!flatQuestions.length) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-        <span className="text-stone-300">试卷不存在</span>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+        <span className="text-slate-500">试卷不存在</span>
       </div>
     );
   }
@@ -1992,7 +2021,7 @@ function ExamFlow(props) {
     }
 
     return (
-      <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+      <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
         <div style={{ width: contentWidth, margin: '0 auto', paddingBottom: 40 }}>
           <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
             <div className="flex items-center mb-1">
@@ -2005,17 +2034,17 @@ function ExamFlow(props) {
           </div>
 
           <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 16 }}>
-            <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(37,38,90,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}>
+            <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}>
               <div className="rounded-full mx-auto flex flex-col items-center justify-center" style={{ width: 100, height: 100, backgroundColor: scoreColor + '22', boxShadow: '0 0 32px ' + scoreColor + '25' }}>
                 <span className="text-4xl font-bold" style={{ color: scoreColor }}>{totalScore}</span>
                 <span className="text-sm" style={{ color: scoreColor + '99' }}>/ {totalMax}</span>
               </div>
-              <span className="text-white text-base font-bold mt-4 block">
+              <span className="text-slate-800 text-base font-bold mt-4 block">
                 {ratio >= 0.8 ? '优秀' : ratio >= 0.6 ? '及格' : '需努力'}
               </span>
               <div className="flex items-center justify-center mt-2">
                 <Award size={14} color={scoreColor} />
-                <span className="text-stone-300 text-sm ml-1">正确率 {Math.round(ratio * 100)}%</span>
+                <span className="text-slate-500 text-sm ml-1">正确率 {Math.round(ratio * 100)}%</span>
               </div>
             </div>
 
@@ -2028,12 +2057,12 @@ function ExamFlow(props) {
               var secRatio = secMax > 0 ? secScore / secMax : 0;
               var SecIcon = secConfig.icon;
               return (
-                <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+                <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
                   <div className="flex items-center mb-1">
                     <div className="rounded-lg flex items-center justify-center" style={{ width: 32, height: 32, backgroundColor: secConfig.color + '22' }}>
                       <SecIcon size={14} color={secConfig.color} />
                     </div>
-                    <span className="text-white text-sm font-bold ml-2">{secConfig.label}</span>
+                    <span className="text-slate-700 text-sm font-bold ml-2">{secConfig.label}</span>
                     <div className="flex-1" />
                     <span className="text-sm font-bold" style={{ color: getScoreColor(secRatio) }}>{secScore} / {secMax}</span>
                   </div>
@@ -2043,14 +2072,14 @@ function ExamFlow(props) {
                       var rColor = getScoreColor(rRatio);
                       var q = flatQuestions.find(function(qq) { return qq.id === r.question_id; });
                       return (
-                        <div key={r.id} className="flex items-center p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 12 }}>
+                        <div key={r.id} className="flex items-center p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.03)', borderRadius: 12 }}>
                           <div className="rounded-lg flex items-center justify-center flex-shrink-0" style={{ width: 28, height: 28, backgroundColor: rColor + '22' }}>
                             {r.is_failed ? <XCircle size={14} color={rColor} /> : <CheckCircle size={14} color={rColor} />}
                           </div>
-                          <span className="text-stone-300 text-xs ml-2 flex-1">
+                          <span className="text-slate-500 text-xs ml-2 flex-1">
                             第 {idx + 1} 题
                             {q && q.type === 'listen_choose' && (
-                              <span className="text-stone-300 ml-1">
+                              <span className="text-slate-500 ml-1">
                                 {r.user_answer ? OPTION_LABELS[Number(r.user_answer)] : '-'}
                                 {q.content.correct_answer !== undefined && (
                                   <span>{' -> '}{OPTION_LABELS[q.content.correct_answer]}</span>
@@ -2068,8 +2097,8 @@ function ExamFlow(props) {
             })}
 
             <div className="flex gap-3 mt-6">
-              <button onClick={function() { navigate('/exam'); }} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <span className="text-white font-semibold text-sm">返回列表</span>
+              <button onClick={function() { navigate('/exam'); }} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+                <span className="text-indigo-600 font-semibold text-sm">返回列表</span>
               </button>
               <button onClick={function() { setExamResults(null); setAnswers({}); setCurrentIdx(0); }} className="flex-1 rounded-2xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 8px 24px rgba(99,102,241,0.3)' }}>
                 <span className="text-white font-bold text-sm">重新考试</span>
@@ -2084,7 +2113,7 @@ function ExamFlow(props) {
   var progressPercent = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
 
   return (
-    <div className="min-h-screen card-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
           <div className="flex items-center mb-1">
@@ -2094,14 +2123,14 @@ function ExamFlow(props) {
             <span className="text-white text-lg font-bold flex-1">试卷 {paperId} · 考试模拟</span>
           </div>
           <div className="flex items-center">
-            <div className="rounded-full flex-1 overflow-hidden" style={{ height: 6, backgroundColor: 'rgba(255,255,255,0.2)' }}>
+            <div className="rounded-full flex-1 overflow-hidden" style={{ height: 6, backgroundColor: 'rgba(99,102,241,0.10)' }}>
               <div className="rounded-full transition-all" style={{ width: progressPercent + '%', height: '100%', backgroundColor: '#FFFFFF' }} />
             </div>
             <span className="text-white/80 text-xs ml-3">{answeredCount} / {totalQuestions}</span>
           </div>
         </div>
 
-        <div className="overflow-x-auto scrollbar-hide px-5 py-3" style={{ background: 'rgba(27,27,58,0.6)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.14)' }}>
+        <div className="overflow-x-auto scrollbar-hide px-5 py-3" style={{ background: 'rgba(248,250,252,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(99,102,241,0.10)' }}>
           <div className="flex gap-1.5">
             {flatQuestions.map(function(q, idx) {
               var ans = answers[q.id];
@@ -2110,7 +2139,7 @@ function ExamFlow(props) {
               var qConfig = SECTION_CONFIG[q.type];
               return (
                 <button key={q.id} onClick={function() { setCurrentIdx(idx); }} className="rounded-full flex items-center justify-center transition-all"
-                  style={{ width: 36, height: 36, minWidth: 36, backgroundColor: isActive ? EXAM_HEADER_COLOR : isAnswered ? qConfig.color + '30' : 'rgba(255,255,255,0.10)', color: isActive ? '#FFFFFF' : isAnswered ? qConfig.color : '#A5B4FC', border: isActive ? 'none' : '1px solid rgba(255,255,255,0.14)', fontWeight: 700, fontSize: 13 }}>
+                  style={{ width: 36, height: 36, minWidth: 36, backgroundColor: isActive ? EXAM_HEADER_COLOR : isAnswered ? qConfig.color + '30' : 'rgba(255,255,255,0.95)', color: isActive ? '#FFFFFF' : isAnswered ? qConfig.color : '#94A3B8', border: isActive ? 'none' : '1px solid rgba(99,102,241,0.10)', fontWeight: 700, fontSize: 13 }}>
                   {idx + 1}
                 </button>
               );
@@ -2125,8 +2154,8 @@ function ExamFlow(props) {
                 <div className="rounded-lg flex items-center justify-center" style={{ width: 32, height: 32, backgroundColor: currentSectionConfig.color + '22' }}>
                   <currentSectionConfig.icon size={14} color={currentSectionConfig.color} />
                 </div>
-                <span className="text-white text-sm font-bold ml-2">{currentSectionConfig.label}</span>
-                <span className="text-stone-300 text-xs ml-2">第 {currentIdx + 1} / {totalQuestions} 题 · {currentQuestion.max_score}分</span>
+                <span className="text-slate-700 text-sm font-bold ml-2">{currentSectionConfig.label}</span>
+                <span className="text-slate-500 text-xs ml-2">第 {currentIdx + 1} / {totalQuestions} 题 · {currentQuestion.max_score}分</span>
               </div>
 
               {currentQuestion.type !== 'read_aloud' && (
@@ -2134,9 +2163,9 @@ function ExamFlow(props) {
               )}
 
               {currentQuestion.type === 'read_aloud' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-                  <span className="text-white text-sm font-bold block mb-3">朗读以下短文</span>
-                  <p className="text-stone-100 text-base" style={{ lineHeight: 1.8 }}>{currentQuestion.content.passage}</p>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                  <span className="text-slate-800 text-sm font-bold block mb-3">朗读以下短文</span>
+                  <p className="text-slate-700 text-base" style={{ lineHeight: 1.8 }}>{currentQuestion.content.passage}</p>
                   <div className="mt-4">
                     <TTSPlayer text={currentQuestion.audio_script} color={currentSectionConfig.color} label="播放标准朗读" playCount={1} questionId={currentQuestion.id} />
                   </div>
@@ -2144,18 +2173,18 @@ function ExamFlow(props) {
               )}
 
               {currentQuestion.type === 'listen_choose' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-                  <span className="text-white text-sm font-bold block mb-3">{currentQuestion.content.question}</span>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                  <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.question}</span>
                   <div className="flex flex-col gap-2">
                     {currentQuestion.content.options.map(function(opt, idx) {
                       var ans = answers[currentQuestion.id];
                       var isSelected = ans && ans.selectedAnswer === idx;
                       return (
                         <button key={idx} onClick={function() { handleSelectAnswer(idx); }} className="rounded-xl p-3 flex items-center transition-all text-left"
-                          style={{ background: isSelected ? currentSectionConfig.color + '20' : 'rgba(255,255,255,0.04)', border: '1.5px solid ' + (isSelected ? currentSectionConfig.color : 'rgba(255,255,255,0.14)') }}>
+                          style={{ background: isSelected ? currentSectionConfig.color + '20' : 'rgba(99,102,241,0.03)', border: '1.5px solid ' + (isSelected ? currentSectionConfig.color : 'rgba(99,102,241,0.10)') }}>
                           <span className="rounded-md flex items-center justify-center font-bold flex-shrink-0"
-                            style={{ width: 24, height: 24, backgroundColor: isSelected ? currentSectionConfig.color : 'rgba(255,255,255,0.14)', color: isSelected ? '#FFFFFF' : '#F1F5F9', fontSize: 13 }}>{OPTION_LABELS[idx]}</span>
-                          <span className="ml-2 text-base font-medium flex-1" style={{ color: isSelected ? currentSectionConfig.color : '#F8FAFC' }}>{opt}</span>
+                            style={{ width: 24, height: 24, backgroundColor: isSelected ? currentSectionConfig.color : 'rgba(99,102,241,0.10)', color: isSelected ? '#FFFFFF' : '#1E293B', fontSize: 13 }}>{OPTION_LABELS[idx]}</span>
+                          <span className="ml-2 text-base font-medium flex-1" style={{ color: isSelected ? currentSectionConfig.color : '#1E293B' }}>{opt}</span>
                         </button>
                       );
                     })}
@@ -2164,27 +2193,27 @@ function ExamFlow(props) {
               )}
 
               {currentQuestion.type === 'listen_answer' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-                  <span className="text-stone-300 text-xs font-bold block mb-2">问题</span>
-                  <span className="text-white text-base font-medium block">{currentQuestion.content.question}</span>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                  <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
+                  <span className="text-slate-800 text-base font-medium block">{currentQuestion.content.question}</span>
                 </div>
               )}
 
               {currentQuestion.type === 'listen_retell' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-                  <span className="text-stone-300 text-xs font-bold block mb-1">转述主题</span>
-                  <span className="text-white text-sm font-bold block mb-3">{currentQuestion.content.topic}</span>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                  <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
+                  <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.topic}</span>
                   {currentQuestion.content.intro && (
-                    <p className="text-stone-300 text-xs mb-4">{currentQuestion.content.intro}</p>
+                    <p className="text-slate-500 text-xs mb-4">{currentQuestion.content.intro}</p>
                   )}
-                  <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.14)' }}>
+                  <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.10)' }}>
                     {currentQuestion.content.info_points.map(function(point, idx) {
                       return (
                         <div key={idx} className="flex items-start p-3"
-                          style={{ background: idx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(255,255,255,0.14)' : 'none' }}>
+                          style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
                           <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0"
                             style={{ backgroundColor: currentSectionConfig.color + '22', color: currentSectionConfig.color }}>{point.label}</span>
-                          <span className="text-stone-100 text-xs ml-3 flex-1">{point.answer}</span>
+                          <span className="text-slate-700 text-xs ml-3 flex-1">{point.answer}</span>
                         </div>
                       );
                     })}
@@ -2199,14 +2228,14 @@ function ExamFlow(props) {
                     <div className="rounded-xl p-3 mt-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.15)', color: '#FCA5A5' }}>{recorder.error}</div>
                   )}
                   {recorder.recording && recorder.interimText && (
-                    <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                      <span className="text-stone-300 text-xs block mb-1">实时识别</span>
-                      <span className="text-stone-100 text-sm">{recorder.interimText}</span>
+                    <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+                      <span className="text-slate-500 text-xs block mb-1">实时识别</span>
+                      <span className="text-slate-700 text-sm">{recorder.interimText}</span>
                     </div>
                   )}
                   <div className="mt-3">
                     <AsrStatusBanner />
-                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的回答内容'} rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
+                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的回答内容'} rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
                   </div>
                 </div>
               )}
@@ -2214,11 +2243,11 @@ function ExamFlow(props) {
           )}
         </div>
 
-        <div className="flex gap-2 px-5 py-3" style={{ background: 'rgba(27,27,58,0.9)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.14)', paddingBottom: 'max(12px, env(safe-area-inset-bottom, 0px))' }}>
+        <div className="flex gap-2 px-5 py-3" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(99,102,241,0.10)', paddingBottom: 'max(12px, env(safe-area-inset-bottom, 0px))' }}>
           <button onClick={function() { setCurrentIdx(Math.max(0, currentIdx - 1)); }} disabled={currentIdx <= 0}
-            className="rounded-xl px-4 py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-            <ChevronLeft size={16} color="#A5B4FC" />
-            <span className="text-stone-300 font-semibold text-sm ml-1">上一题</span>
+            className="rounded-xl px-4 py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+            <ChevronLeft size={16} color="#94A3B8" />
+            <span className="text-slate-500 font-semibold text-sm ml-1">上一题</span>
           </button>
           {currentIdx < totalQuestions - 1 ? (
             <button onClick={function() { setCurrentIdx(Math.min(totalQuestions - 1, currentIdx + 1)); }}
@@ -2241,24 +2270,31 @@ function ExamFlow(props) {
                   <span className="text-white font-bold text-sm ml-2">{allAnswered ? '交卷' : '交卷 (' + answeredCount + '/' + totalQuestions + ')'}</span>
                 </React.Fragment>
               )}
-            </button>
-          )}
+           </button>
+         )}
+       </div>
+     </div>
+
+      {examSubmitError && !examResults && (
+        <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.20)" }}>
+          <AlertCircle size={16} color="#DC2626" style={{ flexShrink: 0, marginTop: 1 }} />
+          <span className="text-red-700 text-xs ml-2 leading-5 block">{examSubmitError}</span>
         </div>
-      </div>
+      )}
 
       {showExitConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(27,27,58,0.8)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setShowExitConfirm(false); }}>
-          <div className="rounded-xl p-7" style={{ background: 'rgba(37,38,90,0.95)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setShowExitConfirm(false); }}>
+          <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
             <div className="flex flex-col items-center mb-5">
               <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FEF2F2' }}>
                 <AlertCircle size={22} color="#DC2626" />
               </div>
             </div>
-            <span className="text-white text-lg font-bold text-center block mb-2">确认退出</span>
-            <span className="text-stone-300 text-sm text-center block mb-6">{answeredCount > 0 ? '已答 ' + answeredCount + '/' + totalQuestions + ' 题，退出后答题记录不会保存。确定要退出吗？' : '退出后答题记录不会保存。确定要退出吗？'}</span>
+            <span className="text-slate-800 text-lg font-bold text-center block mb-2">确认退出</span>
+            <span className="text-slate-500 text-sm text-center block mb-6">{answeredCount > 0 ? '已答 ' + answeredCount + '/' + totalQuestions + ' 题，退出后答题记录不会保存。确定要退出吗？' : '退出后答题记录不会保存。确定要退出吗？'}</span>
             <div className="flex gap-3">
-              <button onClick={function() { setShowExitConfirm(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                <span className="text-white font-semibold">继续考试</span>
+              <button onClick={function() { setShowExitConfirm(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+                <span className="text-indigo-600 font-semibold">继续考试</span>
               </button>
               <button onClick={function() { navigate('/exam'); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(135deg, #DC2626, #E11D48)', boxShadow: '0 4px 16px rgba(220,38,38,0.3)' }}>
                 <span className="text-white font-semibold">退出</span>
@@ -2305,8 +2341,8 @@ function StatItem(props) {
       <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-1.5" style={{ backgroundColor: color + '22' }}>
         <Icon size={15} color={color} />
       </div>
-      <span className="text-white text-lg font-bold">{value}{suffix}</span>
-      <span className="text-stone-300 text-xs mt-0.5">{label}</span>
+      <span className="text-slate-800 text-lg font-bold">{value}{suffix}</span>
+      <span className="text-slate-500 text-xs mt-0.5">{label}</span>
     </div>
   );
 }
@@ -2365,7 +2401,7 @@ function History() {
   var contentWidth = isTablet ? maxContentWidth : '100%';
 
   return (
-    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
@@ -2374,22 +2410,22 @@ function History() {
               <span className="text-white/80 text-xs mt-0.5 block">各项练习和考试成绩</span>
             </div>
             {records.length > 0 && (
-              <button onClick={function() { setClearModalVisible(true); }} className="rounded-xl px-4 py-2.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
-                <Trash2 size={12} color="#FFFFFF" />
-                <span className="text-white text-sm font-semibold ml-1.5">清空</span>
+              <button onClick={function() { setClearModalVisible(true); }} className="rounded-xl px-4 py-2.5 flex items-center" style={{ backgroundColor: 'rgba(99,102,241,0.08)' }}>
+                <Trash2 size={12} color="#4F46E5" />
+                <span className="text-indigo-600 text-sm font-semibold ml-1.5">清空</span>
               </button>
             )}
           </div>
         </div>
 
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, marginTop: -5, marginBottom: 8 }}>
-          <div className="flex rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
-            <StatItem icon={ClipboardList} label="总练习" value={totalExams} color="#A5B4FC" />
-            <div style={{ width: 1, background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }} />
+          <div className="flex rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+            <StatItem icon={ClipboardList} label="总练习" value={totalExams} color="#94A3B8" />
+            <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
             <StatItem icon={CheckCircle} label="及格" value={passCount} color="#10B981" />
-            <div style={{ width: 1, background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }} />
+            <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
             <StatItem icon={XCircle} label="不及格" value={failCount} color="#DC2626" />
-            <div style={{ width: 1, background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }} />
+            <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
             <StatItem icon={BarChart3} label="平均分" value={avgScore} color="#D97706" suffix="%" />
           </div>
         </div>
@@ -2400,14 +2436,14 @@ function History() {
               return (
                 <button key={ft.value} onClick={function() { setFilterType(ft.value); }}
                   className="rounded-full px-4 py-2 whitespace-nowrap transition-all"
-                  style={{ background: filterType === ft.value ? HISTORY_HEADER_GRADIENT : 'rgba(255,255,255,0.10)', border: filterType === ft.value ? 'none' : '1px solid rgba(255,255,255,0.14)', color: filterType === ft.value ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
+                  style={{ background: filterType === ft.value ? HISTORY_HEADER_GRADIENT : 'rgba(255,255,255,0.95)', border: filterType === ft.value ? 'none' : '1px solid rgba(99,102,241,0.10)', color: filterType === ft.value ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
                   {ft.label}
                 </button>
               );
             })}
             <button onClick={function() { setWrongOnly(!wrongOnly); }}
               className="rounded-full px-4 py-2 whitespace-nowrap transition-all flex items-center"
-              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.10)', border: wrongOnly ? 'none' : '1px solid rgba(255,255,255,0.14)', color: wrongOnly ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
+              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.95)', border: wrongOnly ? 'none' : '1px solid rgba(99,102,241,0.10)', color: wrongOnly ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
               <XCircle size={12} style={{ marginRight: 4 }} />
               只看错题
             </button>
@@ -2420,15 +2456,15 @@ function History() {
               <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: HISTORY_HEADER_COLOR + '22', borderRadius: 16 }}>
                 <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: HISTORY_HEADER_COLOR, borderTopColor: 'transparent' }} />
               </div>
-              <span className="text-stone-300 text-sm">加载记录中...</span>
+              <span className="text-slate-500 text-sm">加载记录中...</span>
             </div>
           ) : filteredRecords.length === 0 ? (
             <div className="flex flex-col items-center py-20">
-              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                <ClockRotateLeft size={28} color="#E7E5E4" />
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+                <ClockRotateLeft size={28} color="#6366F1" />
               </div>
-              <span className="text-stone-300 text-base font-medium">暂无历史记录</span>
-              <span className="text-stone-300 mt-1 text-sm">完成练习后这里会显示成绩</span>
+              <span className="text-slate-500 text-base font-medium">暂无历史记录</span>
+              <span className="text-slate-500 mt-1 text-sm">完成练习后这里会显示成绩</span>
             </div>
           ) : (
             <div className="flex flex-wrap" style={{ gap: 12 }}>
@@ -2437,12 +2473,12 @@ function History() {
                 var ratio = ms > 0 ? item.score / ms : 0;
                 var scoreColor = historyScoreColor(ratio);
                 var typeKey = item.question_type || 'unknown';
-                var typeColor = HISTORY_TYPE_COLOR[typeKey] || '#A5B4FC';
+                var typeColor = HISTORY_TYPE_COLOR[typeKey] || '#94A3B8';
                 var grade = getGrade(ratio);
                 return (
                   <button key={item.id} onClick={function() { navigate('/history-detail?id=' + item.id); }}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
-                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
+                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
                     <div className="rounded-xl flex flex-col items-center justify-center" style={{ width: 56, height: 56, backgroundColor: scoreColor + '22', flexShrink: 0 }}>
                       <span className="text-xl font-bold" style={{ color: scoreColor }}>{item.score}</span>
                       <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -2456,10 +2492,10 @@ function History() {
                           {grade}
                         </span>
                       </div>
-                      <span className="text-slate-100 text-sm font-medium mt-1.5 block truncate">{item.question_title || '练习记录'}</span>
-                      <span className="text-stone-300 text-xs mt-0.5 block">{item.created_at ? new Date(item.created_at).toLocaleString('zh-CN') : ''}</span>
+                      <span className="text-slate-700 text-sm font-medium mt-1.5 block truncate">{item.question_title || '练习记录'}</span>
+                      <span className="text-slate-500 text-xs mt-0.5 block">{item.created_at ? new Date(item.created_at).toLocaleString('zh-CN') : ''}</span>
                     </div>
-                    <ChevronRight size={12} color="#E7E5E4" style={{ flexShrink: 0, marginLeft: 4 }} />
+                    <ChevronRight size={12} color="#94A3B8" style={{ flexShrink: 0, marginLeft: 4 }} />
                   </button>
                 );
               })}
@@ -2469,18 +2505,18 @@ function History() {
       </div>
 
       {clearModalVisible && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(27,27,58,0.8)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setClearModalVisible(false); }}>
-          <div className="rounded-xl p-7" style={{ background: 'rgba(37,38,90,0.95)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setClearModalVisible(false); }}>
+          <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
             <div className="flex flex-col items-center mb-5">
               <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FEE2E2' }}>
                 <Trash2 size={22} color="#DC2626" />
               </div>
             </div>
-            <span className="text-white text-lg font-bold text-center block mb-2">确认清空</span>
-            <span className="text-stone-300 text-sm text-center block mb-6">将删除所有历史记录，此操作不可恢复。确定要清空吗？</span>
+            <span className="text-slate-800 text-lg font-bold text-center block mb-2">确认清空</span>
+            <span className="text-slate-500 text-sm text-center block mb-6">将删除所有历史记录，此操作不可恢复。确定要清空吗？</span>
             <div className="flex gap-3">
-              <button onClick={function() { setClearModalVisible(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-                <span className="text-white font-semibold">取消</span>
+              <button onClick={function() { setClearModalVisible(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+                <span className="text-indigo-600 font-semibold">取消</span>
               </button>
               <button onClick={handleClearConfirm} disabled={clearing} className="flex-1 py-4 rounded-xl" style={{ backgroundColor: clearing ? '#FCA5A5' : '#DC2626' }}>
                 <span className="text-white font-semibold">{clearing ? '清空中...' : '清空'}</span>
@@ -2526,7 +2562,7 @@ function HistoryDetail(props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#6366F122' }}>
           <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: '#6366F1', borderTopColor: 'transparent' }} />
         </div>
@@ -2536,8 +2572,8 @@ function HistoryDetail(props) {
 
   if (!record) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-        <span className="text-stone-300">记录不存在</span>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+        <span className="text-slate-500">记录不存在</span>
       </div>
     );
   }
@@ -2561,7 +2597,7 @@ function HistoryDetail(props) {
   }
 
   return (
-    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
         <div className="flex items-center mb-2">
@@ -2573,49 +2609,49 @@ function HistoryDetail(props) {
       </div>
 
       <div className="p-6 pb-20">
-        <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+        <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
           <div className="w-20 h-20 rounded-full mx-auto flex flex-col items-center justify-center" style={{ backgroundColor: scoreColor + '22' }}>
             <span className="text-3xl font-bold" style={{ color: scoreColor }}>{record.score}</span>
             <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
           </div>
-          <span className="text-stone-300 text-sm mt-3 block">{HD_TYPE_LABEL[typeKey] || record.question_type} · {isPass ? '及格' : '不及格'}</span>
-          <span className="text-stone-300 text-xs mt-1 block">{record.created_at ? new Date(record.created_at).toLocaleString('zh-CN') : ''}</span>
+          <span className="text-slate-500 text-sm mt-3 block">{HD_TYPE_LABEL[typeKey] || record.question_type} · {isPass ? '及格' : '不及格'}</span>
+          <span className="text-slate-500 text-xs mt-1 block">{record.created_at ? new Date(record.created_at).toLocaleString('zh-CN') : ''}</span>
         </div>
 
         {record.question_title && (
-          <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-            <span className="text-stone-300 text-xs font-bold block mb-1">题目</span>
-            <span className="text-slate-100 text-sm font-medium">{record.question_title}</span>
+          <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <span className="text-slate-500 text-xs font-bold block mb-1">题目</span>
+            <span className="text-slate-700 text-sm font-medium">{record.question_title}</span>
           </div>
         )}
 
         {record.transcription && (
           <ResultCard icon={FileText} label="语音转写" color={typeColor}>
-            <span className="text-stone-100 text-sm leading-6">{record.transcription}</span>
+            <span className="text-slate-700 text-sm leading-6">{record.transcription}</span>
           </ResultCard>
         )}
 
         {analysisText && (
           <ResultCard icon={BarChart3} label="评分分析" color={typeColor}>
-            <span className="text-stone-100 text-sm leading-6">{analysisText}</span>
+            <span className="text-slate-700 text-sm leading-6">{analysisText}</span>
           </ResultCard>
         )}
 
         {fluencyText && (
           <ResultCard icon={BarChart3} label="流利度分析" color={typeColor}>
-            <span className="text-stone-100 text-sm leading-6">{fluencyText}</span>
+            <span className="text-slate-700 text-sm leading-6">{fluencyText}</span>
           </ResultCard>
         )}
 
         {completenessText && (
           <ResultCard icon={BarChart3} label="完整性分析" color={typeColor}>
-            <span className="text-stone-100 text-sm leading-6">{completenessText}</span>
+            <span className="text-slate-700 text-sm leading-6">{completenessText}</span>
           </ResultCard>
         )}
 
         {suggestionsText && (
           <ResultCard icon={Lightbulb} label="改进建议" color={typeColor}>
-            <span className="text-stone-100 text-sm leading-6">{suggestionsText}</span>
+            <span className="text-slate-700 text-sm leading-6">{suggestionsText}</span>
           </ResultCard>
         )}
 
@@ -2657,37 +2693,37 @@ function ScoringGuide(props) {
   var isSingleType = !!type;
 
   return (
-    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
+    <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
-      <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81, #4C1D95)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(76,29,149,0.3)' }}>
+      <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(99,102,241,0.15)' }}>
         <div className="flex items-center mb-2">
           <button onClick={function() { navigate(type ? '/practice/' + type : '/'); }} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}>
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
-          <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
-        </div>
-        <span className="text-stone-300 text-sm">参考北京市中考英语听说考试评分标准</span>
-      </div>
+        <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
+       </div>
+        <span className="text-indigo-100 text-sm">参考北京市中考英语听说考试评分标准</span>
+     </div>
 
       <div className="p-6 pb-20">
         {!isSingleType && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
             <div className="flex items-center mb-1">
-              <ClipboardList size={16} color="#818CF8" />
-              <span className="text-white text-base font-bold ml-2">总分构成</span>
+              <ClipboardList size={16} color="#4F46E5" />
+              <span className="text-slate-800 text-base font-bold ml-2">总分构成</span>
             </div>
             <div className="flex justify-between">
               {SCORING_RULES.map(function(s) {
                 return (
                   <div key={s.type} className="items-center flex-1 text-center">
                     <span className="text-2xl font-bold block" style={{ color: s.color }}>{s.maxScore}</span>
-                    <span className="text-stone-300 text-xs">{s.label}</span>
+                    <span className="text-slate-500 text-xs">{s.label}</span>
                   </div>
                 );
               })}
               <div className="items-center flex-1 text-center">
-                <span className="text-2xl font-bold text-white block">40</span>
-                <span className="text-stone-300 text-xs">总分</span>
+                <span className="text-2xl font-bold text-slate-800 block">40</span>
+                <span className="text-slate-500 text-xs">总分</span>
               </div>
             </div>
           </div>
@@ -2696,12 +2732,12 @@ function ScoringGuide(props) {
         {filteredRules.map(function(rule) {
           var RuleIcon = rule.icon;
           return (
-            <div key={rule.type} className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div key={rule.type} className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
               <div className="flex items-center mb-1">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: rule.color + '22' }}>
                   <RuleIcon size={14} color={rule.color} />
                 </div>
-                <span className="text-white text-base font-bold ml-2">{rule.label}</span>
+                <span className="text-slate-800 text-base font-bold ml-2">{rule.label}</span>
                 <div className="flex-1" />
                 <span className="text-sm font-bold" style={{ color: rule.color }}>满分 {rule.maxScore} 分</span>
               </div>
@@ -2711,7 +2747,7 @@ function ScoringGuide(props) {
                     <div className="w-5 h-5 rounded-full flex items-center justify-center mt-0.5" style={{ backgroundColor: rule.color + '22' }}>
                       <span className="text-xs font-bold" style={{ color: rule.color }}>{idx + 1}</span>
                     </div>
-                    <span className="text-stone-300 text-sm flex-1 ml-2 leading-5">{r}</span>
+                    <span className="text-slate-500 text-sm flex-1 ml-2 leading-5">{r}</span>
                   </div>
                 );
               })}
@@ -2720,15 +2756,15 @@ function ScoringGuide(props) {
         })}
 
         {filteredRules.some(function(r) { return r.type === 'read_aloud'; }) && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(234,88,12,0.08)' }}>
-            <span className="text-white text-base font-bold block mb-3">短文朗读评分档次</span>
+          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(234,88,12,0.08)' }}>
+            <span className="text-slate-800 text-base font-bold block mb-3">短文朗读评分档次</span>
             {GRADE_LEVELS.map(function(g, idx) {
               return (
                 <div key={idx} className="flex items-center mb-3">
                   <div className="w-16 rounded-lg py-1 text-center mr-3" style={{ backgroundColor: g.color + '22' }}>
                     <span className="text-xs font-bold" style={{ color: g.color }}>{g.range}</span>
                   </div>
-                  <span className="text-stone-300 text-sm flex-1 leading-5">{g.desc}</span>
+                  <span className="text-slate-500 text-sm flex-1 leading-5">{g.desc}</span>
                 </div>
               );
             })}
@@ -2736,8 +2772,8 @@ function ScoringGuide(props) {
         )}
 
         <div className="flex items-center justify-center mt-2">
-          <Lightbulb size={12} color="#E2E8F0" />
-         <span className="text-stone-300 text-xs ml-1">评分标准参考北京市中考英语听说机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
+          <Lightbulb size={12} color="#475569" />
+         <span className="text-slate-500 text-xs ml-1">评分标准参考北京市中考英语听说机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
         </div>
       </div>
     </div>
