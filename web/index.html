@@ -8,11 +8,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="英语听说">
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -786,11 +786,14 @@ function stopSpeaking() { window.speechSynthesis.cancel(); }
 function isSpeechSupported() { return typeof window !== 'undefined' && 'speechSynthesis' in window; }
 if (isSpeechSupported()) loadVoices();
 
+// Resolve audio file URL relative to the document base (supports sub-path hosting like GitHub Pages)
+function audioPath(qid) { return new URL('audio/' + qid + '.mp3', document.baseURI).pathname; }
+
 var audioExistsCache = {};
 async function checkAudioExists(qid) {
   if (qid == null) return false;
   if (qid in audioExistsCache) return audioExistsCache[qid];
-  try { var res = await fetch('/audio/' + qid + '.mp3', { method: 'HEAD' }); audioExistsCache[qid] = res.ok; return res.ok; }
+  try { var res = await fetch(audioPath(qid), { method: 'HEAD' }); audioExistsCache[qid] = res.ok; return res.ok; }
   catch(e) { audioExistsCache[qid] = false; return false; }
 }
 
@@ -1131,7 +1134,7 @@ function TTSPlayer(props) {
     if (playing) { stopAll(); setPlaying(false); roundRef.current = 0; setPlayRound(0); if (onWordIndex) onWordIndex(-1); return; }
     setLoading(true);
     var currentRound = roundRef.current;
-    if (questionId && await checkAudioExists(questionId)) { playAudioFile('/audio/' + questionId + '.mp3', currentRound); }
+    if (questionId && await checkAudioExists(questionId)) { playAudioFile(audioPath(questionId), currentRound); }
     else { playWithSpeech(currentRound); }
   }, [playing, text, playCount, onWordIndex, words, questionId]);
  handlePlayRef.current = handlePlay;
@@ -2715,7 +2718,7 @@ document.addEventListener('DOMContentLoaded', transformAppCode);
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js').catch(function(e) { console.log('SW registration failed:', e); });
+    navigator.serviceWorker.register('sw.js').catch(function(e) { console.log('SW registration failed:', e); });
   });
 }
 </script>

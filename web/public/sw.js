@@ -1,11 +1,11 @@
 const CACHE_VERSION = 'beijing-english-v2';
 const AUDIO_CACHE = 'beijing-english-audio-v1';
 const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
 ];
 
 self.addEventListener('install', function(e) {
@@ -33,7 +33,7 @@ self.addEventListener('fetch', function(e) {
   var url = new URL(req.url);
 
   // Audio files: cache-first, runtime caching
-  if (url.pathname.startsWith('/audio/') && req.method === 'GET') {
+  if (url.pathname.includes('/audio/') && req.method === 'GET') {
     e.respondWith(
       caches.open(AUDIO_CACHE).then(function(cache) {
         return cache.match(req).then(function(cached) {
