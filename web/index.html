@@ -17,6 +17,18 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="module">
+  import { pipeline, env } from "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm";
+  env.allowLocalModels = false;
+  env.useBrowserCache = true;
+ env.remoteHost = "https://hf-mirror.com";
+  // Bypass 307 redirect that breaks browser CORS — use direct resolve-cache URL
+  env.remotePathTemplate = "api/resolve-cache/models/{model}/79fb389fc764e7c395bd330e9531d9d32ada7049/";
+  // Point ONNX Runtime WASM to correct CDN path (default points to transformers dist, which lacks .wasm files)
+  env.backends.onnx.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/";
+ window.__transformers = { pipeline: pipeline, env: env };
+  window.__transformersReady = true;
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -917,114 +929,160 @@ function pickRecorderMimeType() {
   for (var i = 0; i < candidates.length; i++) {
     try { if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i]; } catch(e) {}
   }
-  return '';
+ return '';
+}
+
+// === Whisper ASR (offline speech recognition, works in China without Google) ===
+var _whisperPipeline = null;
+var _whisperLoading = false;
+function waitForTransformers() {
+  return new Promise(function(resolve) {
+    function check() { if (window.__transformersReady) resolve(); else setTimeout(check, 100); }
+    check();
+  });
+}
+async function getWhisperPipeline(onProgress) {
+  if (_whisperPipeline) return _whisperPipeline;
+  await waitForTransformers();
+  if (_whisperPipeline) return _whisperPipeline;
+  if (_whisperLoading) {
+    return new Promise(function(resolve) {
+      var t = setInterval(function() { if (_whisperPipeline) { clearInterval(t); resolve(_whisperPipeline); } }, 200);
+    });
+  }
+  _whisperLoading = true;
+  try {
+    _whisperPipeline = await window.__transformers.pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en', {
+      quantized: true,
+      progress_callback: onProgress || function() {}
+    });
+  } finally { _whisperLoading = false; }
+  return _whisperPipeline;
+}
+async function decodeAudioBlobToFloat32(blob) {
+  var arrayBuffer = await blob.arrayBuffer();
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var tempCtx = new AC();
+  var audioBuffer = await tempCtx.decodeAudioData(arrayBuffer);
+  tempCtx.close();
+  var targetRate = 16000;
+  var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  var length = Math.max(1, Math.ceil(audioBuffer.duration * targetRate));
+  var offlineCtx = new OAC(1, length, targetRate);
+  var source = offlineCtx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(offlineCtx.destination);
+  source.start();
+  var rendered = await offlineCtx.startRendering();
+  return rendered.getChannelData(0);
+}
+async function transcribeWithWhisper(blob, onProgress) {
+  var pipeline = await getWhisperPipeline(onProgress);
+  var audioData = await decodeAudioBlobToFloat32(blob);
+  var output = await pipeline(audioData);
+  return (output && output.text) ? output.text.trim() : '';
+}
+function preloadWhisperModel() {
+  if (_whisperPipeline || _whisperLoading) return;
+  getWhisperPipeline(function(data) {
+    console.log('Whisper model loading:', data.status, data.file || '');
+  }).catch(function(e) { console.warn('Whisper preload failed:', e); });
 }
 
 function useAudioRecorder() {
-  var state = useState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null, asrStatus: '' });
+  var state = useState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null, whisperProgress: '' });
   var st = state[0], setState = state[1];
   var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null), mimeTypeRef = useRef('audio/webm');
-  var audioElementRef = useRef(null), asrControllerRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
- var startRecording = useCallback(async function() {
-   setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0, asrStatus: '' });});
-   try {
-     if (isASRSupported()) {
-       // ASR mode: SpeechRecognition handles audio capture internally.
-       // Do NOT call getUserMedia — it locks the mic and blocks SpeechRecognition.
-       asrControllerRef.current = recognizeSpeech({
-         onInterim: function(text) { setState(function(s){return Object.assign({}, s, { interimText: text });}); },
-         onError: function(err) { setState(function(s){return Object.assign({}, s, { error: mapAsrError(err) });}); },
-         onStatus: function(s) { console.log('ASR_STATUS: ' + s); setState(function(prev){return Object.assign({}, prev, { asrStatus: s });}); }
-       });
-     } else {
-       // Non-ASR mode: record audio for playback, user types text manually
-       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-         throw new DOMException('MediaDevices not available', 'NotSupportedError');
-       }
-       var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-       streamRef.current = stream;
-       if (typeof MediaRecorder === 'undefined') {
-         stream.getTracks().forEach(function(t){t.stop();});
-         throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
-       }
-       var mt = pickRecorderMimeType();
-       mimeTypeRef.current = mt || 'audio/webm';
-       var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
-       mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
-       mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
-       mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
-       mediaRecorder.start(1000);
-     }
-     startTimeRef.current = Date.now();
-     timerRef.current = setInterval(function() {
-       var elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
-       setState(function(s){return Object.assign({}, s, { recordingTime: elapsed });});
-     }, 1000);
-   } catch(e) {
-     var errMsg = e.message || '无法访问麦克风，请检查权限设置。';
-     if (e.name === 'NotAllowedError') errMsg = '麦克风权限被拒绝，请在浏览器设置中允许麦克风访问。';
-     else if (e.name === 'NotFoundError') errMsg = '未找到麦克风设备，请检查设备连接。';
-     else if (e.name === 'NotReadableError') errMsg = '麦克风被其他应用占用，请关闭后重试。';
-     else if (e.name === 'SecurityError') errMsg = '需要 HTTPS 环境才能使用麦克风。';
-     else if (e.name === 'NotSupportedError') errMsg = '当前浏览器不支持录音功能，请使用 Chrome 或 Edge 浏览器。';
-     else if (e.name === 'AbortError') errMsg = '录音启动失败，请刷新页面后重试。';
-     else if (errMsg === e.message) errMsg = '无法访问麦克风，请检查权限设置或更换浏览器重试。';
-     console.error('Recording start failed:', e.name, e.message);
-     setState(function(s){return Object.assign({}, s, { recording: false, error: errMsg });});
-   }
+  var audioElementRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
+  var startRecording = useCallback(async function() {
+    setState(function(s) { return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0, whisperProgress: '' }); });
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new DOMException('MediaDevices not available', 'NotSupportedError');
+      }
+      var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      if (typeof MediaRecorder === 'undefined') {
+        stream.getTracks().forEach(function(t) { t.stop(); });
+        throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
+      }
+      var mt = pickRecorderMimeType();
+      mimeTypeRef.current = mt || 'audio/webm';
+      var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      chunksRef.current = [];
+      mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
+      mediaRecorder.start(1000);
+      startTimeRef.current = Date.now();
+      timerRef.current = setInterval(function() {
+        var elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        setState(function(s) { return Object.assign({}, s, { recordingTime: elapsed }); });
+      }, 1000);
+    } catch(e) {
+      var errMsg = e.message || '无法访问麦克风，请检查权限设置。';
+      if (e.name === 'NotAllowedError') errMsg = '麦克风权限被拒绝，请在浏览器设置中允许麦克风访问。';
+      else if (e.name === 'NotFoundError') errMsg = '未找到麦克风设备，请检查设备连接。';
+      else if (e.name === 'NotReadableError') errMsg = '麦克风被其他应用占用，请关闭后重试。';
+      else if (e.name === 'SecurityError') errMsg = '需要 HTTPS 环境才能使用麦克风。';
+      else if (e.name === 'NotSupportedError') errMsg = '当前浏览器不支持录音功能，请使用 Chrome 或 Edge 浏览器。';
+      else if (e.name === 'AbortError') errMsg = '录音启动失败，请刷新页面后重试。';
+      console.error('Recording start failed:', e.name, e.message);
+      setState(function(s) { return Object.assign({}, s, { recording: false, error: errMsg }); });
+    }
   }, []);
- var stopRecording = useCallback(async function() {
-   if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-   var transcript = '';
-   if (asrControllerRef.current) {
-     setState(function(s){return Object.assign({}, s, { transcribing: true });});
-      // Call stop() to trigger recognition.onend -> resolves promise immediately
-      asrControllerRef.current.stop();
-   }
-   var audioUrl = null;
-   var recorder = mediaRecorderRef.current;
-   // Stop both ASR and MediaRecorder in parallel
-   var recorderPromise = Promise.resolve();
-   if (recorder && recorder.state !== 'inactive') {
-     recorderPromise = new Promise(function(resolve) {
-       recorder.onstop = function() {
-         if (streamRef.current) { streamRef.current.getTracks().forEach(function(t){t.stop();}); streamRef.current = null; }
-         if (chunksRef.current.length > 0) { var blob = new Blob(chunksRef.current, { type: mimeTypeRef.current || 'audio/webm' }); audioUrl = URL.createObjectURL(blob); audioUrlRef.current = audioUrl; }
-         resolve();
-       };
-       recorder.stop();
-     });
-   }
-  var rawAsrPromise = asrControllerRef.current ? asrControllerRef.current.promise : Promise.resolve({ transcript: '' });
-  // Safety timeout: if onend never fires, resolve after 5s with whatever we have
-  var asrPromise = Promise.race([
-    rawAsrPromise,
-    new Promise(function(resolve) { setTimeout(function() { resolve({ transcript: '' }); }, 5000); })
-  ]);
-  var allResult = await Promise.all([asrPromise, recorderPromise]);
-  transcript = allResult[0].transcript;
-  var asrErr = allResult[0].error || null;
-  if (asrControllerRef.current) { asrControllerRef.current = null; setState(function(s){return Object.assign({}, s, { transcribing: false });}); }
-  var newState = { recording: false, recordedUrl: audioUrl, interimText: transcript };
-  if (!transcript && asrErr) { newState.error = mapAsrError(asrErr); }
-  setState(function(s){return Object.assign({}, s, newState);});
-  return { audioUrl: audioUrl, transcript: transcript, error: asrErr };
-}, []);
+  var stopRecording = useCallback(async function() {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    var recorder = mediaRecorderRef.current;
+    var audioUrl = null, audioBlob = null;
+    if (recorder && recorder.state !== 'inactive') {
+      await new Promise(function(resolve) {
+        recorder.onstop = function() {
+          if (streamRef.current) { streamRef.current.getTracks().forEach(function(t) { t.stop(); }); streamRef.current = null; }
+          if (chunksRef.current.length > 0) {
+            audioBlob = new Blob(chunksRef.current, { type: mimeTypeRef.current || 'audio/webm' });
+            audioUrl = URL.createObjectURL(audioBlob);
+            audioUrlRef.current = audioUrl;
+          }
+          resolve();
+        };
+        recorder.stop();
+      });
+    }
+    var transcript = '';
+    if (audioBlob) {
+      setState(function(s) { return Object.assign({}, s, { recording: false, recordedUrl: audioUrl, transcribing: true, recordingTime: 0 }); });
+      try {
+        transcript = await transcribeWithWhisper(audioBlob, function(progress) {
+          if (progress.status === 'progress' && progress.file) {
+            var pct = progress.progress ? Math.round(progress.progress * 100) : 0;
+            var fileName = (progress.file || '').split('/').pop();
+            setState(function(s) { return Object.assign({}, s, { whisperProgress: '加载语音模型: ' + fileName + ' ' + pct + '%（首次使用需下载约40MB，后续自动缓存）' }); });
+          } else if (progress.status === 'ready') {
+            setState(function(s) { return Object.assign({}, s, { whisperProgress: '识别中...' }); });
+          }
+        });
+      } catch(e) {
+        console.error('Whisper transcription failed:', e);
+        setState(function(s) { return Object.assign({}, s, { error: '语音识别失败：' + (e.message || e) + '，请手动输入内容后提交。' }); });
+      }
+    }
+    setState(function(s) { return Object.assign({}, s, { recording: false, recordedUrl: audioUrl, transcribing: false, interimText: transcript, whisperProgress: '' }); });
+    return { audioUrl: audioUrl, transcript: transcript, error: null };
+  }, []);
   var playRecording = useCallback(function() {
     if (!audioUrlRef.current) return;
-    if (st.playing) { if (audioElementRef.current) audioElementRef.current.pause(); setState(function(s){return Object.assign({}, s, { playing: false });}); return; }
-    if (!audioElementRef.current) { audioElementRef.current = new Audio(audioUrlRef.current); audioElementRef.current.onended = function() { setState(function(s){return Object.assign({}, s, { playing: false });}); }; }
+    if (st.playing) { if (audioElementRef.current) audioElementRef.current.pause(); setState(function(s) { return Object.assign({}, s, { playing: false }); }); return; }
+    if (!audioElementRef.current) { audioElementRef.current = new Audio(audioUrlRef.current); audioElementRef.current.onended = function() { setState(function(s) { return Object.assign({}, s, { playing: false }); }); }; }
     audioElementRef.current.play();
-    setState(function(s){return Object.assign({}, s, { playing: true });});
+    setState(function(s) { return Object.assign({}, s, { playing: true }); });
   }, [st.playing]);
   var reset = useCallback(function() {
     if (timerRef.current) clearInterval(timerRef.current);
-    if (asrControllerRef.current) asrControllerRef.current.stop();
-    if (streamRef.current) { streamRef.current.getTracks().forEach(function(t){t.stop();}); streamRef.current = null; }
+    if (streamRef.current) { streamRef.current.getTracks().forEach(function(t) { t.stop(); }); streamRef.current = null; }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') mediaRecorderRef.current.stop();
     if (audioElementRef.current) { audioElementRef.current.pause(); audioElementRef.current = null; }
     if (audioUrlRef.current) { URL.revokeObjectURL(audioUrlRef.current); audioUrlRef.current = null; }
-    setState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null });
+    setState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null, whisperProgress: '' });
   }, []);
   return Object.assign({}, st, { startRecording: startRecording, stopRecording: stopRecording, playRecording: playRecording, reset: reset });
 }
@@ -1272,16 +1330,22 @@ handlePlayRef.current = handlePlay;
 function RecordButton(props) {
   var recording = props.recording, recordedUrl = props.recordedUrl, playing = props.playing;
   var transcribing = props.transcribing, recordingTime = props.recordingTime, color = props.color;
+  var whisperProgress = props.whisperProgress;
   var onStart = props.onStart, onStop = props.onStop, onPlay = props.onPlay;
   return (
     <div>
       <button onClick={recording ? onStop : onStart} disabled={transcribing}
         className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-60"
         style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #EF4444)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 4px 16px ' + (recording ? 'rgba(220,38,38,0.15)' : color + '20') }}>
-        {transcribing ? (<><Loader2 size={18} color="#FFFFFF" className="animate-spin" /><span className="text-white text-base font-bold ml-2">语音识别中...</span></>)
+        {transcribing ? (<><Loader2 size={18} color="#FFFFFF" className="animate-spin" /><span className="text-white text-base font-bold ml-2">{whisperProgress || '语音识别中...'}</span></>)
           : recording ? (<><div className="rounded-full animate-rec-pulse" style={{ width: 10, height: 10, backgroundColor: '#FFFFFF' }} /><span className="text-white text-base font-bold ml-2">停止录音 · {formatTime(recordingTime)}</span></>)
           : (<><Mic size={18} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{recordedUrl ? '重新录音' : '开始录音'}</span></>)}
       </button>
+      {transcribing && whisperProgress && (
+        <div className="rounded-xl p-3 mt-3 text-center" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+          <span className="text-indigo-500 text-xs block">{whisperProgress}</span>
+        </div>
+      )}
       {recordedUrl && !recording && !transcribing && (
         <button onClick={onPlay} className="w-full rounded-xl py-4 flex items-center justify-center mt-3 transition-all active:scale-[0.98]"
           style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
@@ -1293,19 +1357,10 @@ function RecordButton(props) {
   );
 }
 
-var ASR_SUPPORTED = typeof window !== 'undefined' && (!!window.SpeechRecognition || !!window.webkitSpeechRecognition);
+var ASR_SUPPORTED = true; // Whisper ASR works in all modern browsers (WASM-based, offline)
 
 function AsrStatusBanner() {
-  if (ASR_SUPPORTED) return null;
-  return (
-    <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.25)' }}>
-      <AlertCircle size={16} color="#F59E0B" style={{ flexShrink: 0, marginTop: 1 }} />
-      <div className="ml-2 flex-1">
-        <span className="text-amber-600 text-xs font-bold block">当前环境不支持语音识别</span>
-        <span className="text-amber-600/80 text-xs block mt-1">安装版 App 内无法自动识别朗读内容。请用 Chrome 浏览器打开本页面以获得自动识别功能，或在下方文本框手动输入朗读内容后提交评分。</span>
-      </div>
-    </div>
-  );
+  return null;
 }
 
 function ResultCard(props) {
@@ -1476,20 +1531,21 @@ function PracticeAnswer(props) {
       setSiblingQuestions(siblings);
     } catch(e) {} finally { setLoading(false); }
   }, [questionId]);
-  useEffect(function() { loadData(); }, [loadData]);
-  useEffect(function() { if (result && resultRef.current) resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, [result]);
+ useEffect(function() { loadData(); }, [loadData]);
+ useEffect(function() { if (qType !== 'listen_choose') preloadWhisperModel(); }, [qType]);
+ useEffect(function() { if (result && resultRef.current) resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, [result]);
  var currentIdx = useMemo(function() { return siblingQuestions.findIndex(function(q){return q.id === questionId;}); }, [siblingQuestions, questionId]);
   function handleSwitchQuestion(newQid) { navigate('/practice-answer?questionId=' + newQid + '&type=' + (question ? question.type : qType)); }
 var handleStopRecording = useCallback(async function() {
   var res = await recorder.stopRecording();
   if (res.transcript) setTextAnswer(res.transcript);
-    if (!res.transcript && question && question.type !== 'listen_choose') {
-      if (res.error) {
-        setRecordingNotice('语音识别失败：' + mapAsrError(res.error) + ' 请在下方文本框手动输入朗读/回答内容后提交评分。');
-      } else {
-        setRecordingNotice('录音完成，但未识别到语音内容。请在下方文本框手动输入朗读/回答内容后提交评分。');
-      }
-    } else { setRecordingNotice(''); }
+  if (!res.transcript && question && question.type !== 'listen_choose') {
+    if (recorder.error) {
+      setRecordingNotice('语音识别失败：' + recorder.error + ' 请在下方文本框手动输入内容后提交评分。');
+    } else {
+      setRecordingNotice('未识别到语音内容，请重新录音或在下方文本框手动输入内容后提交评分。');
+    }
+  } else { setRecordingNotice(''); }
   return res;
 }, [recorder]);
  var handleSubmit = useCallback(async function() {
@@ -1632,17 +1688,12 @@ var handleStopRecording = useCallback(async function() {
             <div className="mb-4">
               <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing}
                 transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={config.color}
+                whisperProgress={recorder.whisperProgress}
               onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
              {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#EF4444' }}>{recorder.error}</div>}
-             {recorder.recording && recorder.interimText && (
-               <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
-                 <span className="text-slate-500 text-xs block mb-1">实时识别</span>
-                 <span className="text-slate-700 text-sm">{recorder.interimText}</span>
-               </div>
-             )}
-             {recorder.recording && !recorder.interimText && recorder.asrStatus && (
+             {recorder.recording && (
                <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
-                 <span className="text-indigo-500 text-xs block">语音识别状态：{recorder.asrStatus}</span>
+                 <span className="text-indigo-500 text-xs block">录音中... 停止后将自动识别语音内容</span>
                </div>
              )}
               {recordingNotice && (
@@ -1652,10 +1703,9 @@ var handleStopRecording = useCallback(async function() {
                 </div>
               )}
              <div className="mt-3">
-                <AsrStatusBanner />
-                <span className="text-slate-500 text-xs font-bold block mb-2">{rType === 'read_aloud' ? (ASR_SUPPORTED ? '朗读文本（语音识别结果）' : '朗读文本（请手动输入朗读内容）') : (ASR_SUPPORTED ? '回答文本（可手动编辑）' : '回答文本（请手动输入回答内容）')}</span>
+                <span className="text-slate-500 text-xs font-bold block mb-2">{rType === 'read_aloud' ? '朗读文本（语音识别结果，可手动编辑）' : '回答文本（语音识别结果，可手动编辑）'}</span>
                 <textarea value={textAnswer} onChange={function(e){setTextAnswer(e.target.value);}}
-                  placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的朗读内容，然后点击下方提交评分'} rows={3}
+                  placeholder="录音后自动填入识别文本，也可手动输入" rows={3}
                   className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
               </div>
             </div>
@@ -2264,19 +2314,22 @@ var handleSubmitExam = useCallback(async function() {
 
               {currentQuestion.type !== 'listen_choose' && (
                 <div className="mb-4">
-                  <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing} transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={currentSectionConfig.color} onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
+                 <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing} transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={currentSectionConfig.color} onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
+                  {recorder.whisperProgress && recorder.transcribing && (
+                    <div className="rounded-xl p-3 mt-3 text-center" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+                      <span className="text-indigo-500 text-xs block">{recorder.whisperProgress}</span>
+                    </div>
+                  )}
                   {recorder.error && (
                     <div className="rounded-xl p-3 mt-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.15)', color: '#EF4444' }}>{recorder.error}</div>
                   )}
-                  {recorder.recording && recorder.interimText && (
-                    <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
-                      <span className="text-slate-500 text-xs block mb-1">实时识别</span>
-                      <span className="text-slate-700 text-sm">{recorder.interimText}</span>
+                  {recorder.recording && (
+                    <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+                      <span className="text-indigo-500 text-xs block">录音中... 停止后将自动识别语音内容</span>
                     </div>
                   )}
                   <div className="mt-3">
-                    <AsrStatusBanner />
-                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的回答内容'} rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
+                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder="录音后自动填入识别文本，也可手动输入" rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
                   </div>
                 </div>
               )}
@@ -2914,7 +2967,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-      navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v11' }, [channel.port2]);
+      navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v12' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
