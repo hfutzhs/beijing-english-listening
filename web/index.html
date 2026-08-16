@@ -1197,6 +1197,21 @@ function RecordButton(props) {
   );
 }
 
+var ASR_SUPPORTED = typeof window !== 'undefined' && (!!window.SpeechRecognition || !!window.webkitSpeechRecognition);
+
+function AsrStatusBanner() {
+  if (ASR_SUPPORTED) return null;
+  return (
+    <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.25)' }}>
+      <AlertCircle size={16} color="#FBBF24" style={{ flexShrink: 0, marginTop: 1 }} />
+      <div className="ml-2 flex-1">
+        <span className="text-amber-300 text-xs font-bold block">当前环境不支持语音识别</span>
+        <span className="text-amber-200/80 text-xs block mt-1">安装版 App 内无法自动识别朗读内容。请用 Chrome 浏览器打开本页面以获得自动识别功能，或在下方文本框手动输入朗读内容后提交评分。</span>
+      </div>
+    </div>
+  );
+}
+
 function ResultCard(props) {
   var Icon = props.icon, label = props.label, color = props.color, children = props.children;
   return (
@@ -1509,7 +1524,7 @@ function PracticeAnswer(props) {
             <div className="mb-4">
               <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing}
                 transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={config.color}
-                onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
+              onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
               {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#FCA5A5' }}>{recorder.error}</div>}
               {recorder.recording && recorder.interimText && (
                 <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
@@ -1518,9 +1533,10 @@ function PracticeAnswer(props) {
                 </div>
               )}
               <div className="mt-3">
-                <span className="text-stone-300 text-xs font-bold block mb-2">{rType === 'read_aloud' ? '朗读文本（语音识别结果）' : '回答文本（可手动编辑）'}</span>
+                <AsrStatusBanner />
+                <span className="text-stone-300 text-xs font-bold block mb-2">{rType === 'read_aloud' ? (ASR_SUPPORTED ? '朗读文本（语音识别结果）' : '朗读文本（请手动输入朗读内容）') : (ASR_SUPPORTED ? '回答文本（可手动编辑）' : '回答文本（请手动输入回答内容）')}</span>
                 <textarea value={textAnswer} onChange={function(e){setTextAnswer(e.target.value);}}
-                  placeholder="录音后自动填入识别文本，也可手动输入" rows={3}
+                  placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的朗读内容，然后点击下方提交评分'} rows={3}
                   className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
               </div>
             </div>
@@ -2125,7 +2141,8 @@ function ExamFlow(props) {
                     </div>
                   )}
                   <div className="mt-3">
-                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder="录音后自动填入识别文本，也可手动输入" rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
+                    <AsrStatusBanner />
+                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder={ASR_SUPPORTED ? '录音后自动填入识别文本，也可手动输入' : '请在此输入你的回答内容'} rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.10)', color: '#F1F5F9', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontFamily: 'inherit' }} />
                   </div>
                 </div>
               )}
