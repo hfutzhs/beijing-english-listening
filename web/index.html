@@ -897,12 +897,13 @@ function useDeviceId() {
 function useAudioRecorder() {
   var state = useState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null });
   var st = state[0], setState = state[1];
-  var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null);
+  var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null);
   var audioElementRef = useRef(null), asrControllerRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
   var startRecording = useCallback(async function() {
     setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0 });});
     try {
       var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
       var mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
       mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
@@ -920,29 +921,35 @@ function useAudioRecorder() {
       setState(function(s){return Object.assign({}, s, { recording: false, error: e.message || '无法访问麦克风，请检查权限设置。' });});
     }
   }, []);
-  var stopRecording = useCallback(async function() {
-    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-    var transcript = '';
-    if (asrControllerRef.current) {
-      setState(function(s){return Object.assign({}, s, { transcribing: true });});
-      var result = await asrControllerRef.current.promise;
-      transcript = result.transcript; asrControllerRef.current = null;
-      setState(function(s){return Object.assign({}, s, { transcribing: false });});
-    }
-    var audioUrl = null;
-    var recorder = mediaRecorderRef.current;
-    if (recorder && recorder.state !== 'inactive') {
-      await new Promise(function(resolve) {
-        recorder.onstop = function() {
-          if (chunksRef.current.length > 0) { var blob = new Blob(chunksRef.current, { type: 'audio/webm' }); audioUrl = URL.createObjectURL(blob); audioUrlRef.current = audioUrl; }
-          resolve();
-        };
-        recorder.stop();
-      });
-    }
-    setState(function(s){return Object.assign({}, s, { recording: false, recordedUrl: audioUrl, interimText: transcript });});
-    return { audioUrl: audioUrl, transcript: transcript };
-  }, []);
+ var stopRecording = useCallback(async function() {
+   if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+   var transcript = '';
+   if (asrControllerRef.current) {
+     setState(function(s){return Object.assign({}, s, { transcribing: true });});
+      // Call stop() to trigger recognition.onend -> resolves promise immediately
+      asrControllerRef.current.stop();
+   }
+   var audioUrl = null;
+   var recorder = mediaRecorderRef.current;
+   // Stop both ASR and MediaRecorder in parallel
+   var recorderPromise = Promise.resolve();
+   if (recorder && recorder.state !== 'inactive') {
+     recorderPromise = new Promise(function(resolve) {
+       recorder.onstop = function() {
+         if (streamRef.current) { streamRef.current.getTracks().forEach(function(t){t.stop();}); streamRef.current = null; }
+         if (chunksRef.current.length > 0) { var blob = new Blob(chunksRef.current, { type: 'audio/webm' }); audioUrl = URL.createObjectURL(blob); audioUrlRef.current = audioUrl; }
+         resolve();
+       };
+       recorder.stop();
+     });
+   }
+   var asrPromise = asrControllerRef.current ? asrControllerRef.current.promise : Promise.resolve({ transcript: '' });
+   var allResult = await Promise.all([asrPromise, recorderPromise]);
+   transcript = allResult[0].transcript;
+   if (asrControllerRef.current) { asrControllerRef.current = null; setState(function(s){return Object.assign({}, s, { transcribing: false });}); }
+   setState(function(s){return Object.assign({}, s, { recording: false, recordedUrl: audioUrl, interimText: transcript });});
+   return { audioUrl: audioUrl, transcript: transcript };
+ }, []);
   var playRecording = useCallback(function() {
     if (!audioUrlRef.current) return;
     if (st.playing) { if (audioElementRef.current) audioElementRef.current.pause(); setState(function(s){return Object.assign({}, s, { playing: false });}); return; }
@@ -953,6 +960,7 @@ function useAudioRecorder() {
   var reset = useCallback(function() {
     if (timerRef.current) clearInterval(timerRef.current);
     if (asrControllerRef.current) asrControllerRef.current.stop();
+    if (streamRef.current) { streamRef.current.getTracks().forEach(function(t){t.stop();}); streamRef.current = null; }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') mediaRecorderRef.current.stop();
     if (audioElementRef.current) { audioElementRef.current.pause(); audioElementRef.current = null; }
     if (audioUrlRef.current) { URL.revokeObjectURL(audioUrlRef.current); audioUrlRef.current = null; }
