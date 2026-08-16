@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>北京市中考英语听说练习</title>
-<meta name="theme-color" content="#1E293B">
+<meta name="theme-color" content="#F8FAFC">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="英语听说">
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -37,25 +37,25 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
 * { -webkit-tap-highlight-color: transparent; }
-body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1E293B; color: #F1F5F9; -webkit-font-smoothing: antialiased; }
+body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FAFC; color: #1E293B; -webkit-font-smoothing: antialiased; }
 
 /* Tech grid background */
 .tech-grid {
   background-image:
-    linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+    linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 .tech-glow-card {
   background: #FFFFFF;
   backdrop-filter: blur(16px);
   border: 1px solid rgba(99,102,241,0.12);
-  box-shadow: 0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 12px rgba(99,102,241,0.06);
   transition: box-shadow 0.3s, transform 0.2s;
 }
 .tech-glow-card:active {
   transform: scale(0.98);
-  box-shadow: 0 2px 12px rgba(99,102,241,0.12);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
 }
 .tech-gradient-text {
   background: linear-gradient(135deg, #6366F1, #4F46E5);
@@ -75,20 +75,19 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1E29
 @keyframes aurora-drift-3 { 0%,100%{transform:translate(0,0) scale(1);opacity:.25} 50%{transform:translate(15%,-15%) scale(1.1);opacity:.4} }
 @keyframes card-fade-in { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{opacity:.6} 50%{opacity:1} }
-@keyframes tab-glow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.5)} 50%{box-shadow:0 0 20px rgba(99,102,241,0.8),0 0 4px rgba(99,102,241,0.4)} }
+@keyframes tab-glow { 0%,100%{box-shadow:0 0 8px rgba(99,102,241,0.25)} 50%{box-shadow:0 0 14px rgba(99,102,241,0.4),0 0 2px rgba(99,102,241,0.2)} }
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
 .aurora-blob{position:absolute;border-radius:50%;filter:blur(70px)}
-.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.10),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
+.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
 .aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.07),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
 .aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.05),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
 .card-fade-in{animation:card-fade-in .5s cubic-bezier(0.16,1,0.3,1)}
 .animate-pulse-soft{animation:pulse-soft 2s ease-in-out infinite}
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
-.neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.05),0 0 16px rgba(99,102,241,.15)}
+.neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.03),0 0 12px rgba(99,102,241,.08)}
 .en-text{font-family:var(--font-en);letter-spacing:.01em}
 .en-passage{font-family:var(--font-en);letter-spacing:.015em;line-height:1.9;font-size:17px}
 .label-cn{font-family:var(--font-cn);letter-spacing:.02em}
-body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(99,102,241,.015) 3px,rgba(99,102,241,.015) 4px);pointer-events:none;z-index:9999}
 </style>
 </head>
 <body>
@@ -813,12 +812,16 @@ function mapAsrError(err) {
 }
 function recognizeSpeech(options) {
   options = options || {};
+  var status = options.onStatus || function(){};
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return { stop: function(){}, promise: Promise.resolve({ transcript: '', error: 'Speech recognition is not supported in this browser. Please use Chrome or Edge.' }) };
+  if (!SR) { status('not-supported'); return { stop: function(){}, promise: Promise.resolve({ transcript: '', error: 'not-supported' }) }; }
   var recognition = new SR();
   recognition.lang = 'en-US'; recognition.continuous = true; recognition.interimResults = true; recognition.maxAlternatives = 1;
  var allFinal = ''; var allInterim = ''; var resolveFn = null;
  var promise = new Promise(function(resolve) { resolveFn = resolve; });
+ recognition.onstart = function() { status('started'); };
+ recognition.onaudiostart = function() { status('audio-start'); };
+ recognition.onspeechstart = function() { status('speech-detected'); };
  recognition.onresult = function(event) {
    allFinal = ''; allInterim = '';
    for (var i = 0; i < event.results.length; i++) {
@@ -826,11 +829,12 @@ function recognizeSpeech(options) {
      else allInterim += event.results[i][0].transcript;
    }
    if (options.onInterim && (allFinal || allInterim)) options.onInterim(allFinal + allInterim);
+   status('result: ' + (allFinal + allInterim).substring(0, 40));
  };
- var asrError = null; recognition.onerror = function(event) { asrError = event.error; if (options.onError) options.onError(event.error); if (resolveFn) { resolveFn({ transcript: (allFinal + ' ' + allInterim).trim(), error: event.error }); resolveFn = null; } };
-  recognition.onend = function() { if (options.onEnd) options.onEnd(); if (resolveFn) { resolveFn({ transcript: (allFinal + ' ' + allInterim).trim(), error: asrError }); resolveFn = null; } };
-  try { recognition.start(); } catch(e) { if (resolveFn) { resolveFn({ transcript: '', error: 'Failed to start recognition' }); resolveFn = null; } }
-  return { stop: function() { try { recognition.stop(); } catch(e) {} }, promise: promise };
+ var asrError = null; recognition.onerror = function(event) { asrError = event.error; status('error: ' + event.error); if (options.onError) options.onError(event.error); if (resolveFn) { resolveFn({ transcript: (allFinal + ' ' + allInterim).trim(), error: event.error }); resolveFn = null; } };
+  recognition.onend = function() { status('ended'); if (options.onEnd) options.onEnd(); if (resolveFn) { resolveFn({ transcript: (allFinal + ' ' + allInterim).trim(), error: asrError }); resolveFn = null; } };
+  try { recognition.start(); status('start-called'); } catch(e) { status('start-failed: ' + e.message); if (resolveFn) { resolveFn({ transcript: '', error: 'Failed to start recognition' }); resolveFn = null; } }
+  return { stop: function() { try { recognition.stop(); status('stop-called'); } catch(e) {} }, promise: promise };
 }
 
 // === API shim ===
@@ -917,38 +921,37 @@ function pickRecorderMimeType() {
 }
 
 function useAudioRecorder() {
-  var state = useState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null });
+  var state = useState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null, asrStatus: '' });
   var st = state[0], setState = state[1];
   var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null), mimeTypeRef = useRef('audio/webm');
   var audioElementRef = useRef(null), asrControllerRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
  var startRecording = useCallback(async function() {
    setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0 });});
    try {
+     // Always record audio via getUserMedia (user needs playback)
+     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+       throw new DOMException('MediaDevices not available', 'NotSupportedError');
+     }
+     var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+     streamRef.current = stream;
+     if (typeof MediaRecorder === 'undefined') {
+       stream.getTracks().forEach(function(t){t.stop();});
+       throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
+     }
+     var mt = pickRecorderMimeType();
+     mimeTypeRef.current = mt || 'audio/webm';
+     var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
+     mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
+     mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
+     mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
+     mediaRecorder.start(1000);
+     // Also start ASR if supported (may fail silently on some browsers)
      if (isASRSupported()) {
-       // ASR mode: SpeechRecognition handles audio capture internally.
-       // Do NOT call getUserMedia — it locks the mic and prevents SpeechRecognition from working.
        asrControllerRef.current = recognizeSpeech({
          onInterim: function(text) { setState(function(s){return Object.assign({}, s, { interimText: text });}); },
-         onError: function(err) { setState(function(s){return Object.assign({}, s, { error: mapAsrError(err) });}); }
+         onError: function(err) { setState(function(s){return Object.assign({}, s, { error: mapAsrError(err) });}); },
+         onStatus: function(s) { console.log('ASR_STATUS: ' + s); setState(function(prev){return Object.assign({}, prev, { asrStatus: s });}); }
        });
-     } else {
-       // Non-ASR mode: record audio for playback, user types text manually
-       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-         throw new DOMException('MediaDevices not available', 'NotSupportedError');
-       }
-       var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-       streamRef.current = stream;
-       if (typeof MediaRecorder === 'undefined') {
-         stream.getTracks().forEach(function(t){t.stop();});
-         throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
-       }
-       var mt = pickRecorderMimeType();
-       mimeTypeRef.current = mt || 'audio/webm';
-       var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
-       mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
-       mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
-       mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
-       mediaRecorder.start(1000);
      }
      startTimeRef.current = Date.now();
      timerRef.current = setInterval(function() {
@@ -1140,7 +1143,7 @@ function TabBar() {
   return (
   <nav className="fixed bottom-0 left-0 right-0 z-50"
      style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-      boxShadow: '0 -4px 24px rgba(99,102,241,0.12), 0 -1px 0 rgba(99,102,241,0.10)',
+      boxShadow: '0 -2px 16px rgba(99,102,241,0.06), 0 -1px 0 rgba(99,102,241,0.06)',
        paddingBottom: 'env(safe-area-inset-bottom, 0px)', borderTop: '1px solid rgba(99,102,241,0.10)' }}>
      <div className="mx-auto flex items-center justify-around" style={{ maxWidth: isDesktop ? 600 : 480, height: 60 }}>
        {TABS.map(function(tab) {
@@ -1272,7 +1275,7 @@ function RecordButton(props) {
     <div>
       <button onClick={recording ? onStop : onStart} disabled={transcribing}
         className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-60"
-        style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 8px 24px ' + (recording ? 'rgba(220,38,38,0.3)' : color + '40') }}>
+        style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 4px 16px ' + (recording ? 'rgba(220,38,38,0.15)' : color + '20') }}>
         {transcribing ? (<><Loader2 size={18} color="#FFFFFF" className="animate-spin" /><span className="text-white text-base font-bold ml-2">语音识别中...</span></>)
           : recording ? (<><div className="rounded-full animate-rec-pulse" style={{ width: 10, height: 10, backgroundColor: '#FFFFFF' }} /><span className="text-white text-base font-bold ml-2">停止录音 · {formatTime(recordingTime)}</span></>)
           : (<><Mic size={18} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{recordedUrl ? '重新录音' : '开始录音'}</span></>)}
@@ -1363,7 +1366,7 @@ function PracticeList(props) {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
      <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: config.gradient, boxShadow: '0 8px 32px ' + config.color + '30', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: config.gradient, boxShadow: '0 4px 20px ' + config.color + '12', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <span className="text-white text-xl font-extrabold block">{config.label}</span>
           <span className="text-white/90 text-xs mt-0.5 block">{config.subtitle}</span>
          <div className="flex items-center mt-2">
@@ -1381,8 +1384,8 @@ function PracticeList(props) {
                 return (
                   <button key={pid} onClick={function(){setSelectedPaper(pid);}}
                    className="rounded-xl px-4 py-2.5 whitespace-nowrap transition-all"
-                   style={{ background: isActive ? config.gradient : 'rgba(255,255,255,0.95)', border: isActive ? 'none' : '1px solid rgba(99,102,241,0.10)', color: isActive ? '#FFFFFF' : '#E2E8F0',
-                      fontWeight: 600, fontSize: 14, boxShadow: isActive ? '0 4px 12px ' + config.color + '30' : 'none' }}>
+                   style={{ background: isActive ? config.gradient : 'rgba(255,255,255,0.95)', border: isActive ? 'none' : '1px solid rgba(99,102,241,0.10)', color: isActive ? '#FFFFFF' : '#64748B',
+                      fontWeight: 600, fontSize: 14, boxShadow: isActive ? '0 2px 8px ' + config.color + '15' : 'none' }}>
                     试卷 {pid}<span style={{ fontSize: 12, marginLeft: 4, opacity: 0.7 }}>{answeredCount}/{paperQs.length}</span>
                   </button>
                 );
@@ -1414,7 +1417,7 @@ function PracticeList(props) {
                   <button key={q.id} onClick={function(){navigate('/practice-answer?questionId=' + q.id + '&type=' + q.type);}}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
                     style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)',
-                      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
+                      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                     <div className="rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ width: 44, height: 44, backgroundColor: answered ? '#10B98122' : config.color + '22' }}>
                       {answered ? <CheckCircle size={18} color="#10B981" /> : <span className="text-base font-bold" style={{ color: config.color }}>{idx + 1}</span>}
@@ -1591,8 +1594,8 @@ var handleStopRecording = useCallback(async function() {
                     <button key={idx} onClick={function(){if(!result) setSelectedAnswer(idx);}} disabled={!!result}
                       className="rounded-xl p-4 flex items-center transition-all text-left" style={{ background: bg, border: '1.5px solid ' + border }}>
                      <span className="rounded-lg flex items-center justify-center font-bold flex-shrink-0"
-                       style={{ width: 28, height: 28, backgroundColor: showResult && isCorrect ? '#10B981' : showResult && isWrong ? '#EF4444' : isSelected ? config.color : '#F3F4F6',
-                          color: showResult && (isCorrect || isWrong) ? '#FFFFFF' : isSelected ? '#FFFFFF' : '#1B1B3A', fontSize: 14 }}>{OPTION_LABELS[idx]}</span>
+                       style={{ width: 28, height: 28, backgroundColor: showResult && isCorrect ? '#10B981' : showResult && isWrong ? '#EF4444' : isSelected ? config.color : '#F1F5F9',
+                          color: showResult && (isCorrect || isWrong) ? '#FFFFFF' : isSelected ? '#FFFFFF' : '#1E293B', fontSize: 14 }}>{OPTION_LABELS[idx]}</span>
                       <span className="ml-3 text-base font-medium flex-1" style={{ color: textColor }}>{opt}</span>
                       {showResult && isCorrect && <CheckCircle size={18} color="#10B981" />}
                       {showResult && isWrong && <XCircle size={18} color="#EF4444" />}
@@ -1628,16 +1631,21 @@ var handleStopRecording = useCallback(async function() {
               <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing}
                 transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={config.color}
               onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
-             {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#FCA5A5' }}>{recorder.error}</div>}
+             {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#EF4444' }}>{recorder.error}</div>}
              {recorder.recording && recorder.interimText && (
                <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
                  <span className="text-slate-500 text-xs block mb-1">实时识别</span>
                  <span className="text-slate-700 text-sm">{recorder.interimText}</span>
                </div>
              )}
+             {recorder.recording && !recorder.interimText && recorder.asrStatus && (
+               <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.12)' }}>
+                 <span className="text-indigo-500 text-xs block">语音识别状态：{recorder.asrStatus}</span>
+               </div>
+             )}
               {recordingNotice && (
                 <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(56,189,248,0.10)', border: '1px solid rgba(56,189,248,0.20)' }}>
-                  <AlertCircle size={16} color="#0284C7" style={{ flexShrink: 0, marginTop: 1 }} />
+                  <AlertCircle size={16} color="#6366F1" style={{ flexShrink: 0, marginTop: 1 }} />
                   <span className="text-sky-700 text-xs ml-2 leading-5 block">{recordingNotice}</span>
                 </div>
               )}
@@ -1653,7 +1661,7 @@ var handleStopRecording = useCallback(async function() {
          {!result && (
            <button onClick={handleSubmit} disabled={!canSubmit || submitting}
              className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-50"
-             style={{ background: config.gradient, boxShadow: '0 8px 24px ' + config.color + '40' }}>
+             style={{ background: config.gradient, boxShadow: '0 4px 16px ' + config.color + '15' }}>
              {submitting ? (<><div className="w-4 h-4 border-2 rounded-full animate-spin mr-2" style={{ borderColor: '#FFFFFF', borderTopColor: 'transparent' }} /><span className="text-white text-base font-bold">评分中...</span></>)
                : (<><Send size={16} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{rType === 'listen_choose' ? '提交答案' : '提交评分'}</span></>)}
            </button>
@@ -1707,7 +1715,7 @@ var handleStopRecording = useCallback(async function() {
                   className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
                   <span className="text-indigo-600 font-semibold text-sm">重新作答</span>
                 </button>
-                <button onClick={handleNext} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ backgroundColor: config.color, boxShadow: '0 4px 10px rgba(0,0,0,0.10)' }}>
+                <button onClick={handleNext} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ backgroundColor: config.color, boxShadow: '0 2px 8px rgba(99,102,241,0.08)' }}>
                   <span className="text-white font-bold text-sm">{currentIdx < siblingQuestions.length - 1 ? '下一题' : '完成'}</span>
                   <ChevronRight size={16} color="#FFFFFF" style={{ marginLeft: 4 }} />
                 </button>
@@ -1831,7 +1839,7 @@ function ExamMock() {
                 return (
                   <button key={paper.paperId} onClick={function() { handlePaperClick(paper.paperId); }}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
-                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
+                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                     <div className="rounded-xl flex flex-col items-center justify-center flex-shrink-0"
                       style={{ width: 52, height: 52, backgroundColor: isCompleted ? '#10B98122' : EXAM_HEADER_COLOR + '22' }}>
                       {isCompleted ? (
@@ -2256,7 +2264,7 @@ var handleSubmitExam = useCallback(async function() {
                 <div className="mb-4">
                   <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing} transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={currentSectionConfig.color} onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
                   {recorder.error && (
-                    <div className="rounded-xl p-3 mt-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.15)', color: '#FCA5A5' }}>{recorder.error}</div>
+                    <div className="rounded-xl p-3 mt-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.15)', color: '#EF4444' }}>{recorder.error}</div>
                   )}
                   {recorder.recording && recorder.interimText && (
                     <div className="rounded-xl p-3 mt-3" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
@@ -2317,7 +2325,7 @@ var handleSubmitExam = useCallback(async function() {
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setShowExitConfirm(false); }}>
           <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
             <div className="flex flex-col items-center mb-5">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FEF2F2' }}>
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(239,68,68,0.08)' }}>
                 <AlertCircle size={22} color="#DC2626" />
               </div>
             </div>
@@ -2361,7 +2369,7 @@ var FILTER_TYPES = [
 
 function historyScoreColor(ratio) {
   if (ratio >= 0.8) return '#10B981';
-  if (ratio >= 0.6) return '#D97706';
+  if (ratio >= 0.6) return '#F59E0B';
   return '#DC2626';
 }
 
@@ -2457,7 +2465,7 @@ function History() {
             <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
             <StatItem icon={XCircle} label="不及格" value={failCount} color="#DC2626" />
             <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
-            <StatItem icon={BarChart3} label="平均分" value={avgScore} color="#D97706" suffix="%" />
+            <StatItem icon={BarChart3} label="平均分" value={avgScore} color="#F59E0B" suffix="%" />
           </div>
         </div>
 
@@ -2467,14 +2475,14 @@ function History() {
               return (
                 <button key={ft.value} onClick={function() { setFilterType(ft.value); }}
                   className="rounded-full px-4 py-2 whitespace-nowrap transition-all"
-                  style={{ background: filterType === ft.value ? HISTORY_HEADER_GRADIENT : 'rgba(255,255,255,0.95)', border: filterType === ft.value ? 'none' : '1px solid rgba(99,102,241,0.10)', color: filterType === ft.value ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
+                  style={{ background: filterType === ft.value ? HISTORY_HEADER_GRADIENT : 'rgba(255,255,255,0.95)', border: filterType === ft.value ? 'none' : '1px solid rgba(99,102,241,0.10)', color: filterType === ft.value ? '#FFFFFF' : '#64748B', fontWeight: 600, fontSize: 14 }}>
                   {ft.label}
                 </button>
               );
             })}
             <button onClick={function() { setWrongOnly(!wrongOnly); }}
               className="rounded-full px-4 py-2 whitespace-nowrap transition-all flex items-center"
-              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.95)', border: wrongOnly ? 'none' : '1px solid rgba(99,102,241,0.10)', color: wrongOnly ? '#FFFFFF' : '#E2E8F0', fontWeight: 600, fontSize: 14 }}>
+              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.95)', border: wrongOnly ? 'none' : '1px solid rgba(99,102,241,0.10)', color: wrongOnly ? '#FFFFFF' : '#64748B', fontWeight: 600, fontSize: 14 }}>
               <XCircle size={12} style={{ marginRight: 4 }} />
               只看错题
             </button>
@@ -2509,7 +2517,7 @@ function History() {
                 return (
                   <button key={item.id} onClick={function() { navigate('/history-detail?id=' + item.id); }}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
-                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)' }}>
+                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                     <div className="rounded-xl flex flex-col items-center justify-center" style={{ width: 56, height: 56, backgroundColor: scoreColor + '22', flexShrink: 0 }}>
                       <span className="text-xl font-bold" style={{ color: scoreColor }}>{item.score}</span>
                       <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -2549,7 +2557,7 @@ function History() {
               <button onClick={function() { setClearModalVisible(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
                 <span className="text-indigo-600 font-semibold">取消</span>
               </button>
-              <button onClick={handleClearConfirm} disabled={clearing} className="flex-1 py-4 rounded-xl" style={{ backgroundColor: clearing ? '#FCA5A5' : '#DC2626' }}>
+              <button onClick={handleClearConfirm} disabled={clearing} className="flex-1 py-4 rounded-xl" style={{ backgroundColor: clearing ? '#F87171' : '#DC2626' }}>
                 <span className="text-white font-semibold">{clearing ? '清空中...' : '清空'}</span>
               </button>
             </div>
@@ -2710,9 +2718,9 @@ var SCORING_RULES = [
 
 var GRADE_LEVELS = [
   { range: '8-9分', desc: '语音清晰，语调自然，节奏流畅，意群停顿恰当', color: '#10B981' },
-  { range: '6-7分', desc: '语音基本清晰，偶有发音错误，语调基本自然', color: '#84CC16' },
+  { range: '6-7分', desc: '语音基本清晰，偶有发音错误，语调基本自然', color: '#10B981' },
   { range: '4-5分', desc: '语音有较多错误，部分影响理解，语调平淡', color: '#F59E0B' },
-  { range: '2-3分', desc: '语音错误较多，影响理解，节奏不连贯', color: '#F97316' },
+  { range: '2-3分', desc: '语音错误较多，影响理解，节奏不连贯', color: '#EF4444' },
   { range: '0-1分', desc: '无法完成朗读，语音严重错误', color: '#EF4444' },
 ];
 
