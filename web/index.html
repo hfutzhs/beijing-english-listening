@@ -817,18 +817,18 @@ function recognizeSpeech(options) {
   if (!SR) return { stop: function(){}, promise: Promise.resolve({ transcript: '', error: 'Speech recognition is not supported in this browser. Please use Chrome or Edge.' }) };
   var recognition = new SR();
   recognition.lang = 'en-US'; recognition.continuous = true; recognition.interimResults = true; recognition.maxAlternatives = 1;
-  var finalTranscript = ''; var resolveFn = null;
-  var promise = new Promise(function(resolve) { resolveFn = resolve; });
-  recognition.onresult = function(event) {
-    var interim = '';
-    for (var i = event.resultIndex; i < event.results.length; i++) {
-      if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
-      else interim += event.results[i][0].transcript;
-    }
-    if (options.onInterim && interim) options.onInterim(finalTranscript + interim);
-  };
-  var asrError = null; recognition.onerror = function(event) { asrError = event.error; if (options.onError) options.onError(event.error); if (resolveFn) { resolveFn({ transcript: finalTranscript, error: event.error }); resolveFn = null; } };
-  recognition.onend = function() { if (options.onEnd) options.onEnd(); if (resolveFn) { resolveFn({ transcript: finalTranscript.trim(), error: asrError }); resolveFn = null; } };
+ var allFinal = ''; var allInterim = ''; var resolveFn = null;
+ var promise = new Promise(function(resolve) { resolveFn = resolve; });
+ recognition.onresult = function(event) {
+   allFinal = ''; allInterim = '';
+   for (var i = 0; i < event.results.length; i++) {
+     if (event.results[i].isFinal) allFinal += event.results[i][0].transcript;
+     else allInterim += event.results[i][0].transcript;
+   }
+   if (options.onInterim && (allFinal || allInterim)) options.onInterim(allFinal + allInterim);
+ };
+ var asrError = null; recognition.onerror = function(event) { asrError = event.error; if (options.onError) options.onError(event.error); if (resolveFn) { resolveFn({ transcript: (allFinal + ' ' + allInterim).trim(), error: event.error }); resolveFn = null; } };
+  recognition.onend = function() { if (options.onEnd) options.onEnd(); if (resolveFn) { resolveFn({ transcript: (allFinal + ' ' + allInterim).trim(), error: asrError }); resolveFn = null; } };
   try { recognition.start(); } catch(e) { if (resolveFn) { resolveFn({ transcript: '', error: 'Failed to start recognition' }); resolveFn = null; } }
   return { stop: function() { try { recognition.stop(); } catch(e) {} }, promise: promise };
 }
