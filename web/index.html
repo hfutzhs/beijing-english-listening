@@ -909,14 +909,21 @@ function useAudioRecorder() {
   var st = state[0], setState = state[1];
   var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null), mimeTypeRef = useRef('audio/webm');
   var audioElementRef = useRef(null), asrControllerRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
-  var startRecording = useCallback(async function() {
-    setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0 });});
-    try {
-      var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      var mt = pickRecorderMimeType();
-      mimeTypeRef.current = mt || 'audio/webm';
-      var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
+ var startRecording = useCallback(async function() {
+   setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0 });});
+   try {
+     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+       throw new DOMException('MediaDevices not available', 'NotSupportedError');
+     }
+     var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+     streamRef.current = stream;
+     if (typeof MediaRecorder === 'undefined') {
+       stream.getTracks().forEach(function(t){t.stop();});
+       throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
+     }
+     var mt = pickRecorderMimeType();
+     mimeTypeRef.current = mt || 'audio/webm';
+     var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
       mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
@@ -935,6 +942,9 @@ function useAudioRecorder() {
       else if (e.name === 'NotFoundError') errMsg = '未找到麦克风设备，请检查设备连接。';
       else if (e.name === 'NotReadableError') errMsg = '麦克风被其他应用占用，请关闭后重试。';
       else if (e.name === 'SecurityError') errMsg = '需要 HTTPS 环境才能使用麦克风。';
+      else if (e.name === 'NotSupportedError') errMsg = '当前浏览器不支持录音功能，请使用 Chrome 或 Edge 浏览器。';
+      else if (e.name === 'AbortError') errMsg = '录音启动失败，请刷新页面后重试。';
+      else if (errMsg === e.message) errMsg = '无法访问麦克风，请检查权限设置或更换浏览器重试。';
       console.error('Recording start failed:', e.name, e.message);
       setState(function(s){return Object.assign({}, s, { recording: false, error: errMsg });});
     }
