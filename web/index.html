@@ -799,6 +799,18 @@ async function checkAudioExists(qid) {
 
 // === ASR ===
 function isASRSupported() { return typeof window !== 'undefined' && (!!window.SpeechRecognition || !!window.webkitSpeechRecognition); }
+function mapAsrError(err) {
+  var msgs = {
+    'no-speech': '未识别到语音内容，请靠近麦克风重新朗读。',
+    'audio-capture': '无法访问麦克风，请检查设备连接。',
+    'not-allowed': '麦克风权限被拒绝，请在浏览器设置中允许麦克风访问。',
+    'service-not-allowed': '语音识别服务不可用，请使用 Chrome 或 Edge 浏览器。',
+    'network': '语音识别网络请求失败，请检查网络后重试。',
+    'aborted': '语音识别被中断，请重新录音。',
+    'language-not-supported': '不支持当前识别语言。'
+  };
+  return msgs[err] || ('语音识别失败（' + (err || '未知错误') + '），请重试或手动输入。');
+}
 function recognizeSpeech(options) {
   options = options || {};
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -815,9 +827,9 @@ function recognizeSpeech(options) {
     }
     if (options.onInterim && interim) options.onInterim(finalTranscript + interim);
   };
-  recognition.onerror = function(event) { if (resolveFn) resolveFn({ transcript: finalTranscript, error: event.error }); };
-  recognition.onend = function() { if (options.onEnd) options.onEnd(); if (resolveFn) resolveFn({ transcript: finalTranscript.trim() }); };
-  try { recognition.start(); } catch(e) { if (resolveFn) resolveFn({ transcript: '', error: 'Failed to start recognition' }); }
+  var asrError = null; recognition.onerror = function(event) { asrError = event.error; if (options.onError) options.onError(event.error); if (resolveFn) { resolveFn({ transcript: finalTranscript, error: event.error }); resolveFn = null; } };
+  recognition.onend = function() { if (options.onEnd) options.onEnd(); if (resolveFn) { resolveFn({ transcript: finalTranscript.trim(), error: asrError }); resolveFn = null; } };
+  try { recognition.start(); } catch(e) { if (resolveFn) { resolveFn({ transcript: '', error: 'Failed to start recognition' }); resolveFn = null; } }
   return { stop: function() { try { recognition.stop(); } catch(e) {} }, promise: promise };
 }
 
@@ -929,7 +941,7 @@ function useAudioRecorder() {
       mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
       mediaRecorder.start(1000);
       if (isASRSupported()) {
-        asrControllerRef.current = recognizeSpeech({ onInterim: function(text) { setState(function(s){return Object.assign({}, s, { interimText: text });}); } });
+        asrControllerRef.current = recognizeSpeech({ onInterim: function(text) { setState(function(s){return Object.assign({}, s, { interimText: text });}); }, onError: function(err) { setState(function(s){return Object.assign({}, s, { error: mapAsrError(err) });}); } });
       }
       startTimeRef.current = Date.now();
       timerRef.current = setInterval(function() {
@@ -971,13 +983,16 @@ function useAudioRecorder() {
        recorder.stop();
      });
    }
-   var asrPromise = asrControllerRef.current ? asrControllerRef.current.promise : Promise.resolve({ transcript: '' });
-   var allResult = await Promise.all([asrPromise, recorderPromise]);
-   transcript = allResult[0].transcript;
-   if (asrControllerRef.current) { asrControllerRef.current = null; setState(function(s){return Object.assign({}, s, { transcribing: false });}); }
-   setState(function(s){return Object.assign({}, s, { recording: false, recordedUrl: audioUrl, interimText: transcript });});
-   return { audioUrl: audioUrl, transcript: transcript };
- }, []);
+  var asrPromise = asrControllerRef.current ? asrControllerRef.current.promise : Promise.resolve({ transcript: '' });
+  var allResult = await Promise.all([asrPromise, recorderPromise]);
+  transcript = allResult[0].transcript;
+  var asrErr = allResult[0].error || null;
+  if (asrControllerRef.current) { asrControllerRef.current = null; setState(function(s){return Object.assign({}, s, { transcribing: false });}); }
+  var newState = { recording: false, recordedUrl: audioUrl, interimText: transcript };
+  if (!transcript && asrErr) { newState.error = mapAsrError(asrErr); }
+  setState(function(s){return Object.assign({}, s, newState);});
+  return { audioUrl: audioUrl, transcript: transcript, error: asrErr };
+}, []);
   var playRecording = useCallback(function() {
     if (!audioUrlRef.current) return;
     if (st.playing) { if (audioElementRef.current) audioElementRef.current.pause(); setState(function(s){return Object.assign({}, s, { playing: false });}); return; }
@@ -1449,13 +1464,17 @@ function PracticeAnswer(props) {
  var currentIdx = useMemo(function() { return siblingQuestions.findIndex(function(q){return q.id === questionId;}); }, [siblingQuestions, questionId]);
   function handleSwitchQuestion(newQid) { navigate('/practice-answer?questionId=' + newQid + '&type=' + (question ? question.type : qType)); }
 var handleStopRecording = useCallback(async function() {
-   var res = await recorder.stopRecording();
-   if (res.transcript) setTextAnswer(res.transcript);
+  var res = await recorder.stopRecording();
+  if (res.transcript) setTextAnswer(res.transcript);
     if (!res.transcript && question && question.type !== 'listen_choose') {
-      setRecordingNotice('录音完成，但未识别到语音内容。请在下方文本框手动输入朗读/回答内容后提交评分。');
+      if (res.error) {
+        setRecordingNotice('语音识别失败：' + mapAsrError(res.error) + ' 请在下方文本框手动输入朗读/回答内容后提交评分。');
+      } else {
+        setRecordingNotice('录音完成，但未识别到语音内容。请在下方文本框手动输入朗读/回答内容后提交评分。');
+      }
     } else { setRecordingNotice(''); }
-   return res;
- }, [recorder]);
+  return res;
+}, [recorder]);
  var handleSubmit = useCallback(async function() {
   if (!question || !deviceId) return;
    setSubmitError(null);
