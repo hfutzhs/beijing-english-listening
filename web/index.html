@@ -23,11 +23,11 @@
 :root { --font-cn: 'Noto Sans SC', 'SF Pro Display', -apple-system, sans-serif; --font-en: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; --font-mono: 'JetBrains Mono', 'SF Mono', monospace; }
 @keyframes rec-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes slide-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-@keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px rgba(99,102,241,0.3)} 50%{box-shadow:0 0 40px rgba(99,102,241,0.5)} }
+@keyframes glow-pulse { 0%,100%{box-shadow:0 0 16px rgba(99,102,241,0.15)} 50%{box-shadow:0 0 28px rgba(99,102,241,0.25)} }
 @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 @keyframes float-up { 0%{transform:translateY(0)} 50%{transform:translateY(-6px)} 100%{transform:translateY(0)} }
-@keyframes border-glow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.2)} 50%{box-shadow:0 0 24px rgba(99,102,241,0.35)} }
+@keyframes border-glow { 0%,100%{box-shadow:0 0 8px rgba(99,102,241,0.10)} 50%{box-shadow:0 0 16px rgba(99,102,241,0.20)} }
 .animate-spin { animation: spin 1s linear infinite; }
 .animate-rec-pulse { animation: rec-pulse 1s ease-in-out infinite; }
 .animate-slide-up { animation: slide-up 0.4s cubic-bezier(0.16,1,0.3,1); }
@@ -49,7 +49,7 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 .tech-glow-card {
   background: #FFFFFF;
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.10);
   box-shadow: 0 2px 12px rgba(99,102,241,0.06);
   transition: box-shadow 0.3s, transform 0.2s;
 }
@@ -79,8 +79,8 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
 .aurora-blob{position:absolute;border-radius:50%;filter:blur(70px)}
 .aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
-.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.07),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
-.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.05),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
+.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.06),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
+.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.04),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
 .card-fade-in{animation:card-fade-in .5s cubic-bezier(0.16,1,0.3,1)}
 .animate-pulse-soft{animation:pulse-soft 2s ease-in-out infinite}
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
@@ -926,32 +926,34 @@ function useAudioRecorder() {
   var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null), mimeTypeRef = useRef('audio/webm');
   var audioElementRef = useRef(null), asrControllerRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
  var startRecording = useCallback(async function() {
-   setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0 });});
+   setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0, asrStatus: '' });});
    try {
-     // Always record audio via getUserMedia (user needs playback)
-     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-       throw new DOMException('MediaDevices not available', 'NotSupportedError');
-     }
-     var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-     streamRef.current = stream;
-     if (typeof MediaRecorder === 'undefined') {
-       stream.getTracks().forEach(function(t){t.stop();});
-       throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
-     }
-     var mt = pickRecorderMimeType();
-     mimeTypeRef.current = mt || 'audio/webm';
-     var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
-     mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
-     mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
-     mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
-     mediaRecorder.start(1000);
-     // Also start ASR if supported (may fail silently on some browsers)
      if (isASRSupported()) {
+       // ASR mode: SpeechRecognition handles audio capture internally.
+       // Do NOT call getUserMedia — it locks the mic and blocks SpeechRecognition.
        asrControllerRef.current = recognizeSpeech({
          onInterim: function(text) { setState(function(s){return Object.assign({}, s, { interimText: text });}); },
          onError: function(err) { setState(function(s){return Object.assign({}, s, { error: mapAsrError(err) });}); },
          onStatus: function(s) { console.log('ASR_STATUS: ' + s); setState(function(prev){return Object.assign({}, prev, { asrStatus: s });}); }
        });
+     } else {
+       // Non-ASR mode: record audio for playback, user types text manually
+       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+         throw new DOMException('MediaDevices not available', 'NotSupportedError');
+       }
+       var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+       streamRef.current = stream;
+       if (typeof MediaRecorder === 'undefined') {
+         stream.getTracks().forEach(function(t){t.stop();});
+         throw new DOMException('MediaRecorder not supported', 'NotSupportedError');
+       }
+       var mt = pickRecorderMimeType();
+       mimeTypeRef.current = mt || 'audio/webm';
+       var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
+       mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
+       mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
+       mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
+       mediaRecorder.start(1000);
      }
      startTimeRef.current = Date.now();
      timerRef.current = setInterval(function() {
@@ -1247,7 +1249,7 @@ handlePlayRef.current = handlePlay;
     <div>
       <button onClick={handlePlay} disabled={loading}
         className="w-full rounded-xl py-4 px-5 flex items-center transition-all active:scale-[0.98]"
-        style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid ' + color + '20', boxShadow: '0 4px 24px ' + color + '15, 0 1px 4px rgba(0,0,0,0.04)' }}>
+        style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid ' + color + '20', boxShadow: '0 2px 12px ' + color + '08' }}>
         <div className="flex items-center justify-center rounded-xl" style={{ width: 44, height: 44, background: 'linear-gradient(135deg, ' + color + ', ' + color + 'CC)', flexShrink: 0, boxShadow: '0 4px 12px ' + color + '40' }}>
           {loading ? <Loader2 size={18} color="#FFFFFF" className="animate-spin" />
             : playing ? <Square size={16} color="#FFFFFF" fill="#FFFFFF" />
@@ -1275,7 +1277,7 @@ function RecordButton(props) {
     <div>
       <button onClick={recording ? onStop : onStart} disabled={transcribing}
         className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-60"
-        style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 4px 16px ' + (recording ? 'rgba(220,38,38,0.15)' : color + '20') }}>
+        style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #EF4444)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 4px 16px ' + (recording ? 'rgba(220,38,38,0.15)' : color + '20') }}>
         {transcribing ? (<><Loader2 size={18} color="#FFFFFF" className="animate-spin" /><span className="text-white text-base font-bold ml-2">语音识别中...</span></>)
           : recording ? (<><div className="rounded-full animate-rec-pulse" style={{ width: 10, height: 10, backgroundColor: '#FFFFFF' }} /><span className="text-white text-base font-bold ml-2">停止录音 · {formatTime(recordingTime)}</span></>)
           : (<><Mic size={18} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{recordedUrl ? '重新录音' : '开始录音'}</span></>)}
@@ -1283,7 +1285,7 @@ function RecordButton(props) {
       {recordedUrl && !recording && !transcribing && (
         <button onClick={onPlay} className="w-full rounded-xl py-4 flex items-center justify-center mt-3 transition-all active:scale-[0.98]"
           style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
-          {playing ? <Pause size={14} color="#475569" /> : <Play size={14} color="#475569" />}
+          {playing ? <Pause size={14} color="#64748B" /> : <Play size={14} color="#64748B" />}
           <span className="text-slate-500 font-semibold ml-2">{playing ? '暂停播放' : '播放我的录音'}</span>
         </button>
       )}
@@ -1297,9 +1299,9 @@ function AsrStatusBanner() {
   if (ASR_SUPPORTED) return null;
   return (
     <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.25)' }}>
-      <AlertCircle size={16} color="#FBBF24" style={{ flexShrink: 0, marginTop: 1 }} />
+      <AlertCircle size={16} color="#F59E0B" style={{ flexShrink: 0, marginTop: 1 }} />
       <div className="ml-2 flex-1">
-        <span className="text-amber-700 text-xs font-bold block">当前环境不支持语音识别</span>
+        <span className="text-amber-600 text-xs font-bold block">当前环境不支持语音识别</span>
         <span className="text-amber-600/80 text-xs block mt-1">安装版 App 内无法自动识别朗读内容。请用 Chrome 浏览器打开本页面以获得自动识别功能，或在下方文本框手动输入朗读内容后提交评分。</span>
       </div>
     </div>
@@ -1309,12 +1311,12 @@ function AsrStatusBanner() {
 function ResultCard(props) {
   var Icon = props.icon, label = props.label, color = props.color, children = props.children;
   return (
-    <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+    <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
       <div className="flex items-center mb-2">
         <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ backgroundColor: color + '22' }}>
           <Icon size={10} color={color} />
         </div>
-        <span className="text-xs font-bold ml-2 uppercase tracking-wider" style={{ color: '#475569' }}>{label}</span>
+        <span className="text-xs font-bold ml-2 uppercase tracking-wider" style={{ color: '#64748B' }}>{label}</span>
       </div>
       {children}
     </div>
@@ -1562,7 +1564,7 @@ var handleStopRecording = useCallback(async function() {
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 12, paddingBottom: 80 }}>
          {rType !== 'read_aloud' && <TTSPlayer text={question.audio_script} color={config.color} label={rType === 'listen_retell' ? '播放听力原文（两遍）' : '播放听力原文'} playCount={rType === 'listen_retell' ? 2 : 1} questionId={question.id} />}
           {rType === 'read_aloud' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
                 <button onClick={function(){navigate('/scoring-guide?type=read_aloud');}} className="text-xs font-medium" style={{ color: config.color }}>评分标准</button>
@@ -1576,7 +1578,7 @@ var handleStopRecording = useCallback(async function() {
             </div>
           )}
           {rType === 'listen_choose' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <span className="text-slate-800 text-base font-bold block mb-4">{question.content.question}</span>
               <div className="flex flex-col gap-3">
                 {(question.content.options || []).map(function(opt, idx) {
@@ -1606,19 +1608,19 @@ var handleStopRecording = useCallback(async function() {
             </div>
           )}
           {rType === 'listen_answer' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
               <span className="text-slate-800 text-base font-medium block">{question.content.question}</span>
             </div>
           )}
           {rType === 'listen_retell' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
               <span className="text-slate-800 text-base font-bold block mb-3">{question.content.topic}</span>
               {question.content.intro && <p className="text-slate-500 text-sm mb-4">{question.content.intro}</p>}
               <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.08)' }}>
                 {(question.content.info_points || []).map(function(point, idx) {
-                  return <div key={idx} className="flex items-start p-3" style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
+                  return <div key={idx} className="flex items-start p-3" style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.03)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
                     <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0" style={{ backgroundColor: config.color + '22', color: config.color }}>{point.label}</span>
                     <span className="text-slate-700 text-sm ml-3 flex-1">{point.answer}</span>
                   </div>;
@@ -1639,14 +1641,14 @@ var handleStopRecording = useCallback(async function() {
                </div>
              )}
              {recorder.recording && !recorder.interimText && recorder.asrStatus && (
-               <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.12)' }}>
+               <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
                  <span className="text-indigo-500 text-xs block">语音识别状态：{recorder.asrStatus}</span>
                </div>
              )}
               {recordingNotice && (
                 <div className="rounded-xl p-3 mt-3 flex items-start" style={{ background: 'rgba(56,189,248,0.10)', border: '1px solid rgba(56,189,248,0.20)' }}>
                   <AlertCircle size={16} color="#6366F1" style={{ flexShrink: 0, marginTop: 1 }} />
-                  <span className="text-sky-700 text-xs ml-2 leading-5 block">{recordingNotice}</span>
+                  <span className="text-slate-500 text-xs ml-2 leading-5 block">{recordingNotice}</span>
                 </div>
               )}
              <div className="mt-3">
@@ -1674,7 +1676,7 @@ var handleStopRecording = useCallback(async function() {
           )}
          {result && (
             <div ref={resultRef} className="animate-slide-up">
-              <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}>
+              <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 16px rgba(99,102,241,0.06)' }}>
                 <div className="rounded-full mx-auto flex flex-col items-center justify-center" style={{ width: 80, height: 80, backgroundColor: scoreColor + '22', boxShadow: '0 0 24px ' + scoreColor + '20' }}>
                   <span className="text-3xl font-bold" style={{ color: scoreColor }}>{result.score}</span>
                   <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -1787,7 +1789,7 @@ function ExamMock() {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center">
             <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, backgroundColor: 'rgba(99,102,241,0.08)' }}>
               <FilePen size={18} color="#FFFFFF" />
@@ -1804,7 +1806,7 @@ function ExamMock() {
         </div>
 
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, marginTop: -4, marginBottom: 8 }}>
-          <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+          <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
             <div className="flex">
               {EXAM_SECTIONS.map(function(s) {
                 var Icon = s.icon;
@@ -2073,7 +2075,7 @@ var handleSubmitExam = useCallback(async function() {
           </div>
 
           <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 16 }}>
-            <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 8px 32px rgba(99,102,241,0.12)' }}>
+            <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 16px rgba(99,102,241,0.06)' }}>
               <div className="rounded-full mx-auto flex flex-col items-center justify-center" style={{ width: 100, height: 100, backgroundColor: scoreColor + '22', boxShadow: '0 0 32px ' + scoreColor + '25' }}>
                 <span className="text-4xl font-bold" style={{ color: scoreColor }}>{totalScore}</span>
                 <span className="text-sm" style={{ color: scoreColor + '99' }}>/ {totalMax}</span>
@@ -2096,7 +2098,7 @@ var handleSubmitExam = useCallback(async function() {
               var secRatio = secMax > 0 ? secScore / secMax : 0;
               var SecIcon = secConfig.icon;
               return (
-                <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+                <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                   <div className="flex items-center mb-1">
                     <div className="rounded-lg flex items-center justify-center" style={{ width: 32, height: 32, backgroundColor: secConfig.color + '22' }}>
                       <SecIcon size={14} color={secConfig.color} />
@@ -2202,7 +2204,7 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'read_aloud' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-800 text-sm font-bold block mb-3">朗读以下短文</span>
                   <p className="text-slate-700 text-base" style={{ lineHeight: 1.8 }}>{currentQuestion.content.passage}</p>
                   <div className="mt-4">
@@ -2212,7 +2214,7 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'listen_choose' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.question}</span>
                   <div className="flex flex-col gap-2">
                     {currentQuestion.content.options.map(function(opt, idx) {
@@ -2232,14 +2234,14 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'listen_answer' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
                   <span className="text-slate-800 text-base font-medium block">{currentQuestion.content.question}</span>
                 </div>
               )}
 
               {currentQuestion.type === 'listen_retell' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
                   <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.topic}</span>
                   {currentQuestion.content.intro && (
@@ -2249,7 +2251,7 @@ var handleSubmitExam = useCallback(async function() {
                     {currentQuestion.content.info_points.map(function(point, idx) {
                       return (
                         <div key={idx} className="flex items-start p-3"
-                          style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.02)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
+                          style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.03)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
                           <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0"
                             style={{ backgroundColor: currentSectionConfig.color + '22', color: currentSectionConfig.color }}>{point.label}</span>
                           <span className="text-slate-700 text-xs ml-3 flex-1">{point.answer}</span>
@@ -2297,7 +2299,7 @@ var handleSubmitExam = useCallback(async function() {
           ) : (
             <button onClick={handleSubmitExam} disabled={submitting || !allAnswered}
               className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-50"
-              style={{ backgroundColor: submitting ? '#FCA5A5' : EXAM_HEADER_COLOR }}>
+              style={{ backgroundColor: submitting ? '#F87171' : EXAM_HEADER_COLOR }}>
               {submitting ? (
                 <React.Fragment>
                   <div className="w-4 h-4 border-2 rounded-full animate-spin mr-2" style={{ borderColor: '#FFFFFF', borderTopColor: 'transparent' }} />
@@ -2335,7 +2337,7 @@ var handleSubmitExam = useCallback(async function() {
               <button onClick={function() { setShowExitConfirm(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
                 <span className="text-indigo-600 font-semibold">继续考试</span>
               </button>
-              <button onClick={function() { navigate('/exam'); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(135deg, #DC2626, #E11D48)', boxShadow: '0 4px 16px rgba(220,38,38,0.3)' }}>
+              <button onClick={function() { navigate('/exam'); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(135deg, #DC2626, #EF4444)', boxShadow: '0 4px 16px rgba(220,38,38,0.15)' }}>
                 <span className="text-white font-semibold">退出</span>
               </button>
             </div>
@@ -2442,7 +2444,7 @@ function History() {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <span className="text-white text-xl font-extrabold block">历史记录</span>
@@ -2458,7 +2460,7 @@ function History() {
         </div>
 
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, marginTop: -5, marginBottom: 8 }}>
-          <div className="flex rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
+          <div className="flex rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
             <StatItem icon={ClipboardList} label="总练习" value={totalExams} color="#94A3B8" />
             <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
             <StatItem icon={CheckCircle} label="及格" value={passCount} color="#10B981" />
@@ -2482,7 +2484,7 @@ function History() {
             })}
             <button onClick={function() { setWrongOnly(!wrongOnly); }}
               className="rounded-full px-4 py-2 whitespace-nowrap transition-all flex items-center"
-              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #E11D48)' : 'rgba(255,255,255,0.95)', border: wrongOnly ? 'none' : '1px solid rgba(99,102,241,0.10)', color: wrongOnly ? '#FFFFFF' : '#64748B', fontWeight: 600, fontSize: 14 }}>
+              style={{ background: wrongOnly ? 'linear-gradient(135deg, #DC2626, #EF4444)' : 'rgba(255,255,255,0.95)', border: wrongOnly ? 'none' : '1px solid rgba(99,102,241,0.10)', color: wrongOnly ? '#FFFFFF' : '#64748B', fontWeight: 600, fontSize: 14 }}>
               <XCircle size={12} style={{ marginRight: 4 }} />
               只看错题
             </button>
@@ -2547,7 +2549,7 @@ function History() {
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setClearModalVisible(false); }}>
           <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
             <div className="flex flex-col items-center mb-5">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#FEE2E2' }}>
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(239,68,68,0.08)' }}>
                 <Trash2 size={22} color="#DC2626" />
               </div>
             </div>
@@ -2648,7 +2650,7 @@ function HistoryDetail(props) {
       </div>
 
       <div className="p-6 pb-20">
-        <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+        <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
           <div className="w-20 h-20 rounded-full mx-auto flex flex-col items-center justify-center" style={{ backgroundColor: scoreColor + '22' }}>
             <span className="text-3xl font-bold" style={{ color: scoreColor }}>{record.score}</span>
             <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -2658,7 +2660,7 @@ function HistoryDetail(props) {
         </div>
 
         {record.question_title && (
-          <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+          <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
             <span className="text-slate-500 text-xs font-bold block mb-1">题目</span>
             <span className="text-slate-700 text-sm font-medium">{record.question_title}</span>
           </div>
@@ -2694,7 +2696,7 @@ function HistoryDetail(props) {
           </ResultCard>
         )}
 
-        <button onClick={handleRetry} className="w-full rounded-xl py-4 flex items-center justify-center mt-6 transition-all active:scale-[0.98]" style={{ backgroundColor: typeColor, boxShadow: '0 6px 12px rgba(0,0,0,0.10)' }}>
+        <button onClick={handleRetry} className="w-full rounded-xl py-4 flex items-center justify-center mt-6 transition-all active:scale-[0.98]" style={{ backgroundColor: typeColor, boxShadow: '0 2px 8px rgba(99,102,241,0.08)' }}>
          <RefreshCw size={16} color="#FFFFFF" />
          <span className="text-white text-base font-bold ml-2">重新练习</span>
        </button>
@@ -2746,7 +2748,7 @@ function ScoringGuide(props) {
 
       <div className="p-6 pb-20">
         {!isSingleType && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
             <div className="flex items-center mb-1">
               <ClipboardList size={16} color="#4F46E5" />
               <span className="text-slate-800 text-base font-bold ml-2">总分构成</span>
@@ -2771,7 +2773,7 @@ function ScoringGuide(props) {
         {filteredRules.map(function(rule) {
           var RuleIcon = rule.icon;
           return (
-            <div key={rule.type} className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
+            <div key={rule.type} className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <div className="flex items-center mb-1">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: rule.color + '22' }}>
                   <RuleIcon size={14} color={rule.color} />
@@ -2795,7 +2797,7 @@ function ScoringGuide(props) {
         })}
 
         {filteredRules.some(function(r) { return r.type === 'read_aloud'; }) && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 24px rgba(234,88,12,0.08)' }}>
+          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
             <span className="text-slate-800 text-base font-bold block mb-3">短文朗读评分档次</span>
             {GRADE_LEVELS.map(function(g, idx) {
               return (
@@ -2811,7 +2813,7 @@ function ScoringGuide(props) {
         )}
 
         <div className="flex items-center justify-center mt-2">
-          <Lightbulb size={12} color="#475569" />
+          <Lightbulb size={12} color="#64748B" />
          <span className="text-slate-500 text-xs ml-1">评分标准参考北京市中考英语听说机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
         </div>
       </div>
@@ -2877,7 +2879,7 @@ function transformAppCode() {
   } catch(e) {
     console.error('Babel transform error:', e);
     var root = document.getElementById('root');
-    if (root) root.innerHTML = '<div style="padding:20px;color:#ef4444;font-family:sans-serif">应用加载失败: ' + e.message + '</div>';
+    if (root) root.innerHTML = '<div style="padding:20px;color:#EF4444;font-family:sans-serif">应用加载失败: ' + e.message + '</div>';
   }
 }
 document.addEventListener('DOMContentLoaded', transformAppCode);
