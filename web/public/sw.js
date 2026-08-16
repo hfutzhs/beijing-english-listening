@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'beijing-english-v2';
+const CACHE_VERSION = 'beijing-english-v3';
 const AUDIO_CACHE = 'beijing-english-audio-v1';
 const APP_SHELL = [
   './',

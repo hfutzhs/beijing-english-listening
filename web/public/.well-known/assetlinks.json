@@ -3,8 +3,8 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "REPLACE_WITH_YOUR_PACKAGE_NAME",
-      "sha256_cert_fingerprints": ["REPLACE_WITH_YOUR_SHA256_FINGERPRINT"]
+      "package_name": "io.github.hfutzhs.twa",
+      "sha256_cert_fingerprints": ["E6:F1:2E:2E:34:7F:6C:5C:E2:2D:5A:EC:2D:DD:A4:B2:BF:B7:B9:31:8B:F8:B5:40:17:5C:3C:2E:03:46:55:CC"]
     }
   }
 ]
