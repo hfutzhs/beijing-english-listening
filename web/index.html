@@ -1128,17 +1128,23 @@ function TTSPlayer(props) {
   var controllerRef = useRef(null);
   var audioRef = useRef(null);
   var roundRef = useRef(0);
-  var handlePlayRef = useRef(null);
-  var timeoutRef = useRef(null);
-  useEffect(function() { return function() { stopSpeaking(); if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; } if (timeoutRef.current) clearTimeout(timeoutRef.current); }; }, []);
-  function stopAll() {
+ var handlePlayRef = useRef(null);
+ var timeoutRef = useRef(null);
+  // Refs to track real-time state, avoiding stale closures in async callbacks
+  var playingRef = useRef(false);
+  var loadingRef = useRef(false);
+  var stoppedRef = useRef(false);
+ useEffect(function() { return function() { stopSpeaking(); if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; } if (timeoutRef.current) clearTimeout(timeoutRef.current); }; }, []);
+ function stopAll() {
+    stoppedRef.current = true;
     stopSpeaking();
     if (audioRef.current) { audioRef.current.onended = null; audioRef.current.ontimeupdate = null; audioRef.current.onerror = null; audioRef.current.pause(); audioRef.current = null; }
     if (timeoutRef.current) { clearTimeout(timeoutRef.current); timeoutRef.current = null; }
+    if (controllerRef.current) { try { controllerRef.current.stop(); } catch(e) {} controllerRef.current = null; }
   }
   function playNextRound(currentRound) {
-    setPlaying(false); if (onWordIndex) onWordIndex(-1);
-    if (currentRound < playCount - 1) { roundRef.current = currentRound + 1; setPlayRound(currentRound + 1); timeoutRef.current = setTimeout(function() { if (handlePlayRef.current) handlePlayRef.current(); }, 800); }
+    setPlaying(false); playingRef.current = false; if (onWordIndex) onWordIndex(-1);
+    if (currentRound < playCount - 1 && !stoppedRef.current) { roundRef.current = currentRound + 1; setPlayRound(currentRound + 1); timeoutRef.current = setTimeout(function() { if (handlePlayRef.current) handlePlayRef.current(); }, 800); }
     else { roundRef.current = 0; setPlayRound(0); }
   }
   function playAudioFile(url, currentRound) {
@@ -1153,12 +1159,15 @@ function TTSPlayer(props) {
     }
     audio.onended = function() { playNextRound(currentRound); };
     audio.onerror = function() { console.warn('Audio file error for', url, 'error code:', audio.error ? audio.error.code : 'unknown'); audioRef.current = null; playWithSpeech(currentRound); };
-    audio.play().then(function() { setLoading(false); setPlaying(true); }).catch(function(err) { console.warn('Audio play failed for', url, err); audioRef.current = null; playWithSpeech(currentRound); });
+    audio.play().then(function() {
+      if (stoppedRef.current) { audio.pause(); audioRef.current = null; return; }
+      setLoading(false); loadingRef.current = false; setPlaying(true); playingRef.current = true;
+    }).catch(function(err) { console.warn('Audio play failed for', url, err); audioRef.current = null; playWithSpeech(currentRound); });
   }
   function playWithSpeech(currentRound) {
     speakText(text, {
       rate: 0.85,
-      onStart: function() { setLoading(false); setPlaying(true); },
+      onStart: function() { if (stoppedRef.current) { stopSpeaking(); return; } setLoading(false); loadingRef.current = false; setPlaying(true); playingRef.current = true; },
       onBoundary: function(charIndex) {
         if (onWordIndex && words) {
           var pos = 0, wordIdx = 0;
@@ -1166,17 +1175,28 @@ function TTSPlayer(props) {
           onWordIndex(Math.min(wordIdx, words.length - 1));
         }
       },
-      onEnd: function() { playNextRound(currentRound); }
+      onEnd: function() { if (!stoppedRef.current) playNextRound(currentRound); }
     }).then(function(controller) { controllerRef.current = controller; setLoading(false); });
   }
   var handlePlay = useCallback(async function() {
-    if (playing) { stopAll(); setPlaying(false); roundRef.current = 0; setPlayRound(0); if (onWordIndex) onWordIndex(-1); return; }
-    setLoading(true);
+    // Use refs for real-time state — avoids stale closure issues with async/await
+    if (playingRef.current || loadingRef.current) {
+      stopAll();
+      setPlaying(false); playingRef.current = false;
+      setLoading(false); loadingRef.current = false;
+      roundRef.current = 0; setPlayRound(0); if (onWordIndex) onWordIndex(-1);
+      return;
+    }
+    stoppedRef.current = false;
+    setLoading(true); loadingRef.current = true;
     var currentRound = roundRef.current;
-    if (questionId && await checkAudioExists(questionId)) { playAudioFile(audioPath(questionId), currentRound); }
+    if (questionId && await checkAudioExists(questionId)) {
+      if (stoppedRef.current) { setLoading(false); loadingRef.current = false; return; }
+      playAudioFile(audioPath(questionId), currentRound);
+    }
     else { playWithSpeech(currentRound); }
-  }, [playing, text, playCount, onWordIndex, words, questionId]);
- handlePlayRef.current = handlePlay;
+  }, [text, playCount, onWordIndex, words, questionId]);
+handlePlayRef.current = handlePlay;
  return (
     <div>
       <button onClick={handlePlay} disabled={loading}
@@ -1459,7 +1479,7 @@ function PracticeAnswer(props) {
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <div className="flex items-center mb-1">
-            <button onClick={function(){navigate('/practice/' + (question ? question.type : qType));}} className="mr-3"><ArrowLeft size={20} color="#FFFFFF" /></button>
+            <button onClick={function(){navigate('/practice/' + (question ? question.type : qType));}} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}><ArrowLeft size={22} color="#FFFFFF" /></button>
             <span className="text-white text-lg font-bold flex-1">{config.label}</span>
             <button onClick={function(){navigate('/scoring-guide?type=' + rType);}} className="rounded-lg px-3 py-1.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
               <BookMarked size={12} color="#FFFFFF" /><span className="text-white text-xs font-semibold ml-1">评分标准</span>
@@ -1960,7 +1980,7 @@ function ExamFlow(props) {
         <div style={{ width: contentWidth, margin: '0 auto', paddingBottom: 40 }}>
           <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
             <div className="flex items-center mb-1">
-              <button onClick={function() { navigate('/exam'); }} className="mr-3">
+              <button onClick={function() { navigate('/exam'); }} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}>
                 <ArrowLeft size={20} color="#FFFFFF" />
               </button>
               <span className="text-white text-lg font-bold">考试结果</span>
@@ -2052,7 +2072,7 @@ function ExamFlow(props) {
       <div style={{ width: contentWidth, margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
           <div className="flex items-center mb-1">
-            <button onClick={function() { setShowExitConfirm(true); }} className="mr-3">
+            <button onClick={function() { setShowExitConfirm(true); }} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}>
               <ArrowLeft size={20} color="#FFFFFF" />
             </button>
             <span className="text-white text-lg font-bold flex-1">试卷 {paperId} · 考试模拟</span>
@@ -2529,7 +2549,7 @@ function HistoryDetail(props) {
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
         <div className="flex items-center mb-2">
-          <button onClick={function() { navigate('/history'); }} className="mr-3">
+          <button onClick={function() { navigate('/history'); }} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}>
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
           <span className="text-white text-lg font-bold">成绩详情</span>
@@ -2625,7 +2645,7 @@ function ScoringGuide(props) {
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81, #4C1D95)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(76,29,149,0.3)' }}>
         <div className="flex items-center mb-2">
-          <button onClick={function() { navigate(type ? '/practice/' + type : '/'); }} className="mr-3">
+          <button onClick={function() { navigate(type ? '/practice/' + type : '/'); }} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}>
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
           <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
