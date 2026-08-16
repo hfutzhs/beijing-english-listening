@@ -1004,6 +1004,12 @@ function navigate(path) {
     window.dispatchEvent(new Event('hashchange'));
   } else {
     window.location.hash = path;
+    // TWA WebView fallback: 确保hashchange一定被触发
+    setTimeout(function() {
+      if (window.location.hash === target) {
+        window.dispatchEvent(new Event('hashchange'));
+      }
+    }, 50);
   }
 }
 function goBack(fallbackPath) {
