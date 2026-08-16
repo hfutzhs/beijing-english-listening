@@ -9,3 +9,4 @@ dist/
 web/screenshot_*.png
 .coze
 .cozeproj/
+web/tsconfig.tsbuildinfo
