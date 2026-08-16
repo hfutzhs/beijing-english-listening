@@ -973,7 +973,11 @@ function useHashRoute() {
   return route;
 }
 function navigate(path) { window.location.hash = path; }
-function goBack() { window.history.back(); }
+function goBack(fallbackPath) {
+  if (window.history.length > 1) { window.history.back(); }
+  else if (fallbackPath) { navigate(fallbackPath); }
+  else { navigate('/'); }
+}
 function parseRoute(hash) {
   var withoutHash = hash.replace(/^#/, '');
   var parts = withoutHash.split('?');
@@ -1405,7 +1409,7 @@ function PracticeAnswer(props) {
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <div className="flex items-center mb-1">
-            <button onClick={function(){goBack();}} className="mr-3"><ArrowLeft size={20} color="#FFFFFF" /></button>
+            <button onClick={function(){navigate('/practice/' + (question ? question.type : qType));}} className="mr-3"><ArrowLeft size={20} color="#FFFFFF" /></button>
             <span className="text-white text-lg font-bold flex-1">{config.label}</span>
             <button onClick={function(){navigate('/scoring-guide?type=' + rType);}} className="rounded-lg px-3 py-1.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
               <BookMarked size={12} color="#FFFFFF" /><span className="text-white text-xs font-semibold ml-1">评分标准</span>
@@ -1461,9 +1465,9 @@ function PracticeAnswer(props) {
                   return (
                     <button key={idx} onClick={function(){if(!result) setSelectedAnswer(idx);}} disabled={!!result}
                       className="rounded-xl p-4 flex items-center transition-all text-left" style={{ background: bg, border: '1.5px solid ' + border }}>
-                      <span className="rounded-lg flex items-center justify-center font-bold flex-shrink-0"
-                        style={{ width: 28, height: 28, backgroundColor: showResult && isCorrect ? '#10B981' : showResult && isWrong ? '#EF4444' : isSelected ? config.color : '#F3F4F6',
-                          color: showResult && (isCorrect || isWrong) ? '#FFFFFF' : isSelected ? '#FFFFFF' : '#F1F5F9', fontSize: 14 }}>{OPTION_LABELS[idx]}</span>
+                     <span className="rounded-lg flex items-center justify-center font-bold flex-shrink-0"
+                       style={{ width: 28, height: 28, backgroundColor: showResult && isCorrect ? '#10B981' : showResult && isWrong ? '#EF4444' : isSelected ? config.color : '#F3F4F6',
+                          color: showResult && (isCorrect || isWrong) ? '#FFFFFF' : isSelected ? '#FFFFFF' : '#1B1B3A', fontSize: 14 }}>{OPTION_LABELS[idx]}</span>
                       <span className="ml-3 text-base font-medium flex-1" style={{ color: textColor }}>{opt}</span>
                       {showResult && isCorrect && <CheckCircle size={18} color="#10B981" />}
                       {showResult && isWrong && <XCircle size={18} color="#EF4444" />}
@@ -2473,7 +2477,7 @@ function HistoryDetail(props) {
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
         <div className="flex items-center mb-2">
-          <button onClick={function() { goBack(); }} className="mr-3">
+          <button onClick={function() { goBack('/history'); }} className="mr-3">
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
           <span className="text-white text-lg font-bold">成绩详情</span>
@@ -2569,7 +2573,7 @@ function ScoringGuide(props) {
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81, #4C1D95)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(76,29,149,0.3)' }}>
         <div className="flex items-center mb-2">
-          <button onClick={function() { goBack(); }} className="mr-3">
+          <button onClick={function() { goBack(type ? '/practice/' + type : '/'); }} className="mr-3">
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
           <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
