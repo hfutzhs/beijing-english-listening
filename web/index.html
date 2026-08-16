@@ -787,13 +787,13 @@ function isSpeechSupported() { return typeof window !== 'undefined' && 'speechSy
 if (isSpeechSupported()) loadVoices();
 
 // Resolve audio file URL relative to the document base (supports sub-path hosting like GitHub Pages)
-function audioPath(qid) { return new URL('audio/' + qid + '.mp3', document.baseURI).pathname; }
+function audioPath(qid) { return new URL('audio/' + qid + '.mp3', document.baseURI).href; }
 
 var audioExistsCache = {};
 async function checkAudioExists(qid) {
   if (qid == null) return false;
   if (qid in audioExistsCache) return audioExistsCache[qid];
-  try { var res = await fetch(audioPath(qid), { method: 'HEAD' }); audioExistsCache[qid] = res.ok; return res.ok; }
+  try { var res = await fetch(audioPath(qid), { method: 'GET', headers: { 'Range': 'bytes=0-1' } }); audioExistsCache[qid] = (res.ok || res.status === 206); return audioExistsCache[qid]; }
   catch(e) { audioExistsCache[qid] = false; return false; }
 }
 
@@ -894,21 +894,33 @@ function useDeviceId() {
   useEffect(function() { setDeviceId(getDeviceId()); }, []);
   return deviceId;
 }
+// Detect the best supported audio recording mimeType for cross-browser/mobile compatibility
+function pickRecorderMimeType() {
+  var candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus', 'audio/mpeg'];
+  if (typeof MediaRecorder === 'undefined') return '';
+  for (var i = 0; i < candidates.length; i++) {
+    try { if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i]; } catch(e) {}
+  }
+  return '';
+}
+
 function useAudioRecorder() {
   var state = useState({ recording: false, recordedUrl: null, playing: false, transcribing: false, interimText: '', recordingTime: 0, error: null });
   var st = state[0], setState = state[1];
-  var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null);
+  var mediaRecorderRef = useRef(null), chunksRef = useRef([]), audioUrlRef = useRef(null), streamRef = useRef(null), mimeTypeRef = useRef('audio/webm');
   var audioElementRef = useRef(null), asrControllerRef = useRef(null), timerRef = useRef(null), startTimeRef = useRef(0);
   var startRecording = useCallback(async function() {
     setState(function(s){return Object.assign({}, s, { error: null, interimText: '', recording: true, recordingTime: 0 });});
     try {
       var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      var mediaRecorder = new MediaRecorder(stream);
+      var mt = pickRecorderMimeType();
+      mimeTypeRef.current = mt || 'audio/webm';
+      var mediaRecorder = mt ? new MediaRecorder(stream, { mimeType: mt }) : new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder; chunksRef.current = [];
       mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mediaRecorder.onstop = function() { stream.getTracks().forEach(function(t){t.stop();}); };
-      mediaRecorder.start();
+      mediaRecorder.start(1000);
       if (isASRSupported()) {
         asrControllerRef.current = recognizeSpeech({ onInterim: function(text) { setState(function(s){return Object.assign({}, s, { interimText: text });}); } });
       }
@@ -918,7 +930,13 @@ function useAudioRecorder() {
         setState(function(s){return Object.assign({}, s, { recordingTime: elapsed });});
       }, 1000);
     } catch(e) {
-      setState(function(s){return Object.assign({}, s, { recording: false, error: e.message || '无法访问麦克风，请检查权限设置。' });});
+      var errMsg = e.message || '无法访问麦克风，请检查权限设置。';
+      if (e.name === 'NotAllowedError') errMsg = '麦克风权限被拒绝，请在浏览器设置中允许麦克风访问。';
+      else if (e.name === 'NotFoundError') errMsg = '未找到麦克风设备，请检查设备连接。';
+      else if (e.name === 'NotReadableError') errMsg = '麦克风被其他应用占用，请关闭后重试。';
+      else if (e.name === 'SecurityError') errMsg = '需要 HTTPS 环境才能使用麦克风。';
+      console.error('Recording start failed:', e.name, e.message);
+      setState(function(s){return Object.assign({}, s, { recording: false, error: errMsg });});
     }
   }, []);
  var stopRecording = useCallback(async function() {
@@ -937,7 +955,7 @@ function useAudioRecorder() {
      recorderPromise = new Promise(function(resolve) {
        recorder.onstop = function() {
          if (streamRef.current) { streamRef.current.getTracks().forEach(function(t){t.stop();}); streamRef.current = null; }
-         if (chunksRef.current.length > 0) { var blob = new Blob(chunksRef.current, { type: 'audio/webm' }); audioUrl = URL.createObjectURL(blob); audioUrlRef.current = audioUrl; }
+         if (chunksRef.current.length > 0) { var blob = new Blob(chunksRef.current, { type: mimeTypeRef.current || 'audio/webm' }); audioUrl = URL.createObjectURL(blob); audioUrlRef.current = audioUrl; }
          resolve();
        };
        recorder.stop();
@@ -1124,7 +1142,9 @@ function TTSPlayer(props) {
     else { roundRef.current = 0; setPlayRound(0); }
   }
   function playAudioFile(url, currentRound) {
-    var audio = new Audio(url);
+    var audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = url;
     audioRef.current = audio;
     if (onWordIndex && words && words.length > 0) {
       audio.ontimeupdate = function() {
@@ -1132,8 +1152,8 @@ function TTSPlayer(props) {
       };
     }
     audio.onended = function() { playNextRound(currentRound); };
-    audio.onerror = function() { audioRef.current = null; playWithSpeech(currentRound); };
-    audio.play().then(function() { setLoading(false); setPlaying(true); }).catch(function() { audioRef.current = null; playWithSpeech(currentRound); });
+    audio.onerror = function() { console.warn('Audio file error for', url, 'error code:', audio.error ? audio.error.code : 'unknown'); audioRef.current = null; playWithSpeech(currentRound); };
+    audio.play().then(function() { setLoading(false); setPlaying(true); }).catch(function(err) { console.warn('Audio play failed for', url, err); audioRef.current = null; playWithSpeech(currentRound); });
   }
   function playWithSpeech(currentRound) {
     speakText(text, {
@@ -2754,7 +2774,17 @@ document.addEventListener('DOMContentLoaded', transformAppCode);
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function(e) { console.log('SW registration failed:', e); });
+    navigator.serviceWorker.register('./sw.js', { scope: './' }).then(function(reg) {
+      // Auto-reload when a new SW takes control
+      navigator.serviceWorker.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'SW_UPDATED') { window.location.reload(); }
+      });
+      // Also reload when the controller changes (new SW activated)
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
+    }).catch(function(e) { console.log('SW registration failed:', e); });
   });
 }
 </script>

@@ -1,5 +1,5 @@
-const CACHE_VERSION = 'beijing-english-v9';
-const AUDIO_CACHE = 'beijing-english-audio-v1';
+const CACHE_VERSION = 'beijing-english-v10';
+const AUDIO_CACHE = 'beijing-english-audio-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -10,8 +10,14 @@ const APP_SHELL = [
 
 self.addEventListener('install', function(e) {
   e.waitUntil(
-    caches.open(CACHE_VERSION).then(function(cache) {
-      return cache.addAll(APP_SHELL);
+    caches.keys().then(function(names) {
+      return Promise.all(names.map(function(n) {
+        if (n !== CACHE_VERSION && n !== AUDIO_CACHE) return caches.delete(n);
+      }));
+    }).then(function() {
+      return caches.open(CACHE_VERSION).then(function(cache) {
+        return cache.addAll(APP_SHELL);
+      });
     }).then(function() { return self.skipWaiting(); })
   );
 });
@@ -20,12 +26,17 @@ self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(names) {
       return Promise.all(
-        names.filter(function(n) {
-          return n !== CACHE_VERSION && n !== AUDIO_CACHE;
-        }).map(function(n) { return caches.delete(n); })
+        names.map(function(n) {
+          if (n === CACHE_VERSION || n === AUDIO_CACHE) return null;
+          return caches.delete(n);
+        }).filter(Boolean)
       );
     }).then(function() { return self.clients.claim(); })
-  );
+  ).then(function() {
+    self.clients.matchAll().then(function(clients) {
+      clients.forEach(function(c) { c.postMessage({ type: 'SW_UPDATED' }); });
+    });
+  });
 });
 
 self.addEventListener('fetch', function(e) {
@@ -34,17 +45,27 @@ self.addEventListener('fetch', function(e) {
 
   // Audio files: cache-first, runtime caching
   if (url.pathname.includes('/audio/') && req.method === 'GET') {
+    // Range requests (e.g. bytes=0-1 from checkAudioExists) must NOT use the cache:
+    // a cached 206 partial response would corrupt full playback. Only cache full 200s.
+    var hasRange = req.headers.get('range');
+    if (hasRange) {
+      e.respondWith(fetch(req));
+      return;
+    }
     e.respondWith(
       caches.open(AUDIO_CACHE).then(function(cache) {
         return cache.match(req).then(function(cached) {
           if (cached) return cached;
           return fetch(req).then(function(resp) {
-            if (resp.ok) {
+            if (resp.ok && resp.status === 200) {
               var copy = resp.clone();
               cache.put(req, copy);
             }
             return resp;
-          }).catch(function() { return cached; });
+          }).catch(function() {
+            if (cached) return cached;
+            return new Response('', { status: 503, statusText: 'Service Unavailable' });
+          });
         });
       })
     );
@@ -63,7 +84,9 @@ self.addEventListener('fetch', function(e) {
               cache.put(req, copy);
             }
             return resp;
-          }).catch(function() { return cached; });
+          }).catch(function() {
+            return cached || new Response('', { status: 503 });
+          });
         });
       })
     );
@@ -79,7 +102,11 @@ self.addEventListener('fetch', function(e) {
         return resp;
       }).catch(function() {
         return caches.match(req).then(function(cached) {
-          return cached || caches.match('/index.html');
+          // Try the exact request first, then fall back to relative index
+          if (cached) return cached;
+          return caches.match('./index.html').then(function(fallback) {
+            return fallback || new Response('<h1>Offline</h1>', { headers: { 'Content-Type': 'text/html' } });
+          });
         });
       })
     );
@@ -97,7 +124,9 @@ self.addEventListener('fetch', function(e) {
               cache.put(req, copy);
             }
             return resp;
-          }).catch(function() { return cached; });
+          }).catch(function() {
+            return cached || new Response('', { status: 503 });
+          });
           return cached || fetchPromise;
         });
       })
