@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.expo/
+*.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+web/screenshot_*.png
+.coze
+.cozeproj/
