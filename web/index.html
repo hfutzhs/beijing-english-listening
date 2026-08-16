@@ -1190,7 +1190,7 @@ function ResultCard(props) {
   var Icon = props.icon, label = props.label, color = props.color, children = props.children;
   return (
     <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-      <div className="flex items-center mb-3">
+      <div className="flex items-center mb-2">
         <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ backgroundColor: color + '22' }}>
           <Icon size={10} color={color} />
         </div>
@@ -1246,10 +1246,10 @@ function PracticeList(props) {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
      <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-6 pt-12 pb-8 tech-grid" style={{ background: config.gradient, boxShadow: '0 8px 32px ' + config.color + '30', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
-          <span className="text-white text-2xl font-extrabold block">{config.label}</span>
-          <span className="text-white/90 text-sm mt-1 block">{config.subtitle}</span>
-         <div className="flex items-center mt-4">
+        <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: config.gradient, boxShadow: '0 8px 32px ' + config.color + '30', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+          <span className="text-white text-xl font-extrabold block">{config.label}</span>
+          <span className="text-white/90 text-xs mt-0.5 block">{config.subtitle}</span>
+         <div className="flex items-center mt-2">
             <span className="text-white/90 text-sm font-medium">共 {questions.length} 题</span>
             <span className="text-white/90 text-sm ml-3">已答 {answeredIds.size}</span>
           </div>
@@ -1403,8 +1403,8 @@ function PracticeAnswer(props) {
  return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-5 pt-10 pb-4 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
-          <div className="flex items-center mb-3">
+        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+          <div className="flex items-center mb-1">
             <button onClick={function(){goBack();}} className="mr-3"><ArrowLeft size={20} color="#FFFFFF" /></button>
             <span className="text-white text-lg font-bold flex-1">{config.label}</span>
             <button onClick={function(){navigate('/scoring-guide?type=' + rType);}} className="rounded-lg px-3 py-1.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
@@ -1422,7 +1422,7 @@ function PracticeAnswer(props) {
               </div>
             </div>
           )}
-          <div className="flex items-center mt-3">
+          <div className="flex items-center mt-1">
             <span className="text-white/80 text-sm">{currentIdx >= 0 ? '第 ' + (currentIdx + 1) + ' / ' + siblingQuestions.length + ' 题' : ''}</span>
             <span className="text-white/80 text-xs ml-3">满分 {ms} 分</span>
           </div>
@@ -1431,7 +1431,7 @@ function PracticeAnswer(props) {
          {rType !== 'read_aloud' && <TTSPlayer text={question.audio_script} color={config.color} label={rType === 'listen_retell' ? '播放听力原文（两遍）' : '播放听力原文'} playCount={rType === 'listen_retell' ? 2 : 1} questionId={question.id} />}
           {rType === 'read_aloud' && (
             <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-white text-sm font-bold">朗读以下短文</span>
                 <button onClick={function(){navigate('/scoring-guide?type=read_aloud');}} className="text-xs font-medium" style={{ color: config.color }}>评分标准</button>
               </div>
@@ -1637,17 +1637,17 @@ function ExamMock() {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-6 pt-12 pb-8 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center">
-            <div className="rounded-xl flex items-center justify-center" style={{ width: 48, height: 48, backgroundColor: 'rgba(255,255,255,0.15)' }}>
-              <FilePen size={22} color="#FFFFFF" />
+            <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, backgroundColor: 'rgba(255,255,255,0.15)' }}>
+              <FilePen size={18} color="#FFFFFF" />
             </div>
             <div className="ml-3">
-              <span className="text-white text-2xl font-extrabold block">考试模拟</span>
+              <span className="text-white text-xl font-extrabold block">考试模拟</span>
               <span className="text-white/90 text-sm block">综合考试 · 总分 40 分</span>
             </div>
           </div>
-          <div className="flex items-center mt-4">
+          <div className="flex items-center mt-2">
             <span className="text-white/90 text-sm font-medium">共 {papers.length} 套试卷</span>
             <span className="text-white/90 text-sm ml-3">已完成 {completedCount}</span>
           </div>
@@ -1903,12 +1903,12 @@ function ExamFlow(props) {
     return (
       <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
         <div style={{ width: contentWidth, margin: '0 auto', paddingBottom: 40 }}>
-          <div className="px-6 pt-12 pb-8 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
-            <div className="flex items-center mb-2">
+          <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
+            <div className="flex items-center mb-1">
               <button onClick={function() { navigate('/exam'); }} className="mr-3">
                 <ArrowLeft size={20} color="#FFFFFF" />
               </button>
-              <span className="text-white text-xl font-bold">考试结果</span>
+              <span className="text-white text-lg font-bold">考试结果</span>
             </div>
             <span className="text-white/90 text-sm">试卷 {paperId}</span>
           </div>
@@ -1938,7 +1938,7 @@ function ExamFlow(props) {
               var SecIcon = secConfig.icon;
               return (
                 <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.08)' }}>
-                  <div className="flex items-center mb-3">
+                  <div className="flex items-center mb-1">
                     <div className="rounded-lg flex items-center justify-center" style={{ width: 32, height: 32, backgroundColor: secConfig.color + '22' }}>
                       <SecIcon size={14} color={secConfig.color} />
                     </div>
@@ -1995,8 +1995,8 @@ function ExamFlow(props) {
   return (
     <div className="min-h-screen card-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div className="px-5 pt-10 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
-          <div className="flex items-center mb-3">
+        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
+          <div className="flex items-center mb-1">
             <button onClick={function() { setShowExitConfirm(true); }} className="mr-3">
               <ArrowLeft size={20} color="#FFFFFF" />
             </button>
@@ -2275,11 +2275,11 @@ function History() {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-6 pt-12 pb-5 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(14,165,233,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(14,165,233,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <span className="text-white text-2xl font-extrabold block">历史记录</span>
-              <span className="text-white/80 text-sm mt-1 block">各项练习和考试成绩</span>
+              <span className="text-white text-xl font-extrabold block">历史记录</span>
+              <span className="text-white/80 text-xs mt-0.5 block">各项练习和考试成绩</span>
             </div>
             {records.length > 0 && (
               <button onClick={function() { setClearModalVisible(true); }} className="rounded-xl px-4 py-2.5 flex items-center" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
@@ -2471,8 +2471,8 @@ function HistoryDetail(props) {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
-      <div className="px-6 pt-12 pb-6 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
-        <div className="flex items-center mb-3">
+      <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+        <div className="flex items-center mb-2">
           <button onClick={function() { goBack(); }} className="mr-3">
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
@@ -2567,7 +2567,7 @@ function ScoringGuide(props) {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
-      <div className="px-6 pt-12 pb-6 tech-grid" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81, #4C1D95)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(76,29,149,0.3)' }}>
+      <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81, #4C1D95)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(76,29,149,0.3)' }}>
         <div className="flex items-center mb-2">
           <button onClick={function() { goBack(); }} className="mr-3">
             <ArrowLeft size={18} color="#FFFFFF" />
@@ -2580,7 +2580,7 @@ function ScoringGuide(props) {
       <div className="p-6 pb-20">
         {!isSingleType && (
           <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-            <div className="flex items-center mb-3">
+            <div className="flex items-center mb-1">
               <ClipboardList size={16} color="#818CF8" />
               <span className="text-white text-base font-bold ml-2">总分构成</span>
             </div>
@@ -2605,7 +2605,7 @@ function ScoringGuide(props) {
           var RuleIcon = rule.icon;
           return (
             <div key={rule.type} className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: '0 4px 24px rgba(99,102,241,0.06)' }}>
-              <div className="flex items-center mb-3">
+              <div className="flex items-center mb-1">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: rule.color + '22' }}>
                   <RuleIcon size={14} color={rule.color} />
                 </div>
