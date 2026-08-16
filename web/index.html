@@ -972,7 +972,14 @@ function useHashRoute() {
   }, []);
   return route;
 }
-function navigate(path) { window.location.hash = path; }
+function navigate(path) {
+  var target = '#' + path;
+  if (window.location.hash === target) {
+    window.dispatchEvent(new Event('hashchange'));
+  } else {
+    window.location.hash = path;
+  }
+}
 function goBack(fallbackPath) {
   if (window.history.length > 1) { window.history.back(); }
   else if (fallbackPath) { navigate(fallbackPath); }
@@ -2477,7 +2484,7 @@ function HistoryDetail(props) {
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
         <div className="flex items-center mb-2">
-          <button onClick={function() { goBack('/history'); }} className="mr-3">
+          <button onClick={function() { navigate('/history'); }} className="mr-3">
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
           <span className="text-white text-lg font-bold">成绩详情</span>
@@ -2573,7 +2580,7 @@ function ScoringGuide(props) {
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81, #4C1D95)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(76,29,149,0.3)' }}>
         <div className="flex items-center mb-2">
-          <button onClick={function() { goBack(type ? '/practice/' + type : '/'); }} className="mr-3">
+          <button onClick={function() { navigate(type ? '/practice/' + type : '/'); }} className="mr-3">
             <ArrowLeft size={18} color="#FFFFFF" />
           </button>
           <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
