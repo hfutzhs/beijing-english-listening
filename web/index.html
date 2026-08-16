@@ -58,7 +58,7 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B
   box-shadow: 0 2px 12px rgba(99,102,241,0.12);
 }
 .tech-gradient-text {
-  background: linear-gradient(135deg, #6366F1, #A855F7, #EC4899);
+  background: linear-gradient(135deg, #6366F1, #818CF8);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -75,12 +75,12 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #1B1B
 @keyframes aurora-drift-3 { 0%,100%{transform:translate(0,0) scale(1);opacity:.25} 50%{transform:translate(15%,-15%) scale(1.1);opacity:.4} }
 @keyframes card-fade-in { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{opacity:.6} 50%{opacity:1} }
-@keyframes tab-glow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.5)} 50%{box-shadow:0 0 20px rgba(99,102,241,0.8),0 0 4px rgba(168,85,247,0.6)} }
+@keyframes tab-glow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.5)} 50%{box-shadow:0 0 20px rgba(99,102,241,0.8),0 0 4px rgba(99,102,241,0.4)} }
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
 .aurora-blob{position:absolute;border-radius:50%;filter:blur(70px)}
 .aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.55),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
-.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(168,85,247,.45),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
-.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(14,165,233,.4),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
+.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.35),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
+.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.25),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
 .card-fade-in{animation:card-fade-in .5s cubic-bezier(0.16,1,0.3,1)}
 .animate-pulse-soft{animation:pulse-soft 2s ease-in-out infinite}
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
@@ -1078,15 +1078,15 @@ var ListChecks = makeIcon('<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><pat
 
 // === Config ===
 var TYPE_CONFIG = {
-  listen_choose: { label: '听后选择', subtitle: '听对话或独白，选择正确答案', color: '#0EA5E9', gradient: 'linear-gradient(135deg, #0284C7, #0EA5E9, #6366F1)' },
-  listen_answer: { label: '听后回答', subtitle: '听对话或独白，口头回答问题', color: '#10B981', gradient: 'linear-gradient(135deg, #047857, #10B981, #0EA5E9)' },
-  listen_retell: { label: '听后转述', subtitle: '听两遍录音，转述信息内容', color: '#A855F7', gradient: 'linear-gradient(135deg, #A855F7, #A855F7, #EC4899)' },
-  read_aloud: { label: '短文朗读', subtitle: '朗读给定英文短文', color: '#F59E0B', gradient: 'linear-gradient(135deg, #D97706, #F59E0B, #F43F5E)' },
+  listen_choose: { label: '听后选择', subtitle: '听对话或独白，选择正确答案', color: '#6366F1', gradient: 'linear-gradient(135deg, #4338CA, #6366F1)' },
+  listen_answer: { label: '听后回答', subtitle: '听对话或独白，口头回答问题', color: '#6366F1', gradient: 'linear-gradient(135deg, #4338CA, #6366F1)' },
+  listen_retell: { label: '听后转述', subtitle: '听两遍录音，转述信息内容', color: '#6366F1', gradient: 'linear-gradient(135deg, #4338CA, #6366F1)' },
+  read_aloud: { label: '短文朗读', subtitle: '朗读给定英文短文', color: '#6366F1', gradient: 'linear-gradient(135deg, #4338CA, #6366F1)' },
 };
 var EXAM_HEADER_COLOR = '#6366F1';
-var EXAM_HEADER_GRADIENT = 'linear-gradient(135deg, #4338CA, #6366F1, #8B5CF6)';
-var HISTORY_HEADER_COLOR = '#0EA5E9';
-var HISTORY_HEADER_GRADIENT = 'linear-gradient(135deg, #0C4A6E, #0EA5E9, #6366F1)';
+var EXAM_HEADER_GRADIENT = 'linear-gradient(135deg, #4338CA, #6366F1)';
+var HISTORY_HEADER_COLOR = '#6366F1';
+var HISTORY_HEADER_GRADIENT = 'linear-gradient(135deg, #4338CA, #6366F1)';
 var FLAT_LIST_TYPES = ['read_aloud', 'listen_retell'];
 var OPTION_LABELS = ['A', 'B', 'C', 'D', 'E'];
 function getScoreColor(ratio) { if (ratio >= 0.8) return '#10B981'; if (ratio >= 0.6) return '#F59E0B'; return '#EF4444'; }
@@ -1122,10 +1122,10 @@ function TabBar() {
          return (
            <a key={tab.path} href={'#' + tab.path}
              className="flex flex-col items-center justify-center"
-             style={{ flex: 1, paddingTop: 8, paddingBottom: 8, gap: 3, textDecoration: 'none', position: 'relative' }}>
-             {isActive && <div className="tab-glow" style={{ position: 'absolute', top: 0, width: 28, height: 3, borderRadius: 2, background: 'linear-gradient(90deg, #6366F1, #A855F7)' }} />}
-             <Icon size={isDesktop ? 22 : 21} strokeWidth={isActive ? 2.5 : 2} color={isActive ? '#818CF8' : '#A5B4FC'} />
-             <span style={{ fontSize: isDesktop ? 11 : 10, fontWeight: 700, color: isActive ? '#A5B4FC' : '#A5B4FC' }}>{tab.label}</span>
+            style={{ flex: 1, paddingTop: 8, paddingBottom: 8, gap: 3, textDecoration: 'none', position: 'relative' }}>
+             {isActive && <div className="tab-glow" style={{ position: 'absolute', top: 0, width: 28, height: 3, borderRadius: 2, background: 'linear-gradient(90deg, #818CF8, #6366F1)' }} />}
+            <Icon size={isDesktop ? 22 : 21} strokeWidth={isActive ? 2.5 : 2} color={isActive ? '#818CF8' : '#A5B4FC'} />
+             <span style={{ fontSize: isDesktop ? 11 : 10, fontWeight: 700, color: isActive ? '#818CF8' : '#A5B4FC' }}>{tab.label}</span>
            </a>
          );
        })}
@@ -1683,10 +1683,10 @@ function PracticeAnswer(props) {
 
 // === ExamMock ===
 var EXAM_SECTIONS = [
-  { type: 'listen_choose', label: '听后选择', color: '#0EA5E9', maxScore: 9, count: 6, icon: Headphones },
-  { type: 'listen_answer', label: '听后回答', color: '#10B981', maxScore: 12, count: 6, icon: MessageCircle },
-  { type: 'listen_retell', label: '听后转述', color: '#A855F7', maxScore: 10, count: 1, icon: Repeat },
-  { type: 'read_aloud', label: '短文朗读', color: '#F59E0B', maxScore: 9, count: 1, icon: BookOpen },
+  { type: 'listen_choose', label: '听后选择', color: '#6366F1', maxScore: 9, count: 6, icon: Headphones },
+  { type: 'listen_answer', label: '听后回答', color: '#6366F1', maxScore: 12, count: 6, icon: MessageCircle },
+  { type: 'listen_retell', label: '听后转述', color: '#6366F1', maxScore: 10, count: 1, icon: Repeat },
+  { type: 'read_aloud', label: '短文朗读', color: '#6366F1', maxScore: 9, count: 1, icon: BookOpen },
 ];
 
 function ExamMock() {
@@ -1818,10 +1818,10 @@ function ExamMock() {
 
 // === ExamFlow ===
 var SECTION_CONFIG = {
-  listen_choose: { label: '听后选择', color: '#0EA5E9', icon: Headphones },
-  listen_answer: { label: '听后回答', color: '#10B981', icon: MessageCircle },
-  listen_retell: { label: '听后转述', color: '#A855F7', icon: Repeat },
-  read_aloud: { label: '短文朗读', color: '#F59E0B', icon: BookOpen },
+  listen_choose: { label: '听后选择', color: '#6366F1', icon: Headphones },
+  listen_answer: { label: '听后回答', color: '#6366F1', icon: MessageCircle },
+  listen_retell: { label: '听后转述', color: '#6366F1', icon: Repeat },
+  read_aloud: { label: '短文朗读', color: '#6366F1', icon: BookOpen },
 };
 var SECTION_ORDER = ['listen_choose', 'listen_answer', 'listen_retell', 'read_aloud'];
 
@@ -2279,10 +2279,10 @@ var HISTORY_TYPE_LABEL = {
   listen_retell: '听后转述',
 };
 var HISTORY_TYPE_COLOR = {
-  read_aloud: '#F59E0B',
-  listen_choose: '#0EA5E9',
-  listen_answer: '#10B981',
-  listen_retell: '#A855F7',
+  read_aloud: '#6366F1',
+  listen_choose: '#6366F1',
+  listen_answer: '#6366F1',
+  listen_retell: '#6366F1',
 };
 var FILTER_TYPES = [
   { value: '', label: '全部' },
@@ -2367,7 +2367,7 @@ function History() {
   return (
     <div className="min-h-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
-        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(14,165,233,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 8px 32px rgba(99,102,241,0.25)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <span className="text-white text-xl font-extrabold block">历史记录</span>
@@ -2501,10 +2501,10 @@ var HD_TYPE_LABEL = {
   listen_retell: '听后转述',
 };
 var HD_TYPE_COLOR = {
-  read_aloud: '#F59E0B',
-  listen_choose: '#0EA5E9',
-  listen_answer: '#10B981',
-  listen_retell: '#A855F7',
+  read_aloud: '#6366F1',
+  listen_choose: '#6366F1',
+  listen_answer: '#6366F1',
+  listen_retell: '#6366F1',
 };
 
 function HistoryDetail(props) {
@@ -2527,8 +2527,8 @@ function HistoryDetail(props) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #1B1B3A 0%, #25265A 100%)' }}>
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#F59E0B22' }}>
-          <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: '#F59E0B', borderTopColor: 'transparent' }} />
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#6366F122' }}>
+          <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: '#6366F1', borderTopColor: 'transparent' }} />
         </div>
       </div>
     );
@@ -2545,9 +2545,9 @@ function HistoryDetail(props) {
   var ms = record.max_score || 0;
   var ratio = ms > 0 ? record.score / ms : 0;
   var isPass = ratio >= 0.6;
-  var typeKey = record.question_type || 'unknown';
-  var typeColor = HD_TYPE_COLOR[typeKey] || '#A855F7';
-  var scoreColor = ratio >= 0.8 ? '#10B981' : ratio >= 0.6 ? '#F59E0B' : '#EF4444';
+ var typeKey = record.question_type || 'unknown';
+  var typeColor = HD_TYPE_COLOR[typeKey] || '#6366F1';
+ var scoreColor = ratio >= 0.8 ? '#10B981' : ratio >= 0.6 ? '#F59E0B' : '#EF4444';
   var fb = record.feedback || {};
   var analysisText = fb.analysis || fb.accuracyAnalysis || fb.languageAnalysis || record.accuracy_analysis || '';
   var fluencyText = fb.fluencyAnalysis || fb.coherenceAnalysis || record.fluency_analysis || '';
@@ -2631,13 +2631,13 @@ function HistoryDetail(props) {
 
 // === ScoringGuide ===
 var SCORING_RULES = [
-  { type: 'listen_choose', label: '听后选择', color: '#0EA5E9', icon: ListChecks, maxScore: 9,
+  { type: 'listen_choose', label: '听后选择', color: '#6366F1', icon: ListChecks, maxScore: 9,
     rules: ['每题1.5分，共6题', '每题2-3个选项，选择正确得分', '选错或不选不得分', '听力材料播放两遍'] },
-  { type: 'listen_answer', label: '听后回答', color: '#10B981', icon: MessageCircle, maxScore: 12,
+  { type: 'listen_answer', label: '听后回答', color: '#6366F1', icon: MessageCircle, maxScore: 12,
     rules: ['每题2分，共6题', '发音不准确但不影响理解，不扣分', '表达有语法错误但能说出关键词，不影响理解，不扣分', '不做答或所答与对话内容完全无关，不得分', '录音中出现多题答案，以最后答案为准', '零误差原则'] },
-  { type: 'listen_retell', label: '听后转述', color: '#A855F7', icon: Repeat, maxScore: 10,
+  { type: 'listen_retell', label: '听后转述', color: '#6366F1', icon: Repeat, maxScore: 10,
     rules: ['根据信息表转述听力内容', '信息点完整，每个信息点2分', '拼写错误不得分', '单复数扣分，大小写错误不扣分', '出现多余信息但不影响交际不扣分', '意思等值可给分（遵循交际原则）'] },
-  { type: 'read_aloud', label: '短文朗读', color: '#F59E0B', icon: BookOpen, maxScore: 9,
+  { type: 'read_aloud', label: '短文朗读', color: '#6366F1', icon: BookOpen, maxScore: 9,
     rules: ['满分档引入容错机制', '档内从宽原则', '个别错误指1-2个（不影响得分档）', '评分维度：语音语调、语速节奏、意群停顿、重读弱读', '如出现与作答无关的语音，做异常卷标记'] },
 ];
 
