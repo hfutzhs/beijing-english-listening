@@ -1,5 +1,6 @@
-const CACHE_VERSION = 'beijing-english-v10';
+const CACHE_VERSION = 'beijing-english-v11';
 const AUDIO_CACHE = 'beijing-english-audio-v2';
+const PAGE_VERSION = 'v11';
 const APP_SHELL = [
   './',
   './index.html',
@@ -131,5 +132,18 @@ self.addEventListener('fetch', function(e) {
         });
       })
     );
+  }
+
+});
+
+// Handle messages from the page (outside fetch handler)
+self.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
+  if (e.data && e.data.type === 'CHECK_VERSION') {
+    var mismatch = e.data.version !== PAGE_VERSION;
+    try {
+      if (e.ports && e.ports[0]) e.ports[0].postMessage({ mismatch: mismatch });
+      else if (e.source) e.source.postMessage({ mismatch: mismatch });
+    } catch(err) {}
   }
 });
