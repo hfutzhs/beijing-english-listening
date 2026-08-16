@@ -4,7 +4,10 @@
     "target": {
       "namespace": "android_app",
       "package_name": "io.github.hfutzhs.twa",
-      "sha256_cert_fingerprints": ["E6:F1:2E:2E:34:7F:6C:5C:E2:2D:5A:EC:2D:DD:A4:B2:BF:B7:B9:31:8B:F8:B5:40:17:5C:3C:2E:03:46:55:CC"]
+      "sha256_cert_fingerprints": [
+        "3B:F3:EE:7A:12:04:A8:4B:21:87:57:27:FF:2D:F0:6F:BA:87:3D:CA:C8:51:76:85:2E:FC:7E:9B:DE:39:40:9B",
+        "E6:F1:2E:2E:34:7F:6C:5C:E2:2D:5A:EC:2D:DD:A4:B2:BF:B7:B9:31:8B:F8:B5:40:17:5C:3C:2E:03:46:55:CC"
+      ]
     }
   }
 ]
