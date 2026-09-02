@@ -73,9 +73,9 @@ window.__transformersReady = true;
 .animate-border-glow { animation: border-glow 3s ease-in-out infinite; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
-html, body, #root { height: 100vh; height: 100dvh; overflow: hidden; }
-.fit-screen { height: calc(100vh - 56px); height: calc(100dvh - 56px); overflow: hidden; display: flex; flex-direction: column; }
-.fit-screen-fs { height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+html, body, #root { height: 100vh; height: 100dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.fit-screen { min-height: calc(100vh - 56px); min-height: calc(100dvh - 56px); overflow: visible; display: flex; flex-direction: column; }
+.fit-screen-fs { min-height: 100vh; min-height: 100dvh; overflow: visible; display: flex; flex-direction: column; }
 .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .scroll-area::-webkit-scrollbar { width: 0; }
 * { -webkit-tap-highlight-color: transparent; }
@@ -1956,50 +1956,50 @@ var VOCAB_BANK = [
   { en: 'with all speed', zh: '以全速', ph: '' },
   { en: 'with good intentions', zh: '善意地;诚意地', ph: '' },
   { en: 'with joy', zh: '高兴地', ph: '' },
-  { en: 'but', zh: '但是', ph: '' },
-  { en: 'panic', zh: '恐慌', ph: '' },
-  { en: 'clear', zh: '清除;放晴', ph: '' },
-  { en: 'war', zh: '战争', ph: '' },
-  { en: 'promise', zh: '承诺', ph: '' },
-  { en: 'bread', zh: '面包', ph: '' },
-  { en: 'mix', zh: '混合', ph: '' },
-  { en: 'holiday', zh: '假期;节日', ph: '' },
-  { en: 'taste', zh: '味道;品尝', ph: '' },
-  { en: 'language', zh: '语言', ph: '' },
-  { en: 'example', zh: '例子;榜样', ph: '' },
-  { en: 'museum', zh: '博物馆', ph: '' },
-  { en: 'culture', zh: '文化', ph: '' },
-  { en: 'smell', zh: '气味;闻', ph: '' },
-  { en: 'matter', zh: '问题;事情;要紧', ph: '' },
-  { en: 'winter', zh: '冬季', ph: '' },
-  { en: 'pollution', zh: '污染', ph: '' },
-  { en: 'ocean', zh: '海洋', ph: '' },
-  { en: 'machine', zh: '机器', ph: '' },
-  { en: 'record', zh: '记录;唱片', ph: '' },
-  { en: 'truth', zh: '事实;真理;真相', ph: '' },
-  { en: 'task', zh: '任务;工作', ph: '' },
-  { en: 'distance', zh: '距离', ph: '' },
-  { en: 'reporter', zh: '记者', ph: '' },
-  { en: 'death', zh: '死;死亡', ph: '' },
-  { en: 'peace', zh: '和平;安静', ph: '' },
-  { en: 'focus', zh: '集中;焦点', ph: '' },
-  { en: 'truck', zh: 'n卡车,手推车', ph: '' },
-  { en: 'theater', zh: '剧院', ph: '' },
-  { en: 'church', zh: '教堂', ph: '' },
-  { en: 'examination', zh: '考试;检查', ph: '' },
-  { en: 'invitation', zh: '邀请;招待', ph: '' },
-  { en: 'stream', zh: 'n溪流,一股 v.流出', ph: '' },
-  { en: 'circle', zh: '圆圈', ph: '' },
-  { en: 'coast', zh: '海岸;海滨', ph: '' },
-  { en: 'diet', zh: '节食;日常饮食', ph: '' },
-  { en: 'standard', zh: '标准', ph: '' },
-  { en: 'industry', zh: '工业;产业', ph: '' },
-  { en: 'food', zh: '食物', ph: '' },
-  { en: 'steam', zh: '蒸汽', ph: '' },
-  { en: 'wealth', zh: '财富', ph: '' },
-  { en: 'secretary', zh: '秘书', ph: '' },
-  { en: 'pioneer', zh: '先驱;先锋', ph: '' },
-  { en: 'shame', zh: '羞耻;羞愧', ph: '' },
+  { en: 'but', zh: '但是', ph: '/bʌt/'' },
+  { en: 'panic', zh: '恐慌', ph: '/ˈpænɪk/'' },
+  { en: 'clear', zh: '清除;放晴', ph: '/klɪr/'' },
+  { en: 'war', zh: '战争', ph: '/wɔːr/'' },
+  { en: 'promise', zh: '承诺', ph: '/ˈprɒmɪs/'' },
+  { en: 'bread', zh: '面包', ph: '/bred/'' },
+  { en: 'mix', zh: '混合', ph: '/mɪks/'' },
+  { en: 'holiday', zh: '假期;节日', ph: '/ˈhɒlədeɪ/'' },
+  { en: 'taste', zh: '味道;品尝', ph: '/teɪst/'' },
+  { en: 'language', zh: '语言', ph: '/ˈlæŋɡwɪdʒ/'' },
+  { en: 'example', zh: '例子;榜样', ph: '/ɪɡˈzæmpəl/'' },
+  { en: 'museum', zh: '博物馆', ph: '/mjuːˈziːəm/'' },
+  { en: 'culture', zh: '文化', ph: '/ˈkʌltʃər/'' },
+  { en: 'smell', zh: '气味;闻', ph: '/smel/'' },
+  { en: 'matter', zh: '问题;事情;要紧', ph: '/ˈmætər/'' },
+  { en: 'winter', zh: '冬季', ph: '/ˈwɪntər/'' },
+  { en: 'pollution', zh: '污染', ph: '/pəˈluːʃən/'' },
+  { en: 'ocean', zh: '海洋', ph: '/ˈoʊʃən/'' },
+  { en: 'machine', zh: '机器', ph: '/məˈʃiːn/'' },
+  { en: 'record', zh: '记录;唱片', ph: '/ˈrekərd/'' },
+  { en: 'truth', zh: '事实;真理;真相', ph: '/truːθ/'' },
+  { en: 'task', zh: '任务;工作', ph: '/tæsk/'' },
+  { en: 'distance', zh: '距离', ph: '/ˈdɪstəns/'' },
+  { en: 'reporter', zh: '记者', ph: '/rɪˈpɔːrtər/'' },
+  { en: 'death', zh: '死;死亡', ph: '/deθ/'' },
+  { en: 'peace', zh: '和平;安静', ph: '/piːs/'' },
+  { en: 'focus', zh: '集中;焦点', ph: '/ˈfoʊkəs/'' },
+  { en: 'truck', zh: '卡车;手推车', ph: '/trʌk/' },
+  { en: 'theater', zh: '剧院', ph: '/ˈθiːətər/'' },
+  { en: 'church', zh: '教堂', ph: '/tʃɜːrtʃ/'' },
+  { en: 'examination', zh: '考试;检查', ph: '/ɪɡˌzæmɪˈneɪʃən/'' },
+  { en: 'invitation', zh: '邀请;招待', ph: '/ˌɪnvɪˈteɪʃən/'' },
+  { en: 'stream', zh: '溪流;流出', ph: '/striːm/' },
+  { en: 'circle', zh: '圆圈', ph: '/ˈsɜːrkl/'' },
+  { en: 'coast', zh: '海岸;海滨', ph: '/koʊst/'' },
+  { en: 'diet', zh: '节食;日常饮食', ph: '/ˈdaɪət/'' },
+  { en: 'standard', zh: '标准', ph: '/ˈstændərd/'' },
+  { en: 'industry', zh: '工业;产业', ph: '/ˈɪndəstri/'' },
+  { en: 'food', zh: '食物', ph: '/fuːd/'' },
+  { en: 'steam', zh: '蒸汽', ph: '/stiːm/'' },
+  { en: 'wealth', zh: '财富', ph: '/striːm/'' },
+  { en: 'secretary', zh: '秘书', ph: '/ˈsekrəteri/'' },
+  { en: 'pioneer', zh: '先驱;先锋', ph: '/ˌpaɪəˈnɪr/'' },
+  { en: 'shame', zh: '羞耻;羞愧', ph: '/ʃeɪm/'' },
 ];
 
 
@@ -3094,7 +3094,7 @@ function PracticeList(props) {
   }
   return (
     <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
-     <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+     <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: config.gradient, boxShadow: '0 4px 20px ' + config.color + '12', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <span className="text-white text-xl font-extrabold block">{config.label}</span>
           <span className="text-white/90 text-xs mt-0.5 block">{config.subtitle}</span>
@@ -3263,7 +3263,7 @@ var handleStopRecording = useCallback(async function() {
   var canSubmit = rType === 'listen_choose' ? selectedAnswer !== null : true;
  return (
     <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
-      <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <div className="flex items-center mb-1">
             <button onClick={function(){navigate('/practice/' + (question ? question.type : qType));}} className="mr-3 flex items-center justify-center" style={{ minWidth: 44, minHeight: 44, padding: 8 }}><ArrowLeft size={22} color="#FFFFFF" /></button>
@@ -3509,7 +3509,7 @@ function ExamMock() {
 
   return (
     <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
-      <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center">
             <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, backgroundColor: 'rgba(99,102,241,0.08)' }}>
@@ -4167,7 +4167,7 @@ function History() {
 
   return (
     <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
-      <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-4 pb-2 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -5106,7 +5106,7 @@ function App() {
   }
 
   return (
-    <div style={{ height: '100vh', overflow: 'hidden', paddingBottom: hideTabBar ? 0 : 56 }}>
+    <div style={{ minHeight: '100dvh', overflow: 'visible', paddingBottom: hideTabBar ? 0 : 56 }}>
       {page}
       {!hideTabBar && <TabBar />}
     </div>
