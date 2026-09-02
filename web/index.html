@@ -18,25 +18,17 @@
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script>
-// Model loading: local files for dev, jsdelivr CDN for production
-// jsdelivr mirrors GitHub and is accessible in China (unlike GitHub Pages CDN)
+// Model loading: local files for dev, HuggingFace mirror for production
+// hf-mirror.com mirrors HuggingFace, is China-accessible, supports CORS, and has no file size limit
+// (jsdelivr has 20MB limit; decoder model is 30MB and gets 403)
 (function() {
   var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost' || location.protocol === 'file:';
-  var JSD_MODEL_BASE = 'https://cdn.jsdelivr.net/gh/hfutzhs/beijing-english-listening@3ae4c07/web/models/';
   var origFetch = window.fetch;
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
-    // Production: rewrite local ./models/ paths to jsdelivr CDN
-    if (!isLocal && url.indexOf('/models/') !== -1 && url.indexOf('cdn.jsdelivr.net') === -1) {
-      var match = url.match(/\/models\/(.+)$/);
-      if (match) {
-        url = JSD_MODEL_BASE + match[1].split('?')[0];
-        input = typeof input === 'string' ? url : new Request(url, input);
-      }
-    }
     // Local dev: cache-busting for model files
     if (isLocal && typeof input === 'string' && input.indexOf('/models/') !== -1 && input.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=30';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=37';
     }
     return origFetch.call(window, input, init);
   };
@@ -44,15 +36,22 @@
 </script>
 <script type="module">
   import { pipeline, env } from "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm";
-  // Model files: local ./models/ for dev, jsdelivr CDN for production
-  // jsdelivr is China-accessible, has CORS *, and mirrors our GitHub repo
- env.allowLocalModels = true;
-env.allowRemoteModels = false;
-env.localModelPath = "./models/";
-env.useBrowserCache = true;
-env.backends.onnx.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/";
-window.__transformers = { pipeline: pipeline, env: env };
-window.__transformersReady = true;
+  // Model files: local ./models/ for dev, hf-mirror.com CDN for production
+  // hf-mirror.com is China-accessible, supports CORS, and has no 20MB file size limit
+  var _isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost' || location.protocol === 'file:';
+  if (_isLocal) {
+    env.allowLocalModels = true;
+    env.allowRemoteModels = false;
+    env.localModelPath = "./models/";
+  } else {
+    env.allowLocalModels = false;
+    env.allowRemoteModels = true;
+    env.remoteHost = 'https://hf-mirror.com/';
+  }
+  env.useBrowserCache = true;
+  env.backends.onnx.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/";
+  window.__transformers = { pipeline: pipeline, env: env };
+  window.__transformersReady = true;
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -2782,7 +2781,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v36</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v37</div>
  </nav>
  );
 }
@@ -5204,6 +5203,10 @@ function transformAppCode() {
     var script = document.createElement('script');
     script.textContent = transformed;
     document.body.appendChild(script);
+    // Preload Whisper model in background (40MB, cached after first load)
+    setTimeout(function() {
+      if (typeof preloadWhisperModel === 'function') preloadWhisperModel();
+    }, 3000);
   } catch(e) {
     console.error('Babel transform error:', e);
     var root = document.getElementById('root');
@@ -5247,7 +5250,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v36' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v37' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
