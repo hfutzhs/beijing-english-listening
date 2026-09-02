@@ -73,9 +73,9 @@ window.__transformersReady = true;
 .animate-border-glow { animation: border-glow 3s ease-in-out infinite; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
-html, body, #root { height: 100dvh; overflow: hidden; }
-.fit-screen { height: calc(100dvh - 56px); overflow: hidden; display: flex; flex-direction: column; }
-.fit-screen-fs { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+html, body, #root { height: 100vh; height: 100dvh; overflow: hidden; }
+.fit-screen { height: calc(100vh - 56px); height: calc(100dvh - 56px); overflow: hidden; display: flex; flex-direction: column; }
+.fit-screen-fs { height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
 .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .scroll-area::-webkit-scrollbar { width: 0; }
 * { -webkit-tap-highlight-color: transparent; }
@@ -90,6 +90,7 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 }
 .tech-glow-card {
   background: #FFFFFF;
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(99,102,241,0.10);
   box-shadow: 0 2px 12px rgba(99,102,241,0.06);
@@ -115,14 +116,14 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 @keyframes aurora-drift-1 { 0%,100%{transform:translate(0,0) scale(1);opacity:.5} 33%{transform:translate(30%,-20%) scale(1.15);opacity:.7} 66%{transform:translate(-15%,25%) scale(.9);opacity:.35} }
 @keyframes aurora-drift-2 { 0%,100%{transform:translate(0,0) scale(1);opacity:.3} 33%{transform:translate(-25%,20%) scale(1.2);opacity:.5} 66%{transform:translate(20%,-30%) scale(.85);opacity:.25} }
 @keyframes aurora-drift-3 { 0%,100%{transform:translate(0,0) scale(1);opacity:.25} 50%{transform:translate(15%,-15%) scale(1.1);opacity:.4} }
-@keyframes card-fade-in { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes card-fade-in { from{opacity:1;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 @keyframes pulse-soft { 0%,100%{opacity:.6} 50%{opacity:1} }
 @keyframes tab-glow { 0%,100%{box-shadow:0 0 8px rgba(99,102,241,0.25)} 50%{box-shadow:0 0 14px rgba(99,102,241,0.4),0 0 2px rgba(99,102,241,0.2)} }
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
-.aurora-blob{position:absolute;border-radius:50%;filter:blur(70px)}
-.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:-12%;left:-8%;animation:aurora-drift-1 22s ease-in-out infinite}
-.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.06),transparent 70%);bottom:8%;right:-6%;animation:aurora-drift-2 28s ease-in-out infinite}
-.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.04),transparent 70%);top:45%;left:40%;animation:aurora-drift-3 35s ease-in-out infinite}
+.aurora-blob{position:absolute;border-radius:50%}
+.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:-12%;left:-8%}
+.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.06),transparent 70%);bottom:8%;right:-6%}
+.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.04),transparent 70%);top:45%;left:40%}
 .card-fade-in{animation:card-fade-in .5s cubic-bezier(0.16,1,0.3,1)}
 .animate-pulse-soft{animation:pulse-soft 2s ease-in-out infinite}
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
@@ -849,13 +850,13 @@ var VOCAB_BANK = [
   { en: 'rise', zh: '升起', ph: '/raɪz/' },
   { en: 'rule', zh: '规则', ph: '/ruːl/' },
   { en: 'run', zh: '跑；奔跑', ph: '/rʌn/' },
-  { en: 'satisfied', zh: '令人满意的', ph: '/ˈsætɪsfaɪd/' },
+  { en: 'satisfied', zh: '感到满意的', ph: '/ˈsætɪsfaɪd/' },
   { en: 'satisfy', zh: '使满意', ph: '/ˈsætɪsfaɪ/' },
-  { en: 'satisfying', zh: '感到满意的', ph: '/ˈsætɪsfaɪɪŋ/' },
+  { en: 'satisfying', zh: '令人满意的', ph: '/ˈsætɪsfaɪɪŋ/' },
   { en: 'save', zh: '保存', ph: '/seɪv/' },
   { en: 'seat', zh: '座位', ph: '/siːt/' },
   { en: 'second', zh: '第二；秒', ph: '/ˈsekənd/' },
-  { en: 'secrete', zh: '秘密', ph: '/sɪˈkriːt/' },
+  { en: 'secrete', zh: '分泌', ph: '/sɪˈkriːt/' },
   { en: 'serious', zh: '严肃的', ph: '/ˈsɪəriəs/' },
   { en: 'serve', zh: '服务', ph: '/sɜːrv/' },
   { en: 'set', zh: '设置', ph: '/set/' },
@@ -950,7 +951,7 @@ var VOCAB_BANK = [
   { en: 'a pair of shoes', zh: '一双鞋', ph: '' },
   { en: 'a period of time', zh: '一段时间', ph: '' },
   { en: 'a piece of news', zh: '一条消息', ph: '' },
-  { en: 'above all', zh: '首先', ph: '' },
+  { en: 'above all', zh: '首要的是;尤其', ph: '' },
   { en: 'across from', zh: '在......对面', ph: '' },
   { en: 'advise sb. to do sth', zh: '建议某人做某事', ph: '' },
   { en: 'after all', zh: '毕竟', ph: '' },
@@ -976,9 +977,7 @@ var VOCAB_BANK = [
   { en: 'at most', zh: '最多', ph: '' },
   { en: 'at night', zh: '在夜里', ph: '' },
   { en: 'at once', zh: '马上', ph: '' },
-  { en: 'at present', zh: '现在', ph: '' },
-  { en: 'at the beginning of', zh: '在……开始', ph: '' },
-  { en: 'at the moment', zh: '此刻', ph: '' },
+  { en: 'at present', zh: '现在', ph: '' },  { en: 'at the moment', zh: '此刻', ph: '' },
   { en: 'at the same time', zh: '同时', ph: '' },
   { en: 'avoid doing', zh: '避免做某事', ph: '' },
   { en: 'basic skills', zh: '基本技能', ph: '' },
@@ -987,12 +986,10 @@ var VOCAB_BANK = [
   { en: 'be absent from a meeting', zh: '缺席一场会议', ph: '' },
   { en: 'be afraid to do sth', zh: '害怕做某事', ph: '' },
   { en: 'be bad for our health', zh: '对我们的健康有害', ph: '' },
-  { en: 'be born with', zh: '天生具有', ph: '' },
+  { en: 'be born with', zh: '天生具有;与生俱来', ph: '' },
   { en: 'be covered with', zh: '被……覆盖', ph: '' },
   { en: 'be covered with snow', zh: '被雪覆盖', ph: '' },
-  { en: 'be crazy about painting', zh: '对绘画着迷', ph: '' },
-  { en: 'be different from', zh: '不同于', ph: '' },
-  { en: 'be far from', zh: '远离', ph: '' },
+  { en: 'be crazy about painting', zh: '对绘画着迷', ph: '' },  { en: 'be far from', zh: '远离', ph: '' },
   { en: 'be filled with energy', zh: '充满能量', ph: '' },
   { en: 'be friendly to the old', zh: '对老人友好', ph: '' },
   { en: 'be friends with', zh: '成为某人的朋友', ph: '' },
@@ -1245,7 +1242,7 @@ var VOCAB_BANK = [
   { en: 'make a choice/choices', zh: '做选择', ph: '' },
   { en: 'make a difference', zh: '有影响', ph: '' },
   { en: 'make a mistake/make mistakes', zh: '犯错误', ph: '' },
-  { en: 'make an effort', zh: '做出努力', ph: '' },
+  { en: 'make an effort', zh: '作出努力', ph: '' },
   { en: 'make an effort/efforts', zh: '做出努力', ph: '' },
   { en: 'make friends', zh: '结交朋友', ph: '' },
   { en: 'make fun of', zh: '嘲笑', ph: '' },
@@ -1302,7 +1299,7 @@ var VOCAB_BANK = [
   { en: 'protect us against/from being hurt', zh: '保护我们免受伤害', ph: '' },
   { en: 'pull together', zh: '齐心协力', ph: '' },
   { en: 'put off', zh: '推迟', ph: '' },
-  { en: 'put on', zh: '增加（体重）', ph: '' },
+  { en: 'put on', zh: '穿上;戴上;上演;增加(体重)', ph: '' },
   { en: 'put on the clothes', zh: '穿上衣服', ph: '' },
   { en: 'put sth. to good use', zh: '好好利用某物', ph: '' },
   { en: 'put up', zh: '搭起', ph: '' },
@@ -1357,13 +1354,13 @@ var VOCAB_BANK = [
   { en: 'take a walk', zh: '散步', ph: '' },
   { en: 'take action', zh: '采取行动', ph: '' },
   { en: 'take advantage of', zh: '利用', ph: '' },
-  { en: 'take care of', zh: '照顾', ph: '' },
+  { en: 'take care of', zh: '照顾;照料', ph: '' },
   { en: 'take down', zh: '记录', ph: '' },
   { en: 'take health seriously', zh: '认真对待健康', ph: '' },
   { en: 'take in', zh: '吸入', ph: '' },
   { en: 'take notes', zh: '做笔记', ph: '' },
   { en: 'take off', zh: '脱下(衣服)', ph: '' },
-  { en: 'take part in', zh: '参加', ph: '' },
+  { en: 'take part in', zh: '参加/参与', ph: '' },
   { en: 'take part in activities', zh: '参加活动', ph: '' },
   { en: 'take place', zh: '发生', ph: '' },
   { en: 'take pride in', zh: '为……感到骄傲', ph: '' },
@@ -1413,14 +1410,14 @@ var VOCAB_BANK = [
   { en: 'word by word', zh: '逐个单词', ph: '' },
   { en: 'work out', zh: '解决', ph: '' },
   { en: 'write down', zh: '写下', ph: '' },
-  { en: 'agree to (do) sth', zh: '同意(做) 某事/意某事', ph: '' },
+  { en: 'agree to (do) sth', zh: '同意(做)某事', ph: '' },
   { en: 'cut in', zh: '插嘴; 插队', ph: '' },
-  { en: 'agree on / about', zh: '就..达成-致', ph: '' },
+  { en: 'agree on / about', zh: '就...达成一致', ph: '' },
   { en: 'break down', zh: '发生故障', ph: '' },
   { en: 'break off', zh: '突然终止; 中断', ph: '' },
   { en: 'break up', zh: '粉碎; 破碎', ph: '' },
   { en: 'fall behind', zh: '落后', ph: '' },
-  { en: 'fall into', zh: '掉进里', ph: '' },
+  { en: 'fall into', zh: '落入;分成', ph: '' },
   { en: 'call back', zh: '给 (某人) 回电话', ph: '' },
   { en: 'fall off', zh: '从..掉下来', ph: '' },
   { en: 'call on', zh: '号召', ph: '' },
@@ -1447,12 +1444,12 @@ var VOCAB_BANK = [
   { en: 'get together', zh: '相聚', ph: '' },
   { en: 'get into trouble', zh: '遇上麻烦; 陷入困境', ph: '' },
   { en: 'get rid of', zh: '摆脱', ph: '' },
-  { en: 'get along well with', zh: '与 相处触洽', ph: '' },
+  { en: 'get along well with', zh: '与...相处融洽', ph: '' },
   { en: 'get away from', zh: '逃离; 摆脱; 从 逃离', ph: '' },
   { en: 'get good grades', zh: '取得好成绩', ph: '' },
-  { en: 'give back', zh: '归还; 恢复 (健康等) [ 回馈', ph: '' },
+  { en: 'give back', zh: '归还;恢复', ph: '' },
   { en: 'give in', zh: '屈服; 让步', ph: '' },
-  { en: 'give off', zh: '发出 (光。热。气味 声音等)', ph: '' },
+  { en: 'give off', zh: '发出(光、热、气味、声音等)', ph: '' },
   { en: 'lose weight', zh: '减肥', ph: '' },
   { en: 'give out', zh: '分发; 散发', ph: '' },
   { en: 'lose ole\'s lite', zh: '失去生命', ph: '' },
@@ -1461,42 +1458,30 @@ var VOCAB_BANK = [
   { en: 'have a chance', zh: '有机会', ph: '' },
   { en: 'make a list', zh: '列清单', ph: '' },
   { en: 'have a picnic', zh: '野餐', ph: '' },
-  { en: 'have a wy', zh: '试一试 尝试', ph: '' },
+  { en: 'have a try', zh: '试一试;尝试', ph: '' },
   { en: 'keep away', zh: '使 远离', ph: '' },
-  { en: 'speech make speeches', zh: '作演讲', ph: '' },
-  { en: 'wish make wishes', zh: '许愿', ph: '' },
-  { en: 'keep on', zh: '坚持 江博=', ph: '' },
-  { en: 'imake an effort', zh: '作出努力', ph: '' },
-  { en: 'keep out', zh: '不让.进入', ph: '' },
+  { en: 'make speeches', zh: '作演讲', ph: '' },
+  { en: 'make wishes', zh: '许愿', ph: '' },
+  { en: 'keep on', zh: '坚持', ph: '' },  { en: 'keep out', zh: '不让.进入', ph: '' },
   { en: 'keep up with', zh: '赶上; 和 保持联系', ph: '' },
-  { en: 'make one\'s way', zh: '前往 行进', ph: '' },
-  { en: 'keep l touch with', zh: '与 保持联系', ph: '' },
-  { en: 'make feelat home', zh: '使 感到宾至如归', ph: '' },
-  { en: 'keep . to oneself', zh: '保守秘密', ph: '' },
+  { en: 'make one\'s way', zh: '前往 行进', ph: '' },  { en: 'make sb. feel at home', zh: '使...感到宾至如归', ph: '' },
+  { en: 'keep sth. to oneself', zh: '保守秘密', ph: '' },
   { en: 'play with', zh: '和 .玩耍', ph: '' },
   { en: 'play chess', zh: '下国际象棋', ph: '' },
   { en: 'play music', zh: '演奏/播放音乐', ph: '' },
   { en: 'play the erhu', zh: '拉二胡', ph: '' },
   { en: 'play the guitar', zh: '弹吉他', ph: '' },
   { en: 'play sports', zh: '做运动', ph: '' },
-  { en: 'play computer gales', zh: '玩电脑游戏', ph: '' },
+  { en: 'play computer games', zh: '玩电脑游戏', ph: '' },
   { en: 'make soup', zh: '做汤', ph: '' },
   { en: 'take _ seriously', zh: '认真对待; 把当回事', ph: '' },
   { en: 'put away', zh: '放好; 收拾', ph: '' },
-  { en: 'put dow', zh: '放下; 写下; 记下', ph: '' },
-  { en: 'put of', zh: '推迟', ph: '' },
-  { en: 'put oil', zh: '穿上; 戴上; 上演; 增加 (体重)', ph: '' },
-  { en: 'put out', zh: '熄灭;扑灭', ph: '' },
-  { en: 'take a shower', zh: '洗淋浴; 洗澡', ph: '' },
-  { en: 'set of', zh: '动身; 出发; 使爆炸', ph: '' },
+  { en: 'put down', zh: '放下;写下;记下', ph: '' },  { en: 'take a shower', zh: '洗淋浴; 洗澡', ph: '' },
+  { en: 'set off', zh: '动身;出发;使爆炸', ph: '' },
   { en: 'take oie\'gs place', zh: '替换; 取代; 占据某人的位置', ph: '' },
-  { en: 'take one\'s temperature', zh: '给某人量体温', ph: '' },
-  { en: 'take carc of', zh: '照顾; 照料', ph: '' },
-  { en: 'stay out', zh: '留在外面', ph: '' },
-  { en: 'take part i', zh: '参加/参与', ph: '' },
-  { en: 'stay with', zh: '同 .住在一起', ph: '' },
-  { en: 'stay away tron', zh: '与保持距离', ph: '' },
-  { en: 'thilk up', zh: '想出', ph: '' },
+  { en: 'take one\'s temperature', zh: '给某人量体温', ph: '' },  { en: 'stay out', zh: '留在外面', ph: '' },  { en: 'stay with', zh: '同 .住在一起', ph: '' },
+  { en: 'stay away from', zh: '与...保持距离', ph: '' },
+  { en: 'think up', zh: '想出', ph: '' },
   { en: 'think over', zh: '仔细考虑', ph: '' },
   { en: 'think twice', zh: '再三考虑', ph: '' },
   { en: 'take away', zh: '拿走', ph: '' },
@@ -1519,9 +1504,7 @@ var VOCAB_BANK = [
   { en: 'hear of', zh: '听说', ph: '' },
   { en: 'come out of', zh: '从.出来', ph: '' },
   { en: 'look out of', zh: '往.外看', ph: '' },
-  { en: 'bc made of', zh: '由 .制成 (可以看出原材料)', ph: '' },
-  { en: 'be made up of', zh: '由.组成', ph: '' },
-  { en: 'run out of', zh: '用完; 用尽 江博教育从小学到留学一站式服务 笫', ph: '' },
+  { en: 'bc made of', zh: '由 .制成 (可以看出原材料)', ph: '' },  { en: 'run out of', zh: '用完;用尽', ph: '' },
   { en: 'close jowl', zh: '永久) 关闭', ph: '' },
   { en: 'learn\' tol', zh: '从..学到', ph: '' },
   { en: 'keep away fom', zh: '避免接近; 使 .远离 了', ph: '' },
@@ -1544,34 +1527,30 @@ var VOCAB_BANK = [
   { en: 'point out', zh: '指出', ph: '' },
   { en: 'focus oil', zh: '聚焦于.;集中(注意力) 于', ph: '' },
   { en: 'knock on', zh: '敲 (门。窗等)', ph: '' },
-  { en: 'add to 5t', zh: '增加某物', ph: '' },
+  { en: 'add to sth', zh: '增加某物', ph: '' },
   { en: 'pass on', zh: '传递', ph: '' },
   { en: 'tur on', zh: '打开', ph: '' },
-  { en: 'belong to 8b', zh: '属于某人', ph: '' },
+  { en: 'belong to sb', zh: '属于某人', ph: '' },
   { en: 'point to', zh: '指向 (远处)', ph: '' },
   { en: 'stick to doing sth', zh: '坚持做某事', ph: '' },
   { en: 'shout to', zh: '对 .大声喊叫', ph: '' },
   { en: 'clean out', zh: '彻底清理; 清空', ph: '' },
-  { en: 'write to 5b', zh: '给某人写信', ph: '' },
+  { en: 'write to sb', zh: '给某人写信', ph: '' },
   { en: 'lend: to', zh: '把..借给_', ph: '' },
   { en: 'look forward to (doing) sth', zh: '期待 (做) 某事 弟', ph: '' },
   { en: 'break of', zh: '突然终止; 中断', ph: '' },
   { en: 'speak up', zh: '大点儿声说; 大胆讲; 畅所欲言', ph: '' },
   { en: 'cut of', zh: '切断 (水源 电源等)', ph: '' },
-  { en: 'put think up', zh: '想出', ph: '' },
-  { en: 'set off', zh: '动身; 出发; 使爆炸', ph: '' },
-  { en: 'tidy up', zh: '整理; 收拾; 归置', ph: '' },
+  { en: 'put think up', zh: '想出', ph: '' },  { en: 'tidy up', zh: '整理; 收拾; 归置', ph: '' },
   { en: 'use up', zh: '用完; 耗尽', ph: '' },
   { en: 'warm up', zh: '热身; 做准备', ph: '' },
   { en: 'take of', zh: '脱下 (衣服) \' (飞机等)起飞', ph: '' },
-  { en: 'julp up and dow', zh: '跳起来; 上蹿下跳', ph: '' },
-  { en: 'agree with 8b', zh: '赞同某人; 与某人持相同意见', ph: '' },
-  { en: 'bring up', zh: '教育; 培养; 抚养', ph: '' },
+  { en: 'julp up and dow', zh: '跳起来; 上蹿下跳', ph: '' },  { en: 'bring up', zh: '教育; 培养; 抚养', ph: '' },
   { en: 'argue with sb', zh: '与某人争吵', ph: '' },
   { en: 'begin withlstart with', zh: '以 .开始; 从...着手', ph: '' },
   { en: 'eat up', zh: '吃光', ph: '' },
   { en: 'do with', zh: '处理 (与what 连用)', ph: '' },
-  { en: 'stay with 5b', zh: '和某人待一起', ph: '' },
+  { en: 'stay with sb', zh: '和某人待一起', ph: '' },
   { en: 'end up with', zh: '以..结束', ph: '' },
   { en: 'catch a bus', zh: '赶公共汽车', ph: '' },
   { en: 'learn a lesson', zh: '吸取教训', ph: '' },
@@ -1580,73 +1559,67 @@ var VOCAB_BANK = [
   { en: 'clean the room', zh: '打扫房间', ph: '' },
   { en: 'do har to', zh: '对。 有害', ph: '' },
   { en: 'have icaning to', zh: '对 .有意义', ph: '' },
-  { en: 'win ? competition', zh: '赢得比赛/竞赛', ph: '' },
+  { en: 'win a competition', zh: '赢得比赛/竞赛', ph: '' },
   { en: 'iale a better understanding of', zh: '对: .有更', ph: '' },
   { en: 'jump out of', zh: '跳出 深入的理解', ph: '' },
   { en: 'follow the ruleg', zh: '守规则', ph: '' },
-  { en: 'solve the problen', zh: '解决问题 (多个问题) 江博教岸', ph: '' },
+  { en: 'solve the problem', zh: '解决问题', ph: '' },
   { en: 'work together', zh: '一起工作; 合作共事', ph: '' },
   { en: 'weal glasses', zh: '戴眼镜', ph: '' },
   { en: 'risk olle\'s lite', zh: '冒着生命危险; 豁出性命 形容词短语', ph: '' },
   { en: 'be careful about', zh: '对 .谨慎; 当', ph: '' },
-  { en: 'be iorried about', zh: '为 .担心', ph: '' },
+  { en: 'be worried about', zh: '为...担心', ph: '' },
   { en: 'be crazy about', zh: '对 极度痴迷; 为。疯狂', ph: '' },
   { en: 'be excited about', zh: '对 感到兴奋', ph: '' },
-  { en: 'be alazed at', zh: '对 感到十分惊奇 惊叹', ph: '' },
-  { en: 'be ieivous about', zh: '对.感到紧张', ph: '' },
+  { en: 'be amazed at', zh: '对...感到十分惊奇;惊叹', ph: '' },
+  { en: 'be nervous about', zh: '对...感到紧张', ph: '' },
   { en: 'be pleased about', zh: '对 .感到满意', ph: '' },
   { en: 'be sad about', zh: '为 感到难过', ph: '' },
-  { en: 'be goodlbad at', zh: '擅长 /不擅长', ph: '' },
+  { en: 'be good/bad at', zh: '擅长/不擅长', ph: '' },
   { en: 'be surprised at', zh: '对 .感到惊讶', ph: '' },
-  { en: 'be sorry about', zh: '对 感到抱歉 江博教育从小学到留学一站式服务 笫', ph: '' },
+  { en: 'be sorry about', zh: '对...感到抱歉', ph: '' },
   { en: 'be tired of (doing', zh: '厌倦 (做)', ph: '' },
-  { en: 'be goodlbad for', zh: '对.有益 /有害', ph: '' },
+  { en: 'be good/bad for', zh: '对...有益/有害', ph: '' },
   { en: 'be late tor', zh: '做某事迟到', ph: '' },
   { en: 'be close to', zh: '靠近', ph: '' },
-  { en: 'be ilecessary for', zh: '对 是必要的 必需的', ph: '' },
+  { en: 'be necessary for', zh: '对...是必要的;必需的', ph: '' },
   { en: 'be/ get ready for', zh: '为 做好准备 象 为 所熟知', ph: '' },
   { en: 'be respolsible for', zh: '对负责', ph: '' },
   { en: 'be sorry tor', zh: '为 .感到抱歉/遗憾', ph: '' },
   { en: 'be related to', zh: '与有关', ph: '' },
-  { en: 'be abgelt tom', zh: '缺席', ph: '' },
+  { en: 'be absent from', zh: '缺席', ph: '' },
   { en: 'be rude to', zh: '对粗鲁', ph: '' },
-  { en: 'be different ion', zh: '与不', ph: '' },
+  { en: 'be different from', zh: '与不', ph: '' },
   { en: 'be far (away ) tol', zh: '离远', ph: '' },
   { en: 'be thankful to', zh: '感激', ph: '' },
   { en: 'getlbe used to', zh: '习惯于_', ph: '' },
   { en: 'be willing to', zh: '乐意', ph: '' },
   { en: 'be usefil to', zh: '对 有用', ph: '' },
-  { en: 'be bor i', zh: '出生于', ph: '' },
-  { en: 'be confident i', zh: '对 .有信心', ph: '' },
+  { en: 'be born in', zh: '出生于', ph: '' },
+  { en: 'be confident in', zh: '对...有信心', ph: '' },
   { en: 'be rich', zh: '皿 富含:产', ph: '' },
   { en: 'be strict in (doing) sth', zh: '对(做)某事要求严格', ph: '' },
-  { en: 'be angy with', zh: '生..的气', ph: '' },
-  { en: 'be borl with', zh: '天生具有;与生俱来', ph: '' },
-  { en: 'be busy with', zh: '忙于', ph: '' },
-  { en: 'be carefil with', zh: '小 (对待)', ph: '' },
-  { en: 'be familiar tith', zh: '熟悉 对了解 了', ph: '' },
+  { en: 'be angry with', zh: '生...的气', ph: '' },  { en: 'be busy with', zh: '忙于', ph: '' },
+  { en: 'be careful with', zh: '小心(对待)', ph: '' },
+  { en: 'be familiar with', zh: '熟悉;对...了解', ph: '' },
   { en: 'be weak i', zh: '在.方面薄弱 不擅长', ph: '' },
   { en: 'be pleased with', zh: '对感到满意 高兴', ph: '' },
   { en: 'be popular with', zh: '在。 中受欢迎', ph: '' },
   { en: 'be satisfied with', zh: '对..感到满意', ph: '' },
   { en: 'be afraid of (doing', zh: '害怕 (做)', ph: '' },
   { en: 'be fond of (doing', zh: '喜欢 (做)', ph: '' },
-  { en: 'be strict with sb', zh: '对某人要求严格', ph: '' },
-  { en: 'above al', zh: '首要的是; 尤其', ph: '' },
-  { en: 'right away', zh: '立刻', ph: '' },
-  { en: 'ad so oi', zh: '等等', ph: '' },
+  { en: 'be strict with sb', zh: '对某人要求严格', ph: '' },  { en: 'right away', zh: '立刻', ph: '' },
+  { en: 'and so on', zh: '等等', ph: '' },
   { en: 'sooier or later', zh: '迟早', ph: '' },
   { en: 'te other day', zh: '前几日', ph: '' },
   { en: 'te day afertomorrow', zh: '后天', ph: '' },
-  { en: 'tle day before yesterday', zh: '前天', ph: '' },
-  { en: 'here al1everywhere', zh: '到处', ph: '' },
-  { en: 'overand over again', zh: '多次; 反复地 其他 介词短语', ph: '' },
-  { en: 'foll then on', zh: '从那时起', ph: '' },
+  { en: 'the day before yesterday', zh: '前天', ph: '' },
+  { en: 'here and everywhere', zh: '到处', ph: '' },  { en: 'foll then on', zh: '从那时起', ph: '' },
   { en: 'from tine to time', zh: '偶尔 有时 不时地', ph: '' },
   { en: 'oil the iternet', zh: '在网上', ph: '' },
   { en: 'oi the left', zh: '在左边', ph: '' },
   { en: 'oil the right', zh: '在右边', ph: '' },
-  { en: 'on hand', zh: '在手头; 现有 江博教育从小学到留学一站式服务', ph: '' },
+  { en: 'on hand', zh: '在手头;现有', ph: '' },
   { en: 'to sfalllt with', zh: '起初; 开始时', ph: '' },
   { en: 'by air', zh: '乘飞机', ph: '' },
   { en: 'by bike', zh: '骑自行车', ph: '' },
@@ -1667,23 +1640,19 @@ var VOCAB_BANK = [
   { en: 'according to', zh: '根据; 按照; 据:所说', ph: '' },
   { en: 'in te way', zh: '挡道; 妨碍', ph: '' },
   { en: 'good health', zh: '身体健康 身体状况良好', ph: '' },
-  { en: 'at tle beginning of', zh: '在。.的开始/初期', ph: '' },
-  { en: 'at tlc end of', zh: '在.结尾', ph: '' },
+  { en: 'at the beginning of', zh: '在。.的开始/初期', ph: '' },
+  { en: 'at the end of', zh: '在...结尾', ph: '' },
   { en: 'at home', zh: '在家', ph: '' },
   { en: 'at last', zh: '最后', ph: '' },
   { en: 'for sale', zh: '待售', ph: '' },
   { en: 'at school', zh: '在上学; 在学校', ph: '' },
   { en: 'at work', zh: '在工怍', ph: '' },
-  { en: 'at weekendslthe weekend', zh: '在周末', ph: '' },
+  { en: 'at weekends/the weekend', zh: '在周末', ph: '' },
   { en: 'in all', zh: '总的来说', ph: '' },
   { en: 'at a time', zh: '每次 一次', ph: '' },
-  { en: 'at that timne', zh: '那时候', ph: '' },
-  { en: 'at the sanle time', zh: '同时', ph: '' },
-  { en: 'all year rould', zh: '全年', ph: '' },
-  { en: 'at the molnelt', zh: '此时; 现在', ph: '' },
-  { en: 'at that momelt', zh: '在那时', ph: '' },
-  { en: 'out of work', zh: '失业', ph: '' },
-  { en: 'at the age of', zh: '在。岁 扫码关注领更多 领福利 江博教育从小学到留学一站式服务', ph: '' },
+  { en: 'at that time', zh: '那时候', ph: '' },
+  { en: 'at the sanle time', zh: '同时', ph: '' },  { en: 'out of work', zh: '失业', ph: '' },
+  { en: 'at the age of', zh: '在...岁', ph: '' },
   { en: 'go away', zh: '走开', ph: '' },
   { en: 'go back', zh: '回去', ph: '' },
   { en: 'go over', zh: '仔细检查; 复习', ph: '' },
@@ -1709,7 +1678,7 @@ var VOCAB_BANK = [
   { en: 'leave.. behind', zh: '把 遗留下来; 留下 遗留', ph: '' },
   { en: 'tush out of', zh: '冲出', ph: '' },
   { en: 'be polite to', zh: '对 .有礼貌', ph: '' },
-  { en: 'be certainlsure of', zh: '对 有把握', ph: '' },
+  { en: 'be certain/sure of', zh: '对...有把握', ph: '' },
   { en: 'on weekends', zh: '在周末', ph: '' },
   { en: 'by subway', zh: '乘地铁', ph: '' },
   { en: 'in the future', zh: '在将来', ph: '' },
@@ -1721,47 +1690,45 @@ var VOCAB_BANK = [
   { en: 'ibandon oneself to', zh: '沉溺于', ph: '' },
   { en: 'against one\'s will', zh: '违心地,不情愿地', ph: '' },
   { en: 'agree with sb', zh: '同意某人意见', ph: '' },
-  { en: 'act tor', zh: '代理,为 .尽力', ph: '' },
+  { en: 'act for', zh: '代理;为...尽力', ph: '' },
   { en: 'all long', zh: '始终, 一直', ph: '' },
-  { en: 'aart from all night long', zh: '整夜', ph: '' },
-  { en: 'appeal to sth all the nieht through', zh: '整夜', ph: '' },
-  { en: 'argue aeainst all over thc world', zh: '遍及世界', ph: '' },
+  { en: 'all night long', zh: '整夜', ph: '' },
+  { en: 'all night through', zh: '整夜', ph: '' },
+  { en: 'all over the world', zh: '遍及世界', ph: '' },
   { en: 'argue sb into doing al the time', zh: '一直', ph: '' },
   { en: 'argue sb oult of doing all the way', zh: '一路上,自始至终', ph: '' },
   { en: 'ar in um uildllnl td', zh: '总计; 等于', ph: '' },
-  { en: 'a the expense of', zh: '由付赀; 以为代价 从不', ph: '' },
+  { en: 'at the expense of', zh: '以...为代价', ph: '' },
   { en: 'd the idea of', zh: '一想到', ph: '' },
-  { en: 'u the mercy of', zh: '任由.摆布 压龠资', ph: '' },
-  { en: 'a the moment', zh: '此刻; 那肘', ph: '' },
-  { en: 'ban sb from doing sth', zh: '禁止某人儆某事', ph: '' },
+  { en: 'u the mercy of', zh: '任由.摆布 压龠资', ph: '' },  { en: 'ban sb from doing sth', zh: '禁止某人儆某事', ph: '' },
   { en: 'the risk of', zh: '冒着', ph: '' },
   { en: 'he about to do sth', zh: '正要做某丰', ph: '' },
-  { en: 'a the sacrifice of', zh: '牺牲', ph: '' },
+  { en: 'at the sacrifice of', zh: '牺牲', ph: '' },
   { en: 'be absorhed in', zh: '全神贯注于', ph: '' },
-  { en: 'a the thought of', zh: '一想到', ph: '' },
+  { en: 'at the thought of', zh: '一想到', ph: '' },
   { en: 'be adapled to', zh: '适应', ph: '' },
   { en: 'one s convenience', zh: '在某人方便的肘候', ph: '' },
-  { en: 'be appropriate io', zh: '付 很合适', ph: '' },
+  { en: 'be appropriate to', zh: '对...很合适', ph: '' },
   { en: 'bc aware of', zh: '察觉到', ph: '' },
   { en: 'hick und forth', zh: '往返, 求回', ph: '' },
   { en: 'bick io bck', zh: '背付背', ph: '' },
-  { en: 'be bused on', zh: '以:为基础', ph: '' },
+  { en: 'be based on', zh: '以...为基础', ph: '' },
   { en: 'badly off', zh: '贫困的', ph: '' },
   { en: 'he horn ollinto', zh: '出身于', ph: '' },
-  { en: 'be hurdened with', zh: '负载', ph: '' },
+  { en: 'be burdened with', zh: '负载', ph: '' },
   { en: 'be buried in', zh: '沉思', ph: '' },
   { en: 'he capable ol', zh: '能够', ph: '' },
-  { en: 'be chareed with', zh: '被控告', ph: '' },
+  { en: 'be charged with', zh: '被控告', ph: '' },
   { en: 'he incled in', zh: '位于,坐落于', ph: '' },
-  { en: 'be made upof', zh: '由.组成', ph: '' },
+  { en: 'be made up of', zh: '由.组成', ph: '' },
   { en: 'be nothing to', zh: '对:尤足辁重', ph: '' },
   { en: 'he generous with sth', zh: '在某事上大方', ph: '' },
   { en: 'be hungry for', zh: '涡堕', ph: '' },
   { en: 'be unconscious ol', zh: '术察觉', ph: '' },
   { en: 'blow iway bend forward bick', zh: '前倾/后仰', ph: '' },
   { en: 'hreik away irom beside oneself', zh: '忘我', ph: '' },
-  { en: 'bread down betler off', zh: '情况好起来', ph: '' },
-  { en: 'breml inlo beyond all question', zh: '亳无', ph: '' },
+  { en: 'better off', zh: '境况好起来', ph: '' },
+  { en: 'beyond all question', zh: '毫无疑问', ph: '' },
   { en: 'brcak off heyond all reason', zh: '亳兀逍理内(地)', ph: '' },
   { en: 'break prison beyond ones power', zh: '是某人力所不及的', ph: '' },
   { en: 'break throueh beyond praise', zh: '夸不胜夸', ph: '' },
@@ -1838,8 +1805,8 @@ var VOCAB_BANK = [
   { en: 'help oneself (to)', zh: '尽管吃随便用', ph: '' },
   { en: 'hire out', zh: '出租', ph: '' },
   { en: 'hold back', zh: '阻碍; 阻止', ph: '' },
-  { en: 'short while', zh: '坚守,固执于 阻止; 垂下 继续; 下挂断(电话) 抓住', ph: '' },
-  { en: 'in addition to', zh: '立刻 匆忙地 杂乱 立刻 在某种意义上 不久 在某种程度上 总之', ph: '' },
+  { en: 'short while', zh: '片刻;一会儿', ph: '' },
+  { en: 'in addition to', zh: '除...之外', ph: '' },
   { en: 'in ay case', zh: '兀论如何', ph: '' },
   { en: 'in company with sb', zh: '和某人在一起', ph: '' },
   { en: 'in competition with sb', zh: '与某人竞争', ph: '' },
@@ -1868,13 +1835,13 @@ var VOCAB_BANK = [
   { en: 'in the way', zh: '在看来', ph: '' },
   { en: 'in the world', zh: '如果.发生; 倘若', ph: '' },
   { en: 'judge by', zh: '鉴干', ph: '' },
-  { en: 'in irouble in turn', zh: '由你作主,取决于你 参加,加入 连接起求 以:来判断; 从:.来看 从: 看;根据 .可以看出 遵守', ph: '' },
+  { en: 'in turn', zh: '轮流;依次', ph: '' },
   { en: 'keep in touch with', zh: '与:保持联络', ph: '' },
   { en: 'laugh a laugh', zh: '发出.方式的笑声', ph: '' },
   { en: 'laugh at', zh: '喇笑', ph: '' },
   { en: 'lay aside', zh: '搁在一边; 积蓄', ph: '' },
   { en: 'lay down one \'s lile for', zh: '为献出生命', ph: '' },
-  { en: 'lend u hand', zh: '帮忙 继续进行 保持镇静 守信 挡住, 使下进去 跟上 陪伴某人 遵守 跟踪 保持联系 跟上 维持 值', ph: '' },
+  { en: 'lend a hand', zh: '帮忙', ph: '' },
   { en: 'look jown upon', zh: '使失望, 辜负', ph: '' },
   { en: 'loge fuith in', zh: '将锁藏;把监禁起来', ph: '' },
   { en: 'make a joke', zh: '讲笑话 看不见', ph: '' },
@@ -1883,14 +1850,13 @@ var VOCAB_BANK = [
   { en: 'make for', zh: '走向; 有利丁 有影响,有重要作用', ph: '' },
   { en: 'make friends with', zh: '和.交朋友 做鬼脸', ph: '' },
   { en: 'make great progress', zh: '取得很大进步 开端好', ph: '' },
-  { en: 'make iittlelmuch of', zh: '轻视/重视 阜某人1某事开玩笑', ph: '' },
+  { en: 'make little/much of', zh: '轻视/重视', ph: '' },
   { en: 'marry sb off', zh: '将(女儿)嫁出 辨认出,理解', ph: '' },
   { en: 'meet h with', zh: '偶遇 言和,和解', ph: '' },
   { en: 'never mind', zh: '不用担心,没关系 组成; 捏造; 化妆', ph: '' },
   { en: 'next door to', zh: '在.:隔壁, 几乎 补偿', ph: '' },
   { en: 'mess than', zh: '正如 下定决心,打定尘意', ph: '' },
   { en: 'io wonder', zh: '难怪', ph: '' },
-  { en: 'application on husiness on christmus day', zh: '就是 仍然 一点也下 许多,下少的 个多于', ph: '' },
   { en: 'now ad then', zh: '不肘地', ph: '' },
   { en: 'on condition that', zh: '既然', ph: '' },
   { en: 'on the decline', zh: '决下', ph: '' },
@@ -1904,7 +1870,7 @@ var VOCAB_BANK = [
   { en: 'on the way', zh: '在展出', ph: '' },
   { en: 'on the whole', zh: '广播', ph: '' },
   { en: 'on trial', zh: '正相反', ph: '' },
-  { en: 'od (eood) evidence', zh: '在没落中 准点地 在工作 在行进 一方面 另方面 正要之际 到处走', ph: '' },
+  { en: 'good evidence', zh: '充分的证据', ph: '' },
   { en: 'other than', zh: '一劳永逸地, 永远地', ph: '' },
   { en: 'out of practice', zh: '否则', ph: '' },
   { en: 'part from', zh: '休会', ph: '' },
@@ -1922,7 +1888,7 @@ var VOCAB_BANK = [
   { en: 'put into practice', zh: '实施', ph: '' },
   { en: 'put on weight', zh: '发福,增加体重', ph: '' },
   { en: 'put one\'s heart into sth', zh: '用全部精力去做', ph: '' },
-  { en: 'pu pressure on sb', zh: '压迫某人 向.订购 禁止. 戏弄某人 扮演角色,起作用 捉弄某人 大量的 指出 指问. 保护,免受', ph: '' },
+  { en: 'put pressure on sb', zh: '对某人施加压力', ph: '' },
   { en: 'regardless of', zh: '接通(电话)', ph: '' },
   { en: 'show concer for sh', zh: '对:加以限制', ph: '' },
   { en: 'shrink from (doing)', zh: '放下', ph: '' },
@@ -1952,9 +1918,7 @@ var VOCAB_BANK = [
   { en: 'tuke one \'s time', zh: '从容,慢慢行动', ph: '' },
   { en: 'take lying down tukc ovci', zh: '继承,接收, 接管', ph: '' },
   { en: 'ikelaiin possession of take piins', zh: '尽力,费苦心,耐心', ph: '' },
-  { en: 'tall hcl take pleisure in', zh: '以 .为荣', ph: '' },
-  { en: 'tall into', zh: '以为例 把当作 考虑 甘受(挫败等) 占有:,拿到 顶嘴,回嘴 说服某人做某事', ph: '' },
-  { en: 'think out', zh: '拆散, 使:分离', ph: '' },
+  { en: 'tall hcl take pleisure in', zh: '以 .为荣', ph: '' },  { en: 'think out', zh: '拆散, 使:分离', ph: '' },
   { en: 'the moment', zh: '一就', ph: '' },
   { en: 'trick sb into doing sth', zh: '哄骗某人做某事', ph: '' },
   { en: 'try one\'s fortune', zh: '碰运气', ph: '' },
@@ -1970,9 +1934,9 @@ var VOCAB_BANK = [
   { en: 'use one s head tumn up', zh: '到达; 开大(声音)', ph: '' },
   { en: 'isc up under arrest', zh: '被捕的', ph: '' },
   { en: 'vote forlagainst under attack', zh: '遭受攻击', ph: '' },
-  { en: 'wait on sh under construction', zh: '在建设之中', ph: '' },
+  { en: 'under construction', zh: '在建设之中', ph: '' },
   { en: 'wake ip under control', zh: '处丁控制之下', ph: '' },
-  { en: 'wash away under discussion', zh: '在讨论中', ph: '' },
+  { en: 'under discussion', zh: '在讨论中', ph: '' },
   { en: 'watch il under the controlof', zh: '在 控制下', ph: '' },
   { en: 'watch one s siep under the intluencc of', zh: '在 影响下', ph: '' },
   { en: 'watch out (for) under way', zh: '在进行中', ph: '' },
@@ -1990,52 +1954,52 @@ var VOCAB_BANK = [
   { en: 'wipe out', zh: '消灭', ph: '' },
   { en: 'with age', zh: '因年老', ph: '' },
   { en: 'with all speed', zh: '以全速', ph: '' },
-  { en: 'with good intention', zh: '善意地,诚意地', ph: '' },
+  { en: 'with good intentions', zh: '善意地;诚意地', ph: '' },
   { en: 'with joy', zh: '高兴地', ph: '' },
-  { en: 'but', zh: 'n乎; 除了..都', ph: '' },
-  { en: 'danic', zh: '茌恐慌中', ph: '' },
-  { en: 'clear', zh: '澄清; 放晴', ph: '' },
-  { en: 'war', zh: '入睡 付诸武力 上升,增长 出毛病; 走入歧途 长大成为', ph: '' },
-  { en: 'promise', zh: '协调/协调地的', ph: '' },
-  { en: 'bread', zh: '谋生 成功', ph: '' },
-  { en: 'mix', zh: '混淆; 弄乱 取得进步', ph: '' },
-  { en: 'holiday', zh: '条件是,只要 上班,值勤 世界上; 宄竞 在展览 步行 在度假', ph: '' },
-  { en: 'taste', zh: '合乎某人口味', ph: '' },
-  { en: 'language', zh: 'n.语言', ph: '' },
-  { en: 'example', zh: 'n例子,;榜样 a.健康的', ph: '' },
-  { en: 'museum', zh: 'n博物馆', ph: '' },
-  { en: 'culture', zh: 'n.文化', ph: '' },
-  { en: 'smell', zh: 'n.气味 v 嗅;闻', ph: '' },
-  { en: 'matter', zh: 'n. 问题,事情 v.要紧', ph: '' },
-  { en: 'winter', zh: 'n.冬季', ph: '' },
-  { en: 'pollution', zh: 'n.污染,污染物', ph: '' },
-  { en: 'ocean', zh: 'n海洋 n危险;威脉 a.舒适的', ph: '' },
-  { en: 'machine', zh: 'n.机器', ph: '' },
-  { en: 'record', zh: 'n记录;唱片 v记录录下 n.建议,意见', ph: '' },
-  { en: 'truth', zh: 'n.事实,真理,真相 n优势', ph: '' },
-  { en: 'task', zh: 'n任务,工作 h.友谊 n.组织,机构 pron 每个人,人人 a年少的,资历浅的 n.晚辈', ph: '' },
-  { en: 'distance', zh: 'n.距离,远方', ph: '' },
-  { en: 'reporter', zh: 'n.记者', ph: '' },
-  { en: 'death', zh: 'n.死,死亡', ph: '' },
-  { en: 'peace', zh: 'n和平,安静', ph: '' },
-  { en: 'focus', zh: 'n焦点中心 v集中 n.经理,管理者', ph: '' },
+  { en: 'but', zh: '但是', ph: '' },
+  { en: 'panic', zh: '恐慌', ph: '' },
+  { en: 'clear', zh: '清除;放晴', ph: '' },
+  { en: 'war', zh: '战争', ph: '' },
+  { en: 'promise', zh: '承诺', ph: '' },
+  { en: 'bread', zh: '面包', ph: '' },
+  { en: 'mix', zh: '混合', ph: '' },
+  { en: 'holiday', zh: '假期;节日', ph: '' },
+  { en: 'taste', zh: '味道;品尝', ph: '' },
+  { en: 'language', zh: '语言', ph: '' },
+  { en: 'example', zh: '例子;榜样', ph: '' },
+  { en: 'museum', zh: '博物馆', ph: '' },
+  { en: 'culture', zh: '文化', ph: '' },
+  { en: 'smell', zh: '气味;闻', ph: '' },
+  { en: 'matter', zh: '问题;事情;要紧', ph: '' },
+  { en: 'winter', zh: '冬季', ph: '' },
+  { en: 'pollution', zh: '污染', ph: '' },
+  { en: 'ocean', zh: '海洋', ph: '' },
+  { en: 'machine', zh: '机器', ph: '' },
+  { en: 'record', zh: '记录;唱片', ph: '' },
+  { en: 'truth', zh: '事实;真理;真相', ph: '' },
+  { en: 'task', zh: '任务;工作', ph: '' },
+  { en: 'distance', zh: '距离', ph: '' },
+  { en: 'reporter', zh: '记者', ph: '' },
+  { en: 'death', zh: '死;死亡', ph: '' },
+  { en: 'peace', zh: '和平;安静', ph: '' },
+  { en: 'focus', zh: '集中;焦点', ph: '' },
   { en: 'truck', zh: 'n卡车,手推车', ph: '' },
-  { en: 'theater', zh: 'n:戏院,剧场 n.压力', ph: '' },
-  { en: 'church', zh: 'n.教堂', ph: '' },
-  { en: 'examination', zh: 'n.考试,检查 n.淋浴;阵雨 n.态度,看法', ph: '' },
-  { en: 'invitation', zh: 'n.邀请,招待 n.尊敬 v. 把..看作,尊敬', ph: '' },
+  { en: 'theater', zh: '剧院', ph: '' },
+  { en: 'church', zh: '教堂', ph: '' },
+  { en: 'examination', zh: '考试;检查', ph: '' },
+  { en: 'invitation', zh: '邀请;招待', ph: '' },
   { en: 'stream', zh: 'n溪流,一股 v.流出', ph: '' },
-  { en: 'circle', zh: 'n.小学生', ph: '' },
-  { en: 'coast', zh: 'n.海岸;海滨', ph: '' },
-  { en: 'diet', zh: 'n.节食,日常饮食', ph: '' },
-  { en: 'standard', zh: 'n.标准,规格 a标准的', ph: '' },
-  { en: 'industry', zh: 'n工业,产业,勤劳', ph: '' },
-  { en: 'food', zh: 'n.洪水 v.淹没 n.肩膀', ph: '' },
-  { en: 'steam', zh: 'n.蒸汽 v.蒸', ph: '' },
-  { en: 'wealth', zh: 'n.财富,财产 n混乱;脏乱 v. 弄乱,弄脏 n.奖牌;勋章 n.链,一连串,束缚', ph: '' },
-  { en: 'secretary', zh: 'n.秘书,部长,书记', ph: '' },
-  { en: 'pioneer', zh: 'n先驱,先锋', ph: '' },
-  { en: 'shame', zh: 'n.羞耻,羞愧 n一打,十二个', ph: '' },
+  { en: 'circle', zh: '圆圈', ph: '' },
+  { en: 'coast', zh: '海岸;海滨', ph: '' },
+  { en: 'diet', zh: '节食;日常饮食', ph: '' },
+  { en: 'standard', zh: '标准', ph: '' },
+  { en: 'industry', zh: '工业;产业', ph: '' },
+  { en: 'food', zh: '食物', ph: '' },
+  { en: 'steam', zh: '蒸汽', ph: '' },
+  { en: 'wealth', zh: '财富', ph: '' },
+  { en: 'secretary', zh: '秘书', ph: '' },
+  { en: 'pioneer', zh: '先驱;先锋', ph: '' },
+  { en: 'shame', zh: '羞耻;羞愧', ph: '' },
 ];
 
 
@@ -2785,7 +2749,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v31</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v32</div>
  </nav>
  );
 }
@@ -2981,7 +2945,7 @@ function TrainingHome() {
   var isTwoCol = resp.width >= 480;
 
   return (
-    <div className="fit-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 60%, #F8FAFC 100%)' }}>
+    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 60%, #F8FAFC 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         {/* Hero header */}
         <div style={{ position: 'relative', overflow: 'hidden', borderBottomLeftRadius: 28, borderBottomRightRadius: 28 }}>
@@ -3129,7 +3093,7 @@ function PracticeList(props) {
     }
   }
   return (
-    <div className="fit-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
      <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: config.gradient, boxShadow: '0 4px 20px ' + config.color + '12', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <span className="text-white text-xl font-extrabold block">{config.label}</span>
@@ -3298,7 +3262,7 @@ var handleStopRecording = useCallback(async function() {
   var rType = question.type;
   var canSubmit = rType === 'listen_choose' ? selectedAnswer !== null : true;
  return (
-    <div className="fit-screen-fs card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <div className="flex items-center mb-1">
@@ -3544,7 +3508,7 @@ function ExamMock() {
   }
 
   return (
-    <div className="fit-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center">
@@ -3819,7 +3783,7 @@ var handleSubmitExam = useCallback(async function() {
     }
 
     return (
-      <div className="fit-screen-fs card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
         <div style={{ width: contentWidth, margin: '0 auto', paddingBottom: 40 }}>
           <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
             <div className="flex items-center mb-1">
@@ -3911,7 +3875,7 @@ var handleSubmitExam = useCallback(async function() {
   var progressPercent = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
 
   return (
-    <div className="fit-screen-fs card-fade-in flex flex-col" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs flex flex-col" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
           <div className="flex items-center mb-1">
@@ -4202,7 +4166,7 @@ function History() {
   var contentWidth = isTablet ? maxContentWidth : '100%';
 
   return (
-    <div className="fit-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div className="px-5 pt-4 pb-2 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
@@ -4398,7 +4362,7 @@ function HistoryDetail(props) {
   }
 
   return (
-    <div className="fit-screen-fs card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
         <div className="flex items-center mb-2">
@@ -4494,7 +4458,7 @@ function ScoringGuide(props) {
   var isSingleType = !!type;
 
   return (
-    <div className="fit-screen-fs card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(99,102,241,0.15)' }}>
         <div className="flex items-center mb-2">
@@ -4925,7 +4889,7 @@ function VocabularyTraining() {
   var isCorrectAnswer = isAnswered && selectedAnswer === currentWord.zh;
 
   return (
-    <div className="fit-screen card-fade-in" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         {/* Header */}
         <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)', boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
@@ -5142,7 +5106,7 @@ function App() {
   }
 
   return (
-    <div style={{ height: '100dvh', overflow: 'hidden', paddingBottom: hideTabBar ? 0 : 56 }}>
+    <div style={{ height: '100vh', overflow: 'hidden', paddingBottom: hideTabBar ? 0 : 56 }}>
       {page}
       {!hideTabBar && <TabBar />}
     </div>
@@ -5207,7 +5171,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v31' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v32' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
