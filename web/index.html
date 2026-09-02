@@ -2332,9 +2332,35 @@ async function speakText(text, options) {
   } catch(e) { console.log('speakText error:', e.message); }
   return { stop: function() { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch(e){} } };
 }
-function stopSpeaking() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(e) {} }
+function stopSpeaking() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(e) {} try { if (window.__wordAudio) { window.__wordAudio.pause(); window.__wordAudio = null; } } catch(e2) {} }
 function isSpeechSupported() { try { return typeof window !== 'undefined' && 'speechSynthesis' in window && window.speechSynthesis !== null; } catch(e) { return false; } }
 if (isSpeechSupported()) loadVoices();
+
+// Audio-based word pronunciation (Youdao dictvoice API — works in China, all browsers including Huawei)
+// type=2 = American English pronunciation
+function playWordAudio(word) {
+  try {
+    stopSpeaking();
+    var url = 'https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(word) + '&type=2';
+    var audio = new Audio(url);
+    window.__wordAudio = audio;
+    audio.play().catch(function(e) {
+      console.log('Youdao audio failed, trying speechSynthesis:', e.message);
+      // Fallback to speechSynthesis if audio fails
+      try {
+        var synth = window.speechSynthesis;
+        if (synth) {
+          var u = new SpeechSynthesisUtterance(word);
+          u.lang = 'en-US';
+          u.rate = 0.8;
+          synth.speak(u);
+        }
+      } catch(e2) {}
+    });
+  } catch(e) { console.log('playWordAudio error:', e.message); }
+}
+// Check if audio-based TTS is available (always true — Youdao works everywhere)
+function isAudioTTSSupported() { return true; }
 
 // Resolve audio file URL relative to the document base (supports sub-path hosting like GitHub Pages)
 function audioPath(qid) { return new URL('audio/' + qid + '.mp3', document.baseURI).href; }
@@ -2752,7 +2778,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v34</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v35</div>
  </nav>
  );
 }
@@ -4693,17 +4719,17 @@ function VocabularyTraining() {
   }
   persist(words, currentIndex, results, completed);
 
-  // Speak word function
+  // Speak word function (uses Youdao audio API — works on all browsers including Huawei)
   function speakWord() {
-    if (currentWord && isSpeechSupported()) {
-      speakText(currentWord.en, { rate: 0.8 });
+    if (currentWord) {
+      playWordAudio(currentWord.en);
     }
   }
 
   // Auto-speak when word changes
   useEffect(function() {
     if (currentWord && !completed) {
-      speakText(currentWord.en, { rate: 0.8 });
+      playWordAudio(currentWord.en);
     }
     return function() { stopSpeaking(); };
   }, [currentIndex, completed]);
@@ -5183,7 +5209,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v34' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v35' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
