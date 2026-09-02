@@ -2785,7 +2785,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v30</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v31</div>
  </nav>
  );
 }
@@ -4715,9 +4715,7 @@ function VocabularyTraining() {
   var resultsState = useState(todayData.results || {}), results = resultsState[0], setResults = resultsState[1];
   var completedState = useState(todayData.completed || false), completed = completedState[0], setCompleted = completedState[1];
   var answeredState = useState(null), selectedAnswer = answeredState[0], setSelectedAnswer = answeredState[1];
-  var swipeState = useState({ startX: 0, startY: 0, dx: 0, dy: 0 }), swipe = swipeState[0], setSwipe = swipeState[1];
-  var animState = useState(null), animPhase = animState[0], setAnimPhase = animState[1]; // null | 'out' | 'in'
-  var animDirState = useState(null), animDir = animDirState[0], setAnimDir = animDirState[1]; // 'next' | 'prev'
+  var swipeRef = useRef({ startX: 0, startY: 0, dx: 0, dy: 0 });
   var cardRef = useRef(null);
 
   // Persist progress
@@ -4819,19 +4817,18 @@ function VocabularyTraining() {
     handleRestart();
   }
 
-  // Swipe handlers (touch + mouse)
+  // Swipe handlers — ref-only, no per-move state updates, no setTimeout, no animation
+  // (Huawei WebView safe: zero re-renders during touchmove, zero animation phases to get stuck in)
   var SWIPE_THRESHOLD = 50;
   function handleTouchStart(e) {
-    if (animPhase) return;
     if (e.touches && e.touches.length > 0) {
-      setSwipe({ startX: e.touches[0].clientX, startY: e.touches[0].clientY, dx: 0, dy: 0 });
+      swipeRef.current = { startX: e.touches[0].clientX, startY: e.touches[0].clientY, dx: 0, dy: 0 };
     }
   }
   function handleTouchMove(e) {
-    if (e.touches && e.touches.length > 0 && swipe.startX) {
-      var dx = e.touches[0].clientX - swipe.startX;
-      var dy = e.touches[0].clientY - swipe.startY;
-      setSwipe(Object.assign({}, swipe, { dx: dx, dy: dy }));
+    if (e.touches && e.touches.length > 0 && swipeRef.current.startX) {
+      swipeRef.current.dx = e.touches[0].clientX - swipeRef.current.startX;
+      swipeRef.current.dy = e.touches[0].clientY - swipeRef.current.startY;
     }
   }
   function handleTouchEnd() {
@@ -4839,56 +4836,27 @@ function VocabularyTraining() {
   }
   // Mouse drag for desktop
   function handleMouseDown(e) {
-    if (animPhase) return;
-    setSwipe({ startX: e.clientX, startY: e.clientY, dx: 0, dy: 0 });
+    swipeRef.current = { startX: e.clientX, startY: e.clientY, dx: 0, dy: 0 };
   }
   function handleMouseMove(e) {
-    if (swipe.startX && !animPhase) {
-      var dx = e.clientX - swipe.startX;
-      var dy = e.clientY - swipe.startY;
-      setSwipe(Object.assign({}, swipe, { dx: dx, dy: dy }));
+    if (swipeRef.current.startX) {
+      swipeRef.current.dx = e.clientX - swipeRef.current.startX;
+      swipeRef.current.dy = e.clientY - swipeRef.current.startY;
     }
   }
   function handleMouseUp() {
     doSwipeEnd();
   }
   function doSwipeEnd() {
-    if (animPhase) return;
-    if (Math.abs(swipe.dx) > SWIPE_THRESHOLD && Math.abs(swipe.dx) > Math.abs(swipe.dy)) {
-      // Trigger slide animation
-      var dir = swipe.dx < 0 ? 'next' : 'prev';
-      var canMove = (dir === 'next' && currentIndex < totalWords - 1) || (dir === 'prev' && currentIndex > 0);
-      if (canMove) {
-        setAnimDir(dir);
-        setAnimPhase('out');
-        setSwipe({ startX: 0, startY: 0, dx: 0, dy: 0 });
-        // After slide-out, switch word and slide in
-        setTimeout(function() {
-          if (dir === 'next') {
-            var newIdx = currentIndex + 1;
-            setCurrentIndex(newIdx);
-            setSelectedAnswer(null);
-            setCachedOptions(null);
-            persist(words, newIdx, results, false);
-          } else {
-            var newIdx = currentIndex - 1;
-            setCurrentIndex(newIdx);
-            setSelectedAnswer(null);
-            setCachedOptions(null);
-            persist(words, newIdx, results, false);
-          }
-          setAnimPhase('in');
-          // After slide-in completes, reset
-          setTimeout(function() {
-            setAnimPhase(null);
-            setAnimDir(null);
-          }, 300);
-        }, 250);
-        return;
+    var cur = swipeRef.current;
+    if (Math.abs(cur.dx) > SWIPE_THRESHOLD && Math.abs(cur.dx) > Math.abs(cur.dy) + 10) {
+      if (cur.dx < 0 && currentIndex < totalWords - 1) {
+        handleNext();
+      } else if (cur.dx > 0 && currentIndex > 0) {
+        handlePrev();
       }
     }
-    // Spring back
-    setSwipe({ startX: 0, startY: 0, dx: 0, dy: 0 });
+    swipeRef.current = { startX: 0, startY: 0, dx: 0, dy: 0 };
   }
 
   // Completed screen
@@ -4995,44 +4963,20 @@ function VocabularyTraining() {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
-            onMouseMove={swipe.startX ? handleMouseMove : undefined}
+            onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            onMouseLeave={swipe.startX ? handleMouseUp : undefined}
+            onMouseLeave={handleMouseUp}
             className="rounded-3xl p-5 select-none"
-            style={function() {
-              var baseStyle = {
-                background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 20px rgba(99,102,241,0.06)',
-                cursor: 'grab', userSelect: 'none', WebkitUserSelect: 'none', touchAction: 'pan-y',
-              };
-              if (animPhase === 'out') {
-                return Object.assign(baseStyle, {
-                  transform: 'translateX(' + (animDir === 'next' ? '-' : '') + '120%)',
-                  opacity: 0,
-                  transition: 'transform 0.25s ease-in, opacity 0.25s ease-in',
-                });
-              } else if (animPhase === 'in') {
-                return Object.assign(baseStyle, {
-                  transform: 'translateX(0)',
-                  opacity: 1,
-                  transition: 'transform 0.3s ease-out, opacity 0.3s ease-out',
-                });
-              } else if (swipe.startX) {
-                var opacity = Math.max(0.3, 1 - Math.abs(swipe.dx) / 400);
-                return Object.assign(baseStyle, {
-                  transform: 'translateX(' + swipe.dx + 'px)',
-                  opacity: opacity,
-                  transition: 'none',
-                  cursor: 'grabbing',
-                });
-              } else {
-                return Object.assign(baseStyle, {
-                  transform: 'translateX(0)',
-                  opacity: 1,
-                  transition: 'transform 0.3s ease, opacity 0.3s ease',
-                });
-              }
-            }()}
+            style={{
+              background: 'rgba(255,255,255,0.95)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(99,102,241,0.10)',
+              boxShadow: '0 4px 20px rgba(99,102,241,0.06)',
+              cursor: 'grab',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              touchAction: 'pan-y',
+            }}
           >
             {/* English word */}
             <div className="text-center py-5">
@@ -5098,11 +5042,19 @@ function VocabularyTraining() {
             )}
           </div>
 
-          {/* Swipe hint */}
-          <div className="flex items-center justify-center mt-4" style={{ gap: 8 }}>
-            <ChevronLeft size={14} color={currentIndex > 0 ? '#94A3B8' : '#E2E8F0'} />
-            <span className="text-xs" style={{ color: '#94A3B8' }}>左滑下一题 · 右滑上一题</span>
-            <ChevronRight size={14} color={currentIndex < totalWords - 1 ? '#94A3B8' : '#E2E8F0'} />
+          {/* Navigation: swipe + buttons */}
+          <div className="flex items-center justify-center mt-4" style={{ gap: 16 }}>
+            <button onClick={handlePrev} disabled={currentIndex <= 0}
+              className="rounded-xl flex items-center justify-center transition-all active:scale-95"
+              style={{ width: 44, height: 44, background: currentIndex > 0 ? 'rgba(99,102,241,0.10)' : 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.10)' }}>
+              <ChevronLeft size={20} color={currentIndex > 0 ? '#6366F1' : '#CBD5E1'} />
+            </button>
+            <span className="text-xs" style={{ color: '#94A3B8' }}>左滑/右滑或点击切换</span>
+            <button onClick={handleNext} disabled={currentIndex >= totalWords - 1}
+              className="rounded-xl flex items-center justify-center transition-all active:scale-95"
+              style={{ width: 44, height: 44, background: currentIndex < totalWords - 1 ? 'rgba(99,102,241,0.10)' : 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.10)' }}>
+              <ChevronRight size={20} color={currentIndex < totalWords - 1 ? '#6366F1' : '#CBD5E1'} />
+            </button>
           </div>
         </div>
       </div>
@@ -5255,7 +5207,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v30' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v31' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
