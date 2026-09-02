@@ -2315,22 +2315,25 @@ function pickEnglishVoice(voices) {
 }
 async function speakText(text, options) {
   options = options || {};
-  var synth = window.speechSynthesis;
-  synth.cancel();
-  var voices = cachedVoices.length > 0 ? cachedVoices : await loadVoices();
-  var utterance = new SpeechSynthesisUtterance(text);
-  var voice = pickEnglishVoice(voices);
-  if (voice) { utterance.voice = voice; utterance.lang = voice.lang; } else { utterance.lang = 'en-US'; }
-  utterance.rate = options.rate != null ? options.rate : 0.85;
-  utterance.pitch = 1.0;
-  if (options.onBoundary) utterance.onboundary = function(e) { options.onBoundary(e.charIndex); };
-  if (options.onEnd) utterance.onend = function() { options.onEnd(); };
-  if (options.onStart) utterance.onstart = function() { options.onStart(); };
-  synth.speak(utterance);
-  return { stop: function() { synth.cancel(); } };
+  try {
+    var synth = window.speechSynthesis;
+    if (!synth) return { stop: function(){} };
+    synth.cancel();
+    var voices = cachedVoices.length > 0 ? cachedVoices : await loadVoices();
+    var utterance = new SpeechSynthesisUtterance(text);
+    var voice = pickEnglishVoice(voices);
+    if (voice) { utterance.voice = voice; utterance.lang = voice.lang; } else { utterance.lang = 'en-US'; }
+    utterance.rate = options.rate != null ? options.rate : 0.85;
+    utterance.pitch = 1.0;
+    if (options.onBoundary) utterance.onboundary = function(e) { options.onBoundary(e.charIndex); };
+    if (options.onEnd) utterance.onend = function() { options.onEnd(); };
+    if (options.onStart) utterance.onstart = function() { options.onStart(); };
+    synth.speak(utterance);
+  } catch(e) { console.log('speakText error:', e.message); }
+  return { stop: function() { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch(e){} } };
 }
-function stopSpeaking() { window.speechSynthesis.cancel(); }
-function isSpeechSupported() { return typeof window !== 'undefined' && 'speechSynthesis' in window; }
+function stopSpeaking() { try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(e) {} }
+function isSpeechSupported() { try { return typeof window !== 'undefined' && 'speechSynthesis' in window && window.speechSynthesis !== null; } catch(e) { return false; } }
 if (isSpeechSupported()) loadVoices();
 
 // Resolve audio file URL relative to the document base (supports sub-path hosting like GitHub Pages)
@@ -2749,7 +2752,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v33</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v34</div>
  </nav>
  );
 }
@@ -4720,15 +4723,11 @@ function VocabularyTraining() {
   var cumulativeAttempted = getCumulativeAttemptedCount();
   var currentWord = words[currentIndex];
 
-  // Generate options for current word (memoized per word)
-  var optionsState = useState(null), cachedOptions = optionsState[0], setCachedOptions = optionsState[1];
+  // Generate options for current word (computed directly, no setState in render)
   var optionsForWord = useMemo(function() {
     if (!currentWord) return [];
-    if (cachedOptions && cachedOptions.word === currentWord.en) return cachedOptions.options;
-    var opts = generateOptions(currentWord);
-    setCachedOptions({ word: currentWord.en, options: opts });
-    return opts;
-  }, [currentWord, cachedOptions]);
+    return generateOptions(currentWord);
+  }, [currentWord]);
 
   function handleAnswer(option) {
     if (selectedAnswer !== null) return;
@@ -4745,7 +4744,7 @@ function VocabularyTraining() {
       var newIdx = currentIndex + 1;
       setCurrentIndex(newIdx);
       setSelectedAnswer(null);
-      setCachedOptions(null);
+      
       persist(words, newIdx, results, false);
     } else {
       setCompleted(true);
@@ -4758,7 +4757,7 @@ function VocabularyTraining() {
       var newIdx = currentIndex - 1;
       setCurrentIndex(newIdx);
       setSelectedAnswer(null);
-      setCachedOptions(null);
+      
       persist(words, newIdx, results, false);
     }
   }
@@ -4770,7 +4769,7 @@ function VocabularyTraining() {
     setResults({});
     setCompleted(false);
     setSelectedAnswer(null);
-    setCachedOptions(null);
+    
     persist(newWords, 0, {}, false);
   }
 
@@ -5073,6 +5072,19 @@ function VocabularyTraining() {
 }
 
 // === App ===
+// Error boundary: prevents a single component crash from blanking the whole page
+function SafeRender(props) {
+  var errorState = useState(null), error = errorState[0], setError = errorState[1];
+  if (error) {
+    return <div style={{ padding: 32, textAlign: 'center', fontFamily: 'sans-serif' }}>
+      <p style={{ color: '#EF4444', fontSize: 16, marginBottom: 12 }}>页面加载出错</p>
+      <p style={{ color: '#64748B', fontSize: 14, marginBottom: 16 }}>{error.message || '未知错误'}</p>
+      <button onClick={function() { setError(null); window.location.hash = '/'; }}
+        style={{ padding: '10px 24px', borderRadius: 12, background: '#6366F1', color: '#FFFFFF', fontSize: 14, fontWeight: 600, border: 'none' }}>返回首页</button>
+    </div>;
+  }
+  return props.children;
+}
 function App() {
   var route = useHashRoute();
   var parsed = parseRoute(route);
@@ -5113,7 +5125,7 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(<SafeRender><App /></SafeRender>);
 
 </script>
 <script>
@@ -5171,7 +5183,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v33' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v34' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
