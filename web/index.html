@@ -117,6 +117,10 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 @keyframes aurora-drift-2 { 0%,100%{transform:translate(0,0) scale(1);opacity:.3} 33%{transform:translate(-25%,20%) scale(1.2);opacity:.5} 66%{transform:translate(20%,-30%) scale(.85);opacity:.25} }
 @keyframes aurora-drift-3 { 0%,100%{transform:translate(0,0) scale(1);opacity:.25} 50%{transform:translate(15%,-15%) scale(1.1);opacity:.4} }
 @keyframes card-fade-in { from{opacity:1;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes vocab-slide-in-right { from{opacity:0;transform:translateX(80px)} to{opacity:1;transform:translateX(0)} }
+@keyframes vocab-slide-in-left { from{opacity:0;transform:translateX(-80px)} to{opacity:1;transform:translateX(0)} }
+.vocab-anim-right{animation:vocab-slide-in-right .35s cubic-bezier(0.16,1,0.3,1)}
+.vocab-anim-left{animation:vocab-slide-in-left .35s cubic-bezier(0.16,1,0.3,1)}
 @keyframes pulse-soft { 0%,100%{opacity:.6} 50%{opacity:1} }
 @keyframes tab-glow { 0%,100%{box-shadow:0 0 8px rgba(99,102,241,0.25)} 50%{box-shadow:0 0 14px rgba(99,102,241,0.4),0 0 2px rgba(99,102,241,0.2)} }
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
@@ -2778,7 +2782,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v35</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v36</div>
  </nav>
  );
 }
@@ -4709,6 +4713,7 @@ function VocabularyTraining() {
   var completedState = useState(todayData.completed || false), completed = completedState[0], setCompleted = completedState[1];
   var answeredState = useState(null), selectedAnswer = answeredState[0], setSelectedAnswer = answeredState[1];
   var swipeRef = useRef({ startX: 0, startY: 0, dx: 0, dy: 0 });
+  var animDirState = useState(null), animDir = animDirState[0], setAnimDir = animDirState[1];
   var cardRef = useRef(null);
 
   // Persist progress
@@ -4795,7 +4800,7 @@ function VocabularyTraining() {
     setResults({});
     setCompleted(false);
     setSelectedAnswer(null);
-    
+    setAnimDir(null);
     persist(newWords, 0, {}, false);
   }
 
@@ -4806,8 +4811,7 @@ function VocabularyTraining() {
     handleRestart();
   }
 
-  // Swipe handlers — ref-only, no per-move state updates, no setTimeout, no animation
-  // (Huawei WebView safe: zero re-renders during touchmove, zero animation phases to get stuck in)
+  // Swipe handlers — direct DOM drag feedback (no React state), immediate switch (no setTimeout)
   var SWIPE_THRESHOLD = 50;
   function handleTouchStart(e) {
     if (e.touches && e.touches.length > 0) {
@@ -4816,8 +4820,17 @@ function VocabularyTraining() {
   }
   function handleTouchMove(e) {
     if (e.touches && e.touches.length > 0 && swipeRef.current.startX) {
-      swipeRef.current.dx = e.touches[0].clientX - swipeRef.current.startX;
-      swipeRef.current.dy = e.touches[0].clientY - swipeRef.current.startY;
+      var dx = e.touches[0].clientX - swipeRef.current.startX;
+      var dy = e.touches[0].clientY - swipeRef.current.startY;
+      swipeRef.current.dx = dx;
+      swipeRef.current.dy = dy;
+      // Direct DOM drag feedback — no React re-render
+      if (cardRef.current && Math.abs(dx) > Math.abs(dy)) {
+        var op = Math.max(0.3, 1 - Math.abs(dx) / 400);
+        cardRef.current.style.transition = 'none';
+        cardRef.current.style.transform = 'translateX(' + dx + 'px)';
+        cardRef.current.style.opacity = String(op);
+      }
     }
   }
   function handleTouchEnd() {
@@ -4829,8 +4842,16 @@ function VocabularyTraining() {
   }
   function handleMouseMove(e) {
     if (swipeRef.current.startX) {
-      swipeRef.current.dx = e.clientX - swipeRef.current.startX;
-      swipeRef.current.dy = e.clientY - swipeRef.current.startY;
+      var dx = e.clientX - swipeRef.current.startX;
+      var dy = e.clientY - swipeRef.current.startY;
+      swipeRef.current.dx = dx;
+      swipeRef.current.dy = dy;
+      if (cardRef.current && Math.abs(dx) > Math.abs(dy)) {
+        var op = Math.max(0.3, 1 - Math.abs(dx) / 400);
+        cardRef.current.style.transition = 'none';
+        cardRef.current.style.transform = 'translateX(' + dx + 'px)';
+        cardRef.current.style.opacity = String(op);
+      }
     }
   }
   function handleMouseUp() {
@@ -4839,10 +4860,26 @@ function VocabularyTraining() {
   function doSwipeEnd() {
     var cur = swipeRef.current;
     if (Math.abs(cur.dx) > SWIPE_THRESHOLD && Math.abs(cur.dx) > Math.abs(cur.dy) + 10) {
+      // Swipe detected — set direction then switch immediately (no setTimeout)
+      setAnimDir(cur.dx < 0 ? 'next' : 'prev');
       if (cur.dx < 0 && currentIndex < totalWords - 1) {
         handleNext();
       } else if (cur.dx > 0 && currentIndex > 0) {
         handlePrev();
+      } else {
+        // Can't move — spring back
+        if (cardRef.current) {
+          cardRef.current.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+          cardRef.current.style.transform = '';
+          cardRef.current.style.opacity = '';
+        }
+      }
+    } else {
+      // Not enough swipe — spring back
+      if (cardRef.current) {
+        cardRef.current.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        cardRef.current.style.transform = '';
+        cardRef.current.style.opacity = '';
       }
     }
     swipeRef.current = { startX: 0, startY: 0, dx: 0, dy: 0 };
@@ -4947,6 +4984,7 @@ function VocabularyTraining() {
         {/* Word card with swipe */}
         <div className="scroll-area" style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 10, paddingBottom: 60 }}>
           <div
+            key={currentIndex}
             ref={cardRef}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -4955,7 +4993,7 @@ function VocabularyTraining() {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            className="rounded-3xl p-5 select-none"
+            className={'rounded-3xl p-5 select-none ' + (animDir === 'next' ? 'vocab-anim-right' : animDir === 'prev' ? 'vocab-anim-left' : 'card-fade-in')}
             style={{
               background: 'rgba(255,255,255,0.95)',
               backdropFilter: 'blur(12px)',
@@ -5033,13 +5071,13 @@ function VocabularyTraining() {
 
           {/* Navigation: swipe + buttons */}
           <div className="flex items-center justify-center mt-4" style={{ gap: 16 }}>
-            <button onClick={handlePrev} disabled={currentIndex <= 0}
+            <button onClick={function() { setAnimDir('prev'); handlePrev(); }} disabled={currentIndex <= 0}
               className="rounded-xl flex items-center justify-center transition-all active:scale-95"
               style={{ width: 44, height: 44, background: currentIndex > 0 ? 'rgba(99,102,241,0.10)' : 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.10)' }}>
               <ChevronLeft size={20} color={currentIndex > 0 ? '#6366F1' : '#CBD5E1'} />
             </button>
             <span className="text-xs" style={{ color: '#94A3B8' }}>左滑/右滑或点击切换</span>
-            <button onClick={handleNext} disabled={currentIndex >= totalWords - 1}
+            <button onClick={function() { setAnimDir('next'); handleNext(); }} disabled={currentIndex >= totalWords - 1}
               className="rounded-xl flex items-center justify-center transition-all active:scale-95"
               style={{ width: 44, height: 44, background: currentIndex < totalWords - 1 ? 'rgba(99,102,241,0.10)' : 'rgba(99,102,241,0.04)', border: '1px solid rgba(99,102,241,0.10)' }}>
               <ChevronRight size={20} color={currentIndex < totalWords - 1 ? '#6366F1' : '#CBD5E1'} />
@@ -5209,7 +5247,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v35' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v36' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
