@@ -2366,9 +2366,6 @@ function playWordAudio(word) {
     });
   } catch(e) { console.log('playWordAudio error:', e.message); }
 }
-// Check if audio-based TTS is available (always true — Youdao works everywhere)
-function isAudioTTSSupported() { return true; }
-
 // Resolve audio file URL relative to the document base (supports sub-path hosting like GitHub Pages)
 function audioPath(qid) { return new URL('audio/' + qid + '.mp3', document.baseURI).href; }
 
@@ -2665,11 +2662,6 @@ function navigate(path) {
       }
     }, 50);
   }
-}
-function goBack(fallbackPath) {
-  if (window.history.length > 1) { window.history.back(); }
-  else if (fallbackPath) { navigate(fallbackPath); }
-  else { navigate('/'); }
 }
 function parseRoute(hash) {
   var withoutHash = hash.replace(/^#/, '');
