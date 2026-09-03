@@ -26,9 +26,9 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p site
-          cp web/index.html site/
+          cp index.html site/
           # Copy all files including hidden ones (.well-known/)
-          cp -r web/public/. site/
+          cp -r manifest.json sw.js icon-*.png .well-known audio .nojekyll site/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
