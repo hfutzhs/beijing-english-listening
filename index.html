@@ -31,7 +31,7 @@
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     if (isLocal && typeof input === 'string' && url.indexOf('/models/') !== -1 && url.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=47';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=48';
       return origFetch.call(window, input, init);
     }
     if (!isLocal && url.indexOf('/models/') !== -1) {
@@ -163,7 +163,7 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
 .neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.03),0 0 12px rgba(99,102,241,.08)}
 .en-text{font-family:var(--font-en);letter-spacing:.01em}
-.en-passage{font-family:var(--font-en);letter-spacing:.01em;line-height:1.85;font-size:16px;text-align:justify;text-justify:inter-word;word-spacing:.02em}
+.en-passage{font-family:var(--font-en);letter-spacing:.01em;line-height:2.0;font-size:16px;text-align:justify;text-justify:inter-word;word-spacing:.03em}
 .label-cn{font-family:var(--font-cn);letter-spacing:.02em}
 </style>
 </head>
@@ -3343,21 +3343,21 @@ var handleStopRecording = useCallback(async function() {
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 12, paddingBottom: 80 }}>
          {rType !== 'read_aloud' && <TTSPlayer text={question.audio_script} color={config.color} label={rType === 'listen_retell' ? '播放听力原文（两遍）' : '播放听力原文'} playCount={rType === 'listen_retell' ? 2 : 1} questionId={question.id} />}
           {rType === 'read_aloud' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 2px 8px rgba(99,102,241,0.03)' }}>
-              <div className="flex items-center justify-between mb-3">
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 2px 8px rgba(99,102,241,0.03)' }}>
+              <div className="flex items-center justify-between mb-4">
                 <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
                 <button onClick={function(){navigate('/scoring-guide?type=read_aloud');}} className="text-xs font-medium" style={{ color: config.color }}>评分标准</button>
               </div>
-              <p className="en-passage" style={{ color: "#334155", margin: '4px 0 0 0' }}>
+              <p className="en-passage" style={{ color: "#334155", margin: '8px 0 0 0' }}>
                 {passageWords.map(function(word, idx) {
                   return <span key={idx} style={{ backgroundColor: idx === currentWordIndex ? config.color + '25' : 'transparent', borderRadius: 2, padding: '0 1px', transition: 'background-color 0.15s', display: 'inline-block' }}>{word} </span>;
                 })}
               </p>
-              <div className="mt-4"><TTSPlayer text={question.audio_script} color={config.color} label="播放标准朗读" playCount={1} words={passageWords} onWordIndex={setCurrentWordIndex} questionId={question.id} /></div>
+              <div className="mt-5"><TTSPlayer text={question.audio_script} color={config.color} label="播放标准朗读" playCount={1} words={passageWords} onWordIndex={setCurrentWordIndex} questionId={question.id} /></div>
             </div>
           )}
           {rType === 'listen_choose' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <span className="text-slate-800 text-base font-bold block mb-4">{question.content.question}</span>
               <div className="flex flex-col gap-3">
                 {(question.content.options || []).map(function(opt, idx) {
@@ -3387,13 +3387,13 @@ var handleStopRecording = useCallback(async function() {
             </div>
           )}
           {rType === 'listen_answer' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
               <span className="text-slate-800 text-base font-medium block">{question.content.question}</span>
             </div>
           )}
           {rType === 'listen_retell' && (
-            <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
               <span className="text-slate-800 text-base font-bold block mb-3">{question.content.topic}</span>
               {question.content.intro && <p className="text-slate-500 text-sm mb-4">{question.content.intro}</p>}
@@ -3977,17 +3977,17 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'read_aloud' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
-                  <span className="text-slate-800 text-xs font-bold block mb-2">朗读以下短文</span>
-                  <p className="en-passage" style={{ color: "#334155", margin: 0 }}>{currentQuestion.content.passage}</p>
-                  <div className="mt-4">
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                  <span className="text-slate-800 text-sm font-bold block mb-4">朗读以下短文</span>
+                  <p className="en-passage" style={{ color: "#334155", margin: '8px 0 0 0' }}>{currentQuestion.content.passage}</p>
+                  <div className="mt-5">
                     <TTSPlayer text={currentQuestion.audio_script} color={currentSectionConfig.color} label="播放标准朗读" playCount={1} questionId={currentQuestion.id} />
                   </div>
                 </div>
               )}
 
               {currentQuestion.type === 'listen_choose' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.question}</span>
                   <div className="flex flex-col gap-2">
                     {currentQuestion.content.options.map(function(opt, idx) {
@@ -4007,14 +4007,14 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'listen_answer' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
                   <span className="text-slate-800 text-base font-medium block">{currentQuestion.content.question}</span>
                 </div>
               )}
 
               {currentQuestion.type === 'listen_retell' && (
-                <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
                   <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
                   <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.topic}</span>
                   {currentQuestion.content.intro && (
@@ -4524,7 +4524,7 @@ function ScoringGuide(props) {
 
       <div className="p-6 pb-20">
         {!isSingleType && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+          <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
             <div className="flex items-center mb-1">
               <ClipboardList size={16} color="#4F46E5" />
               <span className="text-slate-800 text-base font-bold ml-2">总分构成</span>
@@ -4549,7 +4549,7 @@ function ScoringGuide(props) {
         {filteredRules.map(function(rule) {
           var RuleIcon = rule.icon;
           return (
-            <div key={rule.type} className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div key={rule.type} className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
               <div className="flex items-center mb-1">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: rule.color + '22' }}>
                   <RuleIcon size={14} color={rule.color} />
@@ -4573,7 +4573,7 @@ function ScoringGuide(props) {
         })}
 
         {filteredRules.some(function(r) { return r.type === 'read_aloud'; }) && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+          <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
             <span className="text-slate-800 text-base font-bold block mb-3">短文朗读评分档次</span>
             {GRADE_LEVELS.map(function(g, idx) {
               return (
