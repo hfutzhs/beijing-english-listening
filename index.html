@@ -24,12 +24,31 @@
 // (jsdelivr has 20MB limit; decoder model is 30MB and gets 403)
 (function() {
   var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost' || location.protocol === 'file:';
+  var GCORE = 'https://gcore.jsdelivr.net/gh/hfutzhs/beijing-english-listening@main';
   var origFetch = window.fetch;
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
-    // Local dev: cache-busting for model files
-    if (isLocal && typeof input === 'string' && input.indexOf('/models/') !== -1 && input.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=40';
+    if (isLocal && typeof input === 'string' && url.indexOf('/models/') !== -1 && url.indexOf('v=') === -1) {
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=41';
+      return origFetch.call(window, input, init);
+    }
+    if (!isLocal && url.indexOf('/models/') !== -1) {
+      var mp = url.match(/\/models\/(.+)/);
+      if (mp) {
+        var cdnUrl = GCORE + '/models/' + mp[1];
+        return origFetch.call(window, cdnUrl, init).then(function(resp) {
+          if (resp.status === 403) {
+            return origFetch.call(window, input, init).catch(function() {
+              return new Promise(function(resolve) { setTimeout(function() {
+                resolve(origFetch.call(window, input, init));
+              }, 2000); });
+            });
+          }
+          return resp;
+        }).catch(function() {
+          return origFetch.call(window, input, init);
+        });
+      }
     }
     return origFetch.call(window, input, init);
   };
@@ -37,8 +56,9 @@
 </script>
 <script type="module">
   import { pipeline, env } from "./lib/transformers.js";
-  // Model files: local ./models/ for dev, hf-mirror.com CDN for production
-  // hf-mirror.com is China-accessible, supports CORS, and has no 20MB file size limit
+  // Model files: local ./models/ for dev and production (hosted on GitHub Pages)
+  // Production fetch wrapper routes through gcore CDN (China-accessible, Asian POPs)
+  // Large files >20MB auto-fallback to GitHub Pages
   var _isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost' || location.protocol === 'file:';
   // Always use local model files — eliminates CDN/CORS issues entirely
   env.allowLocalModels = true;
@@ -2772,7 +2792,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v40</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v41</div>
  </nav>
  );
 }
@@ -5235,7 +5255,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v40' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v41' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
