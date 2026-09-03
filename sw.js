@@ -1,12 +1,16 @@
-const CACHE_VERSION = 'beijing-english-v37';
+const CACHE_VERSION = 'beijing-english-v38';
 const AUDIO_CACHE = 'beijing-english-audio-v2';
-const PAGE_VERSION = 'v37';
+const PAGE_VERSION = 'v38';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './lib/transformers.js',
+  './lib/onnxruntime-web.js',
+  './lib/onnxruntime-common.js',
+  './lib/jinja.js',
 ];
 
 self.addEventListener('install', function(e) {
