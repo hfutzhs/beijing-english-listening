@@ -13,3 +13,5 @@ web/tsconfig.tsbuildinfo
 web/models/
 web/public/models/
 web/public/wasm/
+test-results/
+*.apk
