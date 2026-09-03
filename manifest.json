@@ -1,7 +1,7 @@
 {
   "id": "./?source=pwa",
-  "name": "北京中考英语听说练习",
-  "short_name": "英语听说",
+  "name": "小杜eng",
+  "short_name": "小杜eng",
   "description": "北京市中考英语听说考试模拟练习平台，包含听后选择、听后回答、听后转述、短文朗读四大题型",
   "start_url": "./?source=pwa",
   "scope": "./",

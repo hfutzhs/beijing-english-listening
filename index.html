@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>北京市中考英语听说练习</title>
+<title>小杜eng</title>
 <meta name="theme-color" content="#F8FAFC">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="英语听说">
+<meta name="apple-mobile-web-app-title" content="小杜eng">
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="./icon-192.png">
@@ -31,7 +31,7 @@
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     if (isLocal && typeof input === 'string' && url.indexOf('/models/') !== -1 && url.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=43';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=44';
       return origFetch.call(window, input, init);
     }
     if (!isLocal && url.indexOf('/models/') !== -1) {
@@ -2807,7 +2807,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v43</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v44</div>
  </nav>
  );
 }
@@ -3012,7 +3012,7 @@ function TrainingHome() {
                 </div>
                 <div className="ml-3">
                   <span className="text-white font-extrabold block" style={{ fontSize: 22, letterSpacing: '0.02em' }}>听说训练</span>
-                  <span className="block" style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, marginTop: 2 }}>北京中考英语听说考试练习</span>
+                  <span className="block" style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, marginTop: 2 }}>北京中考小杜eng</span>
                 </div>
               </div>
               <div className="rounded-full flex items-center justify-center" style={{ width: 44, height: 44, backgroundColor: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)' }}>
@@ -4519,7 +4519,7 @@ function ScoringGuide(props) {
           </button>
         <span className="text-white text-xl font-bold">{isSingleType ? filteredRules[0].label + '评分标准' : '评分标准'}</span>
        </div>
-        <span className="text-indigo-100 text-sm">参考北京市中考英语听说考试评分标准</span>
+        <span className="text-indigo-100 text-sm">参考北京市中考小杜eng考试评分标准</span>
      </div>
 
       <div className="p-6 pb-20">
@@ -4590,7 +4590,7 @@ function ScoringGuide(props) {
 
         <div className="flex items-center justify-center mt-2">
           <Lightbulb size={12} color="#64748B" />
-         <span className="text-slate-500 text-xs ml-1">评分标准参考北京市中考英语听说机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
+         <span className="text-slate-500 text-xs ml-1">评分标准参考北京市中考小杜eng机考评分标准。AI 评分仅供参考，实际考试以人工评分为准。</span>
         </div>
       </div>
     </div>
@@ -5270,7 +5270,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v43' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v44' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
