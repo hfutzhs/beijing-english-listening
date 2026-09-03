@@ -29,7 +29,7 @@
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     // Local dev: cache-busting for model files
     if (isLocal && typeof input === 'string' && input.indexOf('/models/') !== -1 && input.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=39';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=40';
     }
     return origFetch.call(window, input, init);
   };
@@ -2473,17 +2473,17 @@ async function getWhisperPipeline(onProgress) {
       var t = setInterval(function() {
         if (_whisperPipeline) { clearInterval(t); resolve(_whisperPipeline); }
       }, 200);
-      // Timeout after 60s waiting for concurrent load
-      setTimeout(function() { clearInterval(t); reject(new Error('模型加载超时')); }, 60000);
+      // Wait up to 5min for concurrent load (model download on slow networks)
+      setTimeout(function() { clearInterval(t); reject(new Error('模型加载超时，请检查网络后重试')); }, 300000);
     });
  }
   _whisperLoading = true;
  var modelOpts = { quantized: true, progress_callback: onProgress || function() {} };
  try {
-    // Add 120s timeout for model download (40MB on slow networks)
+    // Add 5min timeout for model download (44MB on slow networks)
     var loadPromise = window.__transformers.pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny.en', modelOpts);
     var timeoutPromise = new Promise(function(_, reject) {
-      setTimeout(function() { reject(new Error('模型下载超时(120s)，请检查网络后重试')); }, 120000);
+      setTimeout(function() { reject(new Error('模型下载超时(5分钟)，请检查网络后重试')); }, 300000);
     });
     _whisperPipeline = await Promise.race([loadPromise, timeoutPromise]);
  } catch(e) {
@@ -2772,7 +2772,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v39</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v40</div>
  </nav>
  );
 }
@@ -5235,7 +5235,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v39' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v40' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
