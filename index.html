@@ -26,26 +26,41 @@
   var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost' || location.protocol === 'file:';
   var GCORE = 'https://gcore.jsdelivr.net/gh/hfutzhs/beijing-english-listening@main';
   var origFetch = window.fetch;
+  // Chunked decoder file: 29MB split into two <20MB parts for CDN compatibility
+  var DECODER_FILE = 'decoder_model_merged_quantized.onnx';
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     if (isLocal && typeof input === 'string' && url.indexOf('/models/') !== -1 && url.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=41';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=42';
       return origFetch.call(window, input, init);
     }
     if (!isLocal && url.indexOf('/models/') !== -1) {
       var mp = url.match(/\/models\/(.+)/);
       if (mp) {
-        var cdnUrl = GCORE + '/models/' + mp[1];
-        return origFetch.call(window, cdnUrl, init).then(function(resp) {
-          if (resp.status === 403) {
-            return origFetch.call(window, input, init).catch(function() {
-              return new Promise(function(resolve) { setTimeout(function() {
-                resolve(origFetch.call(window, input, init));
-              }, 2000); });
-            });
-          }
-          return resp;
-        }).catch(function() {
+        var filePath = mp[1];
+        // Large decoder file: fetch two chunks from CDN and reassemble
+        if (filePath.indexOf(DECODER_FILE) !== -1) {
+          var basePath = filePath.replace('onnx/' + DECODER_FILE, '');
+          var p1 = GCORE + '/models/' + basePath + 'onnx/decoder_part1.bin';
+          var p2 = GCORE + '/models/' + basePath + 'onnx/decoder_part2.bin';
+          return Promise.all([origFetch(p1), origFetch(p2)]).then(function(resps) {
+            if (resps[0].ok && resps[1].ok) {
+              return Promise.all([resps[0].arrayBuffer(), resps[1].arrayBuffer()]);
+            }
+            throw new Error('CDN chunk download failed');
+          }).then(function(buffers) {
+            var combined = new Uint8Array(buffers[0].byteLength + buffers[1].byteLength);
+            combined.set(new Uint8Array(buffers[0]), 0);
+            combined.set(new Uint8Array(buffers[1]), buffers[0].byteLength);
+            return new Response(combined.buffer, { headers: { 'Content-Type': 'application/octet-stream' } });
+          }).catch(function() {
+            // Fallback to GitHub Pages original file
+            return origFetch.call(window, input, init);
+          });
+        }
+        // Small model files: direct from CDN
+        var cdnUrl = GCORE + '/models/' + filePath;
+        return origFetch.call(window, cdnUrl, init).catch(function() {
           return origFetch.call(window, input, init);
         });
       }
@@ -2792,7 +2807,7 @@ function TabBar() {
        );
       })}
     </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v41</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v42</div>
  </nav>
  );
 }
@@ -5255,7 +5270,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
         var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v41' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v42' }, [channel.port2]);
         channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };

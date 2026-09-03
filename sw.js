@@ -1,6 +1,6 @@
-const CACHE_VERSION = 'beijing-english-v41';
+const CACHE_VERSION = 'beijing-english-v42';
 const AUDIO_CACHE = 'beijing-english-audio-v2';
-const PAGE_VERSION = 'v41';
+const PAGE_VERSION = 'v42';
 const APP_SHELL = [
   './',
   './index.html',
@@ -82,7 +82,7 @@ if (url.origin !== location.origin && req.method === 'GET') {
     // Do NOT intercept model/WASM downloads from HuggingFace mirrors —
     // transformers.js manages its own Cache API; SW interception causes
     // stale/corrupt responses and empty 503 fallbacks on failure.
-    if (url.hostname.includes('hf-mirror.com') || url.hostname.includes('huggingface.co') || url.hostname.includes('huggingface.co.cn')) {
+    if (url.hostname.includes('hf-mirror.com') || url.hostname.includes('jsdelivr.net') || url.hostname.includes('huggingface.co') || url.hostname.includes('huggingface.co.cn')) {
       return;
     }
     e.respondWith(
