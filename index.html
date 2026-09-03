@@ -31,7 +31,7 @@
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     if (isLocal && typeof input === 'string' && url.indexOf('/models/') !== -1 && url.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=49';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=51';
       return origFetch.call(window, input, init);
     }
     if (!isLocal && url.indexOf('/models/') !== -1) {
@@ -120,23 +120,15 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 }
 .tech-glow-card {
   background: #FFFFFF;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(99,102,241,0.10);
-  box-shadow: 0 2px 12px rgba(99,102,241,0.06);
-  transition: box-shadow 0.3s, transform 0.2s;
+  border: 1px solid rgba(99,102,241,0.08);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: transform 0.2s;
 }
 .tech-glow-card:active {
   transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
 }
 .tech-gradient-text {
-  background: linear-gradient(135deg, #6366F1, #4F46E5);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradient-shift 4s ease infinite;
+  color: #4F46E5;
 }
 .tech-shimmer {
   background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
@@ -152,16 +144,16 @@ body { margin: 0; font-family: var(--font-en), var(--font-cn); background: #F8FA
 .vocab-anim-right{animation:vocab-slide-in-right .35s cubic-bezier(0.16,1,0.3,1)}
 .vocab-anim-left{animation:vocab-slide-in-left .35s cubic-bezier(0.16,1,0.3,1)}
 @keyframes pulse-soft { 0%,100%{opacity:.6} 50%{opacity:1} }
-@keyframes tab-glow { 0%,100%{box-shadow:0 0 8px rgba(99,102,241,0.25)} 50%{box-shadow:0 0 14px rgba(99,102,241,0.4),0 0 2px rgba(99,102,241,0.2)} }
+@keyframes tab-glow { 0%,100%{box-shadow:0 0 6px rgba(99,102,241,0.15)} 50%{box-shadow:0 0 10px rgba(99,102,241,0.25)} }
 .aurora-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;overflow:hidden;pointer-events:none}
 .aurora-blob{position:absolute;border-radius:50%}
-.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);top:-12%;left:-8%}
-.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.06),transparent 70%);bottom:8%;right:-6%}
-.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.04),transparent 70%);top:45%;left:40%}
+.aurora-blob-1{width:320px;height:320px;background:radial-gradient(circle,rgba(99,102,241,.05),transparent 70%);top:-12%;left:-8%}
+.aurora-blob-2{width:260px;height:260px;background:radial-gradient(circle,rgba(99,102,241,.04),transparent 70%);bottom:8%;right:-6%}
+.aurora-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(99,102,241,.03),transparent 70%);top:45%;left:40%}
 .card-fade-in{animation:card-fade-in .5s cubic-bezier(0.16,1,0.3,1)}
 .animate-pulse-soft{animation:pulse-soft 2s ease-in-out infinite}
 .tab-glow{animation:tab-glow 2.5s ease-in-out infinite}
-.neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.03),0 0 12px rgba(99,102,241,.08)}
+.neon-ring{box-shadow:0 0 0 1px rgba(99,102,241,.06)}
 .en-text{font-family:var(--font-en);letter-spacing:.01em}
 .en-passage{font-family:var(--font-en);letter-spacing:.01em;line-height:2.0;font-size:16px;text-align:justify;text-justify:inter-word;word-spacing:.03em}
 .label-cn{font-family:var(--font-cn);letter-spacing:.02em}
@@ -2800,14 +2792,14 @@ function TabBar() {
            <a key={tab.path} href={'#' + tab.path}
              className="flex flex-col items-center justify-center"
             style={{ flex: 1, paddingTop: 8, paddingBottom: 8, gap: 3, textDecoration: 'none', position: 'relative' }}>
-             {isActive && <div className="tab-glow" style={{ position: 'absolute', top: 0, width: 28, height: 3, borderRadius: 2, background: 'linear-gradient(90deg, #4F46E5, #6366F1)' }} />}
+             {isActive && <div className="tab-glow" style={{ position: 'absolute', top: 0, width: 28, height: 3, borderRadius: 2, background: '#6366F1' }} />}
             <Icon size={isDesktop ? 22 : 21} strokeWidth={isActive ? 2.5 : 2} color={isActive ? '#4F46E5' : '#94A3B8'} />
              <span style={{ fontSize: isDesktop ? 11 : 10, fontWeight: 700, color: isActive ? '#4F46E5' : '#94A3B8' }}>{tab.label}</span>
            </a>
        );
       })}
    </div>
- <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v50</div>
+ <div style={{ position: 'absolute', right: 12, top: -18, fontSize: 9, color: '#CBD5E1', fontWeight: 600, pointerEvents: 'none' }}>v51</div>
 </nav>
  );
 }
@@ -2908,8 +2900,8 @@ handlePlayRef.current = handlePlay;
       ) : (
         <button onClick={handlePlay} disabled={loading}
           className="w-full rounded-xl py-4 px-5 flex items-center transition-all active:scale-[0.98]"
-          style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid ' + color + '20', boxShadow: '0 2px 12px ' + color + '08' }}>
-          <div className="flex items-center justify-center rounded-xl" style={{ width: 44, height: 44, background: 'linear-gradient(135deg, ' + color + ', ' + color + 'CC)', flexShrink: 0, boxShadow: '0 4px 12px ' + color + '40' }}>
+          style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid ' + color + '20', boxShadow: '0 1px 6px ' + color + '06' }}>
+          <div className="flex items-center justify-center rounded-xl" style={{ width: 44, height: 44, background: 'linear-gradient(135deg, ' + color + ', ' + color + 'CC)', flexShrink: 0, boxShadow: '0 2px 8px ' + color + '25' }}>
             {loading ? <Loader2 size={18} color="#FFFFFF" className="animate-spin" />
               : playing ? <Square size={16} color="#FFFFFF" fill="#FFFFFF" />
               : <Volume2 size={18} color="#FFFFFF" />}
@@ -2938,19 +2930,19 @@ function RecordButton(props) {
     <div>
       <button onClick={recording ? onStop : onStart} disabled={transcribing}
         className="w-full rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-60"
-        style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #EF4444)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 4px 16px ' + (recording ? 'rgba(220,38,38,0.15)' : color + '20') }}>
+        style={{ background: recording ? 'linear-gradient(135deg, #DC2626, #EF4444)' : 'linear-gradient(135deg, ' + color + ', ' + color + 'DD)', boxShadow: '0 2px 10px ' + (recording ? 'rgba(220,38,38,0.12)' : color + '15') }}>
         {transcribing ? (<><Loader2 size={18} color="#FFFFFF" className="animate-spin" /><span className="text-white text-base font-bold ml-2">{whisperProgress || '语音识别中...'}</span></>)
           : recording ? (<><div className="rounded-full animate-rec-pulse" style={{ width: 10, height: 10, backgroundColor: '#FFFFFF' }} /><span className="text-white text-base font-bold ml-2">停止录音 · {formatTime(recordingTime)}</span></>)
           : (<><Mic size={18} color="#FFFFFF" /><span className="text-white text-base font-bold ml-2">{recordedUrl ? '重新录音' : '开始录音'}</span></>)}
       </button>
       {transcribing && whisperProgress && (
-        <div className="rounded-xl p-3 mt-3 text-center" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+        <div className="rounded-xl p-3 mt-3 text-center" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.06)' }}>
           <span className="text-indigo-500 text-xs block">{whisperProgress}</span>
         </div>
       )}
       {recordedUrl && !recording && !transcribing && (
         <button onClick={onPlay} className="w-full rounded-xl py-4 flex items-center justify-center mt-3 transition-all active:scale-[0.98]"
-          style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
+          style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.04)' }}>
           {playing ? <Pause size={14} color="#64748B" /> : <Play size={14} color="#64748B" />}
           <span className="text-slate-500 font-semibold ml-2">{playing ? '暂停播放' : '播放我的录音'}</span>
         </button>
@@ -2962,7 +2954,7 @@ function RecordButton(props) {
 function ResultCard(props) {
   var Icon = props.icon, label = props.label, color = props.color, children = props.children;
   return (
-    <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+    <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
       <div className="flex items-center mb-2">
         <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ backgroundColor: color + '22' }}>
           <Icon size={10} color={color} />
@@ -2978,15 +2970,15 @@ function ResultCard(props) {
 // === TrainingHome (听说训练首页) ===
 var TRAINING_ENTRIES = [
   { type: 'listen_choose', label: '听后选择', subtitle: '听对话或独白\n选择正确答案', icon: Headphones, count: 126,
-    grad: 'linear-gradient(135deg, #4F46E5, #6366F1)', color: '#6366F1', bg: 'rgba(99,102,241,0.08)', tag: '选择题' },
+    grad: 'linear-gradient(135deg, #4F46E5, #6366F1)', color: '#6366F1', bg: 'rgba(99,102,241,0.06)', tag: '选择题' },
   { type: 'listen_answer', label: '听后回答', subtitle: '听对话或独白\n口头回答问题', icon: MessageCircle, count: 126,
-    grad: 'linear-gradient(135deg, #0EA5E9, #06B6D4)', color: '#0EA5E9', bg: 'rgba(14,165,233,0.08)', tag: '简答题' },
+    grad: 'linear-gradient(135deg, #4F46E5, #6366F1)', color: '#6366F1', bg: 'rgba(99,102,241,0.06)', tag: '简答题' },
   { type: 'listen_retell', label: '听后转述', subtitle: '听两遍录音\n转述信息内容', icon: Repeat, count: 21,
-    grad: 'linear-gradient(135deg, #F59E0B, #FB923C)', color: '#F59E0B', bg: 'rgba(245,158,11,0.08)', tag: '表述题' },
+    grad: 'linear-gradient(135deg, #4F46E5, #6366F1)', color: '#6366F1', bg: 'rgba(99,102,241,0.06)', tag: '表述题' },
   { type: 'read_aloud', label: '短文朗读', subtitle: '朗读给定\n英文短文', icon: BookOpen, count: 21,
-    grad: 'linear-gradient(135deg, #EC4899, #F43F5E)', color: '#EC4899', bg: 'rgba(236,72,153,0.08)', tag: '朗读题' },
+    grad: 'linear-gradient(135deg, #4F46E5, #6366F1)', color: '#6366F1', bg: 'rgba(99,102,241,0.06)', tag: '朗读题' },
   { type: 'exam', label: '考试模拟', subtitle: '综合模拟考试\n总分40分', icon: FilePen, count: 21,
-    grad: 'linear-gradient(135deg, #8B5CF6, #A78BFA)', color: '#8B5CF6', bg: 'rgba(139,92,246,0.08)', tag: '综合' },
+    grad: 'linear-gradient(135deg, #4338CA, #6366F1)', color: '#6366F1', bg: 'rgba(99,102,241,0.06)', tag: '综合' },
 ];
 
 function TrainingHome() {
@@ -3011,13 +3003,13 @@ function TrainingHome() {
   var isTwoCol = resp.width >= 480;
 
   return (
-    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 60%, #F8FAFC 100%)' }}>
+    <div className="fit-screen" style={{ background: '#F8FAFC' }}>
       <div style={{ width: contentWidth, margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Hero header */}
         <div style={{ position: 'relative', overflow: 'hidden', borderBottomLeftRadius: 28, borderBottomRightRadius: 28 }}>
-          <div className="px-5 pt-3 pb-2 tech-grid" style={{ background: 'linear-gradient(135deg, #3730A3 0%, #4F46E5 40%, #6366F1 100%)', boxShadow: '0 8px 32px rgba(79,70,229,0.20)' }}>
+          <div className="px-5 pt-3 pb-2 tech-grid" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)', boxShadow: '0 4px 20px rgba(67,56,202,0.12)' }}>
             {/* Decorative orbs */}
-            <div style={{ position: 'absolute', top: -40, right: -20, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%)' }} />
+            <div style={{ position: 'absolute', top: -40, right: -20, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%)' }} />
             <div style={{ position: 'absolute', bottom: -30, left: -10, width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%)' }} />
             <div className="flex items-center justify-between" style={{ position: 'relative' }}>
               <div className="flex items-center">
@@ -3040,17 +3032,17 @@ function TrainingHome() {
                 <span className="block" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, marginTop: 2 }}>练习次数</span>
               </div>
               <div className="rounded-xl flex flex-col items-center justify-center" style={{ flex: 1, padding: '8px 6px', backgroundColor: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                <span className="font-extrabold" style={{ fontSize: 18, color: '#86EFAC' }}>{stats.passed || 0}</span>
+                <span className="font-extrabold text-white" style={{ fontSize: 18 }}>{stats.passed || 0}</span>
                 <span className="block" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, marginTop: 2 }}>通过次数</span>
               </div>
               <div className="rounded-xl flex flex-col items-center justify-center" style={{ flex: 1, padding: '8px 6px', backgroundColor: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                <span className="font-extrabold" style={{ fontSize: 18, color: '#FCD34D' }}>{progressPercent}%</span>
+                <span className="font-extrabold text-white" style={{ fontSize: 18 }}>{progressPercent}%</span>
                 <span className="block" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, marginTop: 2 }}>完成进度</span>
               </div>
             </div>
             {/* Progress bar */}
             <div className="mt-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.10)', height: 5, position: 'relative' }}>
-              <div style={{ width: progressPercent + '%', height: '100%', background: 'linear-gradient(90deg, #FBBF24, #FCD34D, #86EFAC)', borderRadius: 3, transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1)' }} />
+              <div style={{ width: progressPercent + '%', height: '100%', background: 'linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.9))', borderRadius: 3, transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1)' }} />
             </div>
           </div>
         </div>
@@ -3074,13 +3066,13 @@ function TrainingHome() {
                   else navigate('/practice/' + entry.type);
                 }} className="rounded-2xl text-left transition-all active:scale-[0.97] overflow-hidden"
                   style={{ position: 'relative', padding: 8,
-                    background: '#FFFFFF', border: '1px solid rgba(99,102,241,0.08)',
+                    background: '#FFFFFF', border: '1px solid rgba(99,102,241,0.06)',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                   {/* Top accent bar */}
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: entry.grad }} />
                   {/* Tag badge */}
                   <div className="flex items-start justify-between mb-1.5">
-                    <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, background: entry.grad, boxShadow: '0 3px 10px ' + entry.color + '30' }}>
+                    <div className="rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, background: entry.grad, boxShadow: '0 2px 8px ' + entry.color + '20' }}>
                       <Icon size={22} color="#FFFFFF" />
                     </div>
                     <span className="rounded-full px-2 py-1 text-xs font-medium" style={{ backgroundColor: entry.bg, color: entry.color }}>{entry.tag}</span>
@@ -3155,9 +3147,9 @@ function PracticeList(props) {
     }
   }
   return (
-    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: '#F8FAFC' }}>
      <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
-        <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: config.gradient, boxShadow: '0 4px 20px ' + config.color + '12', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
+        <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: config.gradient, boxShadow: '0 2px 12px ' + config.color + '08', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <span className="text-white text-xl font-extrabold block">{config.label}</span>
           <span className="text-white/90 text-xs mt-0.5 block">{config.subtitle}</span>
          <div className="flex items-center mt-2">
@@ -3194,7 +3186,7 @@ function PracticeList(props) {
             </div>
           ) : displayQuestions.length === 0 ? (
             <div className="flex flex-col items-center py-20">
-              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: '#F8FAFC' }}>
                 <BookOpen size={28} color="#6366F1" />
               </div>
               <span className="text-slate-500 text-base font-medium">暂无题目</span>
@@ -3208,7 +3200,7 @@ function PracticeList(props) {
                   <button key={q.id} onClick={function(){navigate('/practice-answer?questionId=' + q.id + '&type=' + q.type);}}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
                     style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)',
-                      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
+                      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                     <div className="rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ width: 44, height: 44, backgroundColor: answered ? '#10B98122' : config.color + '22' }}>
                       {answered ? <CheckCircle size={18} color="#10B981" /> : <span className="text-base font-bold" style={{ color: config.color }}>{idx + 1}</span>}
@@ -3309,14 +3301,14 @@ var handleStopRecording = useCallback(async function() {
     return question.content.passage.split(/\s+/);
   }, [question]);
   if (loading) {
-    return <div className="fit-screen-fs flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    return <div className="fit-screen-fs flex items-center justify-center" style={{ background: '#F8FAFC' }}>
       <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: config.color + '22', borderRadius: 16 }}>
         <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: config.color, borderTopColor: 'transparent' }} />
       </div>
     </div>;
   }
   if (!question) {
-    return <div className="fit-screen-fs flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}><span className="text-slate-500">题目不存在</span></div>;
+    return <div className="fit-screen-fs flex items-center justify-center" style={{ background: '#F8FAFC' }}><span className="text-slate-500">题目不存在</span></div>;
   }
  var ms = question.max_score, ratio = result ? result.score / ms : 0, scoreColor = getScoreColor(ratio);
  var fb = (result && result.feedback) || {};
@@ -3324,7 +3316,7 @@ var handleStopRecording = useCallback(async function() {
   var rType = question.type;
   var canSubmit = rType === 'listen_choose' ? selectedAnswer !== null : true;
  return (
-    <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs" style={{ background: '#F8FAFC' }}>
       <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: config.gradient, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
           <div className="flex items-center mb-1">
@@ -3353,7 +3345,7 @@ var handleStopRecording = useCallback(async function() {
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 12, paddingBottom: 80 }}>
          {rType !== 'read_aloud' && <TTSPlayer text={question.audio_script} color={config.color} label={rType === 'listen_retell' ? '播放听力原文（两遍）' : '播放听力原文'} playCount={rType === 'listen_retell' ? 2 : 1} questionId={question.id} />}
           {rType === 'read_aloud' && (
-            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 2px 8px rgba(99,102,241,0.03)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 8px rgba(99,102,241,0.03)' }}>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
                 <TTSPlayer compact text={question.audio_script} color={config.color} label="标准朗读" playCount={1} words={passageWords} onWordIndex={setCurrentWordIndex} questionId={question.id} />
@@ -3366,7 +3358,7 @@ var handleStopRecording = useCallback(async function() {
             </div>
           )}
           {rType === 'listen_choose' && (
-            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
               <span className="text-slate-800 text-base font-bold block mb-4">{question.content.question}</span>
               <div className="flex flex-col gap-3">
                 {(question.content.options || []).map(function(opt, idx) {
@@ -3396,17 +3388,17 @@ var handleStopRecording = useCallback(async function() {
             </div>
           )}
           {rType === 'listen_answer' && (
-            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
               <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
               <span className="text-slate-800 text-base font-medium block">{question.content.question}</span>
             </div>
           )}
           {rType === 'listen_retell' && (
-            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
               <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
               <span className="text-slate-800 text-base font-bold block mb-3">{question.content.topic}</span>
               {question.content.intro && <p className="text-slate-500 text-sm mb-4">{question.content.intro}</p>}
-              <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.08)' }}>
+              <div className="rounded-xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.06)' }}>
                 {(question.content.info_points || []).map(function(point, idx) {
                   return <div key={idx} className="flex items-start p-3" style={{ background: idx % 2 === 0 ? 'rgba(99,102,241,0.03)' : 'transparent', borderTop: idx > 0 ? '1px solid rgba(99,102,241,0.10)' : 'none' }}>
                     <span className="rounded-md px-2 py-0.5 text-xs font-bold flex-shrink-0" style={{ backgroundColor: config.color + '22', color: config.color }}>{point.label}</span>
@@ -3424,7 +3416,7 @@ var handleStopRecording = useCallback(async function() {
               onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
              {recorder.error && <div className="rounded-xl p-3 mt-3 text-sm" style={{ backgroundColor: 'rgba(239,68,68,0.12)', color: '#EF4444' }}>{recorder.error}</div>}
              {recorder.recording && (
-               <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+               <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.06)' }}>
                  <span className="text-indigo-500 text-xs block">录音中... 停止后将自动识别语音内容</span>
                </div>
              )}
@@ -3438,7 +3430,7 @@ var handleStopRecording = useCallback(async function() {
                 <span className="text-slate-500 text-xs font-bold block mb-2">{rType === 'read_aloud' ? '朗读文本（语音识别结果，可手动编辑）' : '回答文本（语音识别结果，可手动编辑）'}</span>
                 <textarea value={textAnswer} onChange={function(e){setTextAnswer(e.target.value);}}
                   placeholder="录音后自动填入识别文本，也可手动输入" rows={3}
-                  className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
+                  className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.06)', outline: 'none', fontFamily: 'inherit' }} />
               </div>
             </div>
           )}
@@ -3458,7 +3450,7 @@ var handleStopRecording = useCallback(async function() {
           )}
          {result && (
             <div ref={resultRef} className="animate-slide-up">
-              <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 16px rgba(99,102,241,0.06)' }}>
+              <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 4px 16px rgba(99,102,241,0.06)' }}>
                 <div className="rounded-full mx-auto flex flex-col items-center justify-center" style={{ width: 80, height: 80, backgroundColor: scoreColor + '22', boxShadow: '0 0 24px ' + scoreColor + '20' }}>
                   <span className="text-3xl font-bold" style={{ color: scoreColor }}>{result.score}</span>
                   <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -3496,7 +3488,7 @@ var handleStopRecording = useCallback(async function() {
               {rType === 'listen_retell' && <ResultCard icon={FileText} label="参考转述" color={config.color}><span className="text-slate-700 text-sm leading-6">{(question.content.info_points || []).map(function(p){return p.answer;}).join('. ')}</span></ResultCard>}
               <div className="flex gap-3 mt-4">
                 <button onClick={function(){setResult(null);setSelectedAnswer(null);setTextAnswer('');recorder.reset();}}
-                  className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+                  className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.06)' }}>
                   <span className="text-indigo-600 font-semibold text-sm">重新作答</span>
                 </button>
                 <button onClick={handleNext} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ backgroundColor: config.color, boxShadow: '0 2px 8px rgba(99,102,241,0.08)' }}>
@@ -3508,10 +3500,10 @@ var handleStopRecording = useCallback(async function() {
           )}
           {!result && siblingQuestions.length > 1 && (
             <div className="flex gap-3 mt-4">
-              <button onClick={handlePrev} disabled={currentIdx <= 0} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+              <button onClick={handlePrev} disabled={currentIdx <= 0} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.06)' }}>
                 <ChevronLeft size={16} color="#94A3B8" /><span className="text-slate-500 font-semibold text-sm ml-1">上一题</span>
               </button>
-              <button onClick={handleNext} disabled={currentIdx >= siblingQuestions.length - 1} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+              <button onClick={handleNext} disabled={currentIdx >= siblingQuestions.length - 1} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.06)' }}>
                 <span className="text-slate-500 font-semibold text-sm mr-1">下一题</span><ChevronRight size={16} color="#94A3B8" />
               </button>
             </div>
@@ -3569,7 +3561,7 @@ function ExamMock() {
   }
 
   return (
-    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: '#F8FAFC' }}>
       <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center">
@@ -3588,7 +3580,7 @@ function ExamMock() {
         </div>
 
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, marginTop: -4, marginBottom: 8 }}>
-          <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
+          <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
             <div className="flex">
               {EXAM_SECTIONS.map(function(s) {
                 var Icon = s.icon;
@@ -3623,7 +3615,7 @@ function ExamMock() {
                 return (
                   <button key={paper.paperId} onClick={function() { handlePaperClick(paper.paperId); }}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
-                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
+                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                     <div className="rounded-xl flex flex-col items-center justify-center flex-shrink-0"
                       style={{ width: 52, height: 52, backgroundColor: isCompleted ? '#10B98122' : EXAM_HEADER_COLOR + '22' }}>
                       {isCompleted ? (
@@ -3815,7 +3807,7 @@ var handleSubmitExam = useCallback(async function() {
 
   if (loading) {
     return (
-      <div className="fit-screen-fs flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen-fs flex items-center justify-center" style={{ background: '#F8FAFC' }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: EXAM_HEADER_COLOR + '22', borderRadius: 16 }}>
           <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: EXAM_HEADER_COLOR, borderTopColor: 'transparent' }} />
         </div>
@@ -3825,7 +3817,7 @@ var handleSubmitExam = useCallback(async function() {
 
   if (!flatQuestions.length) {
     return (
-      <div className="fit-screen-fs flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen-fs flex items-center justify-center" style={{ background: '#F8FAFC' }}>
         <span className="text-slate-500">试卷不存在</span>
       </div>
     );
@@ -3844,7 +3836,7 @@ var handleSubmitExam = useCallback(async function() {
     }
 
     return (
-      <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen-fs" style={{ background: '#F8FAFC' }}>
         <div style={{ width: contentWidth, margin: '0 auto', paddingBottom: 40 }}>
           <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
             <div className="flex items-center mb-1">
@@ -3857,7 +3849,7 @@ var handleSubmitExam = useCallback(async function() {
           </div>
 
           <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, paddingTop: 16 }}>
-            <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 16px rgba(99,102,241,0.06)' }}>
+            <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 4px 16px rgba(99,102,241,0.06)' }}>
               <div className="rounded-full mx-auto flex flex-col items-center justify-center" style={{ width: 100, height: 100, backgroundColor: scoreColor + '22', boxShadow: '0 0 32px ' + scoreColor + '25' }}>
                 <span className="text-4xl font-bold" style={{ color: scoreColor }}>{totalScore}</span>
                 <span className="text-sm" style={{ color: scoreColor + '99' }}>/ {totalMax}</span>
@@ -3880,7 +3872,7 @@ var handleSubmitExam = useCallback(async function() {
               var secRatio = secMax > 0 ? secScore / secMax : 0;
               var SecIcon = secConfig.icon;
               return (
-                <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
+                <div key={secType} className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                   <div className="flex items-center mb-1">
                     <div className="rounded-lg flex items-center justify-center" style={{ width: 32, height: 32, backgroundColor: secConfig.color + '22' }}>
                       <SecIcon size={14} color={secConfig.color} />
@@ -3920,7 +3912,7 @@ var handleSubmitExam = useCallback(async function() {
             })}
 
             <div className="flex gap-3 mt-6">
-              <button onClick={function() { navigate('/exam'); }} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.08)' }}>
+              <button onClick={function() { navigate('/exam'); }} className="flex-1 rounded-xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(99,102,241,0.06)' }}>
                 <span className="text-indigo-600 font-semibold text-sm">返回列表</span>
               </button>
               <button onClick={function() { setExamResults(null); setAnswers({}); setCurrentIdx(0); }} className="flex-1 rounded-2xl py-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ background: EXAM_HEADER_GRADIENT, boxShadow: '0 8px 24px rgba(99,102,241,0.3)' }}>
@@ -3936,7 +3928,7 @@ var handleSubmitExam = useCallback(async function() {
   var progressPercent = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
 
   return (
-    <div className="fit-screen-fs flex flex-col" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs flex flex-col" style={{ background: '#F8FAFC' }}>
       <div style={{ width: contentWidth, margin: '0 auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="px-5 pt-6 pb-3 tech-grid" style={{ background: EXAM_HEADER_GRADIENT }}>
           <div className="flex items-center mb-1">
@@ -3986,7 +3978,7 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'read_aloud' && (
-                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
                     <TTSPlayer compact text={currentQuestion.audio_script} color={currentSectionConfig.color} label="标准朗读" playCount={1} questionId={currentQuestion.id} />
@@ -3996,7 +3988,7 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'listen_choose' && (
-                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
                   <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.question}</span>
                   <div className="flex flex-col gap-2">
                     {currentQuestion.content.options.map(function(opt, idx) {
@@ -4016,20 +4008,20 @@ var handleSubmitExam = useCallback(async function() {
               )}
 
               {currentQuestion.type === 'listen_answer' && (
-                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
                   <span className="text-slate-500 text-xs font-bold block mb-2">问题</span>
                   <span className="text-slate-800 text-base font-medium block">{currentQuestion.content.question}</span>
                 </div>
               )}
 
               {currentQuestion.type === 'listen_retell' && (
-                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
                   <span className="text-slate-500 text-xs font-bold block mb-1">转述主题</span>
                   <span className="text-slate-800 text-sm font-bold block mb-3">{currentQuestion.content.topic}</span>
                   {currentQuestion.content.intro && (
                     <p className="text-slate-500 text-xs mb-4">{currentQuestion.content.intro}</p>
                   )}
-                  <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.10)' }}>
+                  <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.06)' }}>
                     {currentQuestion.content.info_points.map(function(point, idx) {
                       return (
                         <div key={idx} className="flex items-start p-3"
@@ -4048,7 +4040,7 @@ var handleSubmitExam = useCallback(async function() {
                 <div className="mb-4">
                  <RecordButton recording={recorder.recording} recordedUrl={recorder.recordedUrl} playing={recorder.playing} transcribing={recorder.transcribing} recordingTime={recorder.recordingTime} color={currentSectionConfig.color} onStart={recorder.startRecording} onStop={handleStopRecording} onPlay={recorder.playRecording} />
                   {recorder.whisperProgress && recorder.transcribing && (
-                    <div className="rounded-xl p-3 mt-3 text-center" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+                    <div className="rounded-xl p-3 mt-3 text-center" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.06)' }}>
                       <span className="text-indigo-500 text-xs block">{recorder.whisperProgress}</span>
                     </div>
                   )}
@@ -4056,12 +4048,12 @@ var handleSubmitExam = useCallback(async function() {
                     <div className="rounded-xl p-3 mt-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.15)', color: '#EF4444' }}>{recorder.error}</div>
                   )}
                   {recorder.recording && (
-                    <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.10)' }}>
+                    <div className="rounded-xl p-3 mt-3" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.06)' }}>
                       <span className="text-indigo-500 text-xs block">录音中... 停止后将自动识别语音内容</span>
                     </div>
                   )}
                   <div className="mt-3">
-                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder="录音后自动填入识别文本，也可手动输入" rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.08)', outline: 'none', fontFamily: 'inherit' }} />
+                    <textarea value={textInput} onChange={function(e) { handleTextInputChange(e.target.value); }} placeholder="录音后自动填入识别文本，也可手动输入" rows={2} className="w-full rounded-xl p-3 text-sm resize-none" style={{ background: 'rgba(255,255,255,0.95)', color: '#1E293B', border: '1px solid rgba(99,102,241,0.06)', outline: 'none', fontFamily: 'inherit' }} />
                   </div>
                 </div>
               )}
@@ -4071,7 +4063,7 @@ var handleSubmitExam = useCallback(async function() {
 
         <div className="flex gap-2 px-5 py-3" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(99,102,241,0.10)', paddingBottom: 'max(12px, env(safe-area-inset-bottom, 0px))' }}>
           <button onClick={function() { setCurrentIdx(Math.max(0, currentIdx - 1)); }} disabled={currentIdx <= 0}
-            className="rounded-xl px-4 py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+            className="rounded-xl px-4 py-4 flex items-center justify-center transition-all active:scale-[0.98] disabled:opacity-40" style={{ background: '#F8FAFC' }}>
             <ChevronLeft size={16} color="#94A3B8" />
             <span className="text-slate-500 font-semibold text-sm ml-1">上一题</span>
           </button>
@@ -4110,7 +4102,7 @@ var handleSubmitExam = useCallback(async function() {
 
       {showExitConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setShowExitConfirm(false); }}>
-          <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
+          <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
             <div className="flex flex-col items-center mb-5">
               <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(239,68,68,0.08)' }}>
                 <AlertCircle size={22} color="#DC2626" />
@@ -4119,7 +4111,7 @@ var handleSubmitExam = useCallback(async function() {
             <span className="text-slate-800 text-lg font-bold text-center block mb-2">确认退出</span>
             <span className="text-slate-500 text-sm text-center block mb-6">{answeredCount > 0 ? '已答 ' + answeredCount + '/' + totalQuestions + ' 题，退出后答题记录不会保存。确定要退出吗？' : '退出后答题记录不会保存。确定要退出吗？'}</span>
             <div className="flex gap-3">
-              <button onClick={function() { setShowExitConfirm(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+              <button onClick={function() { setShowExitConfirm(false); }} className="flex-1 py-4 rounded-xl" style={{ background: '#F8FAFC' }}>
                 <span className="text-indigo-600 font-semibold">继续考试</span>
               </button>
               <button onClick={function() { navigate('/exam'); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(135deg, #DC2626, #EF4444)', boxShadow: '0 4px 16px rgba(220,38,38,0.15)' }}>
@@ -4227,7 +4219,7 @@ function History() {
   var contentWidth = isTablet ? maxContentWidth : '100%';
 
   return (
-    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: '#F8FAFC' }}>
       <div style={{ width: contentWidth, margin: '0 auto', minHeight: '100%', display: 'flex', flexDirection: 'column', overflow: 'visible' }}>
         <div className="px-5 pt-4 pb-2 tech-grid" style={{ background: HISTORY_HEADER_GRADIENT, boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
           <div className="flex items-center justify-between">
@@ -4245,13 +4237,13 @@ function History() {
         </div>
 
         <div style={{ paddingLeft: contentPadding, paddingRight: contentPadding, marginTop: -5, marginBottom: 8 }}>
-          <div className="flex rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
+          <div className="flex rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
             <StatItem icon={ClipboardList} label="总练习" value={totalExams} color="#94A3B8" />
-            <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
+            <div style={{ width: 1, background: '#F8FAFC' }} />
             <StatItem icon={CheckCircle} label="及格" value={passCount} color="#10B981" />
-            <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
+            <div style={{ width: 1, background: '#F8FAFC' }} />
             <StatItem icon={XCircle} label="不及格" value={failCount} color="#DC2626" />
-            <div style={{ width: 1, background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }} />
+            <div style={{ width: 1, background: '#F8FAFC' }} />
             <StatItem icon={BarChart3} label="平均分" value={avgScore} color="#F59E0B" suffix="%" />
           </div>
         </div>
@@ -4286,7 +4278,7 @@ function History() {
             </div>
           ) : filteredRecords.length === 0 ? (
             <div className="flex flex-col items-center py-20">
-              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+              <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: '#F8FAFC' }}>
                 <ClockRotateLeft size={28} color="#6366F1" />
               </div>
               <span className="text-slate-500 text-base font-medium">暂无历史记录</span>
@@ -4304,7 +4296,7 @@ function History() {
                 return (
                   <button key={item.id} onClick={function() { navigate('/history-detail?id=' + item.id); }}
                     className="rounded-xl p-3 flex items-center transition-all active:scale-[0.98] text-left"
-                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
+                    style={{ width: 'calc(' + (100 / cardColumns) + '% - ' + ((cardColumns - 1) * 12 / cardColumns) + 'px)', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 2px 12px rgba(99,102,241,0.06)' }}>
                     <div className="rounded-xl flex flex-col items-center justify-center" style={{ width: 56, height: 56, backgroundColor: scoreColor + '22', flexShrink: 0 }}>
                       <span className="text-xl font-bold" style={{ color: scoreColor }}>{item.score}</span>
                       <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -4332,7 +4324,7 @@ function History() {
 
       {clearModalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }} onClick={function() { setClearModalVisible(false); }}>
-          <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
+          <div className="rounded-xl p-7" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(24px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 16px 48px rgba(99,102,241,0.2)', width: '80%', maxWidth: 320, borderRadius: 24 }} onClick={function(e) { e.stopPropagation(); }}>
             <div className="flex flex-col items-center mb-5">
               <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(239,68,68,0.08)' }}>
                 <Trash2 size={22} color="#DC2626" />
@@ -4341,7 +4333,7 @@ function History() {
             <span className="text-slate-800 text-lg font-bold text-center block mb-2">确认清空</span>
             <span className="text-slate-500 text-sm text-center block mb-6">将删除所有历史记录，此操作不可恢复。确定要清空吗？</span>
             <div className="flex gap-3">
-              <button onClick={function() { setClearModalVisible(false); }} className="flex-1 py-4 rounded-xl" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+              <button onClick={function() { setClearModalVisible(false); }} className="flex-1 py-4 rounded-xl" style={{ background: '#F8FAFC' }}>
                 <span className="text-indigo-600 font-semibold">取消</span>
               </button>
               <button onClick={handleClearConfirm} disabled={clearing} className="flex-1 py-4 rounded-xl" style={{ backgroundColor: clearing ? '#F87171' : '#DC2626' }}>
@@ -4388,7 +4380,7 @@ function HistoryDetail(props) {
 
   if (loading) {
     return (
-      <div className="fit-screen-fs flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen-fs flex items-center justify-center" style={{ background: '#F8FAFC' }}>
         <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#6366F122' }}>
           <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: '#6366F1', borderTopColor: 'transparent' }} />
         </div>
@@ -4398,7 +4390,7 @@ function HistoryDetail(props) {
 
   if (!record) {
     return (
-      <div className="fit-screen-fs flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen-fs flex items-center justify-center" style={{ background: '#F8FAFC' }}>
         <span className="text-slate-500">记录不存在</span>
       </div>
     );
@@ -4423,7 +4415,7 @@ function HistoryDetail(props) {
   }
 
   return (
-    <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs" style={{ background: '#F8FAFC' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, ' + typeColor + ', ' + typeColor + 'CC)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
         <div className="flex items-center mb-2">
@@ -4435,7 +4427,7 @@ function HistoryDetail(props) {
       </div>
 
       <div className="p-6 pb-20">
-        <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+        <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
           <div className="w-20 h-20 rounded-full mx-auto flex flex-col items-center justify-center" style={{ backgroundColor: scoreColor + '22' }}>
             <span className="text-3xl font-bold" style={{ color: scoreColor }}>{record.score}</span>
             <span className="text-xs" style={{ color: scoreColor + '99' }}>/ {ms}</span>
@@ -4445,7 +4437,7 @@ function HistoryDetail(props) {
         </div>
 
         {record.question_title && (
-          <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+          <div className="rounded-2xl p-5 mt-4" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
             <span className="text-slate-500 text-xs font-bold block mb-1">题目</span>
             <span className="text-slate-700 text-sm font-medium">{record.question_title}</span>
           </div>
@@ -4519,7 +4511,7 @@ function ScoringGuide(props) {
   var isSingleType = !!type;
 
   return (
-    <div className="fit-screen-fs" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen-fs" style={{ background: '#F8FAFC' }}>
     <div style={{ width: contentWidth, margin: '0 auto' }}>
       <div className="px-5 pt-4 pb-3 tech-grid" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, boxShadow: '0 4px 20px rgba(99,102,241,0.15)' }}>
         <div className="flex items-center mb-2">
@@ -4533,7 +4525,7 @@ function ScoringGuide(props) {
 
       <div className="p-6 pb-20">
         {!isSingleType && (
-          <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+          <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
             <div className="flex items-center mb-1">
               <ClipboardList size={16} color="#4F46E5" />
               <span className="text-slate-800 text-base font-bold ml-2">总分构成</span>
@@ -4558,7 +4550,7 @@ function ScoringGuide(props) {
         {filteredRules.map(function(rule) {
           var RuleIcon = rule.icon;
           return (
-            <div key={rule.type} className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+            <div key={rule.type} className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
               <div className="flex items-center mb-1">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: rule.color + '22' }}>
                   <RuleIcon size={14} color={rule.color} />
@@ -4582,7 +4574,7 @@ function ScoringGuide(props) {
         })}
 
         {filteredRules.some(function(r) { return r.type === 'read_aloud'; }) && (
-          <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
+          <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 1px 6px rgba(99,102,241,0.03)' }}>
             <span className="text-slate-800 text-base font-bold block mb-3">短文朗读评分档次</span>
             {GRADE_LEVELS.map(function(g, idx) {
               return (
@@ -4917,9 +4909,9 @@ function VocabularyTraining() {
   if (completed) {
     var accuracy = answeredCount > 0 ? Math.round(correctCount / answeredCount * 100) : 0;
     return (
-      <div className="fit-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen flex items-center justify-center" style={{ background: '#F8FAFC' }}>
         <div style={{ width: contentWidth, margin: '0 auto', padding: '24px' }}>
-          <div className="rounded-3xl p-8 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 4px 20px rgba(99,102,241,0.08)' }}>
+          <div className="rounded-3xl p-8 text-center" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.06)', boxShadow: '0 4px 20px rgba(99,102,241,0.08)' }}>
             <div className="rounded-full flex items-center justify-center mx-auto mb-4" style={{ width: 72, height: 72, background: accuracy >= 80 ? '#10B98122' : accuracy >= 60 ? '#F59E0B22' : '#EF444422' }}>
               <Award size={32} color={accuracy >= 80 ? '#10B981' : accuracy >= 60 ? '#F59E0B' : '#EF4444'} />
             </div>
@@ -4965,7 +4957,7 @@ function VocabularyTraining() {
 
   if (!currentWord) {
     return (
-      <div className="fit-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+      <div className="fit-screen flex items-center justify-center" style={{ background: '#F8FAFC' }}>
         <div className="text-center">
           <p style={{ color: '#64748B' }}>暂无单词可练习</p>
           <button onClick={handleRestart} className="mt-4 rounded-xl px-6 py-2.5 font-bold text-white" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)' }}>重新生成</button>
@@ -4979,7 +4971,7 @@ function VocabularyTraining() {
   var isCorrectAnswer = isAnswered && selectedAnswer === currentWord.zh;
 
   return (
-    <div className="fit-screen" style={{ background: 'linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%)' }}>
+    <div className="fit-screen" style={{ background: '#F8FAFC' }}>
       <div style={{ width: contentWidth, margin: '0 auto' }}>
         {/* Header */}
         <div className="px-5 pt-6 pb-4 tech-grid" style={{ background: 'linear-gradient(135deg, #4338CA, #6366F1)', boxShadow: '0 4px 20px rgba(99,102,241,0.08)', borderBottomLeftRadius: 24, borderBottomRightRadius: 24 }}>
@@ -5025,7 +5017,7 @@ function VocabularyTraining() {
             style={{
               background: 'rgba(255,255,255,0.95)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(99,102,241,0.10)',
+              border: '1px solid rgba(99,102,241,0.06)',
               boxShadow: '0 4px 20px rgba(99,102,241,0.06)',
               cursor: 'grab',
               userSelect: 'none',
@@ -5265,7 +5257,7 @@ if ('serviceWorker' in navigator) {
       // Send page version to SW for version-mismatch detection
       if (navigator.serviceWorker.controller) {
        var channel = new MessageChannel();
-     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v50' }, [channel.port2]);
+     navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION', version: 'v51' }, [channel.port2]);
        channel.port1.onmessage = function(e) {
           if (e.data && e.data.mismatch) { window.location.reload(); }
         };
