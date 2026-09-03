@@ -31,7 +31,7 @@
   window.fetch = function(input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     if (isLocal && typeof input === 'string' && url.indexOf('/models/') !== -1 && url.indexOf('v=') === -1) {
-      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=48';
+      input = input + (input.indexOf('?') !== -1 ? '&' : '?') + 'v=49';
       return origFetch.call(window, input, init);
     }
     if (!isLocal && url.indexOf('/models/') !== -1) {
@@ -2813,7 +2813,7 @@ function TabBar() {
 }
 
 function TTSPlayer(props) {
-  var text = props.text, color = props.color, label = props.label;
+  var text = props.text, color = props.color, label = props.label, compact = props.compact;
   var playCount = props.playCount || 1, onWordIndex = props.onWordIndex, words = props.words;
   var playingState = useState(false), playing = playingState[0], setPlaying = playingState[1];
   var loadingState = useState(false), loading = loadingState[0], setLoading = loadingState[1];
@@ -2893,24 +2893,38 @@ function TTSPlayer(props) {
 handlePlayRef.current = handlePlay;
  return (
     <div>
-      <button onClick={handlePlay} disabled={loading}
-        className="w-full rounded-xl py-4 px-5 flex items-center transition-all active:scale-[0.98]"
-        style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid ' + color + '20', boxShadow: '0 2px 12px ' + color + '08' }}>
-        <div className="flex items-center justify-center rounded-xl" style={{ width: 44, height: 44, background: 'linear-gradient(135deg, ' + color + ', ' + color + 'CC)', flexShrink: 0, boxShadow: '0 4px 12px ' + color + '40' }}>
-          {loading ? <Loader2 size={18} color="#FFFFFF" className="animate-spin" />
-            : playing ? <Square size={16} color="#FFFFFF" fill="#FFFFFF" />
-            : <Volume2 size={18} color="#FFFFFF" />}
-        </div>
-        <div className="flex-1 ml-3 text-left">
-          <div className="text-sm font-bold" style={{ color: '#1E293B' }}>
-            {loading ? '准备音频中...' : playing ? '正在播放' : (label || '播放听力原文')}
+      {compact ? (
+        <button onClick={handlePlay} disabled={loading}
+          className="inline-flex items-center rounded-lg transition-all active:scale-95"
+          style={{ padding: '4px 10px', background: playing ? color + '15' : color + '0A', border: '1px solid ' + color + '25' }}>
+          {loading ? <Loader2 size={14} color={color} className="animate-spin" />
+            : playing ? <Square size={13} color={color} fill={color} />
+            : <Volume2 size={14} color={color} />}
+          <span className="ml-1 text-xs font-medium" style={{ color: color, whiteSpace: 'nowrap' }}>
+            {loading ? '加载' : playing ? '停止' : (label || '播放')}
+          </span>
+          {playing && <div className="ml-1 rounded-full animate-rec-pulse" style={{ width: 4, height: 4, backgroundColor: color }} />}
+        </button>
+      ) : (
+        <button onClick={handlePlay} disabled={loading}
+          className="w-full rounded-xl py-4 px-5 flex items-center transition-all active:scale-[0.98]"
+          style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid ' + color + '20', boxShadow: '0 2px 12px ' + color + '08' }}>
+          <div className="flex items-center justify-center rounded-xl" style={{ width: 44, height: 44, background: 'linear-gradient(135deg, ' + color + ', ' + color + 'CC)', flexShrink: 0, boxShadow: '0 4px 12px ' + color + '40' }}>
+            {loading ? <Loader2 size={18} color="#FFFFFF" className="animate-spin" />
+              : playing ? <Square size={16} color="#FFFFFF" fill="#FFFFFF" />
+              : <Volume2 size={18} color="#FFFFFF" />}
           </div>
-          <div className="text-xs mt-0.5" style={{ color: '#64748B' }}>
-            {playing ? '第 ' + (playRound + 1) + ' / ' + playCount + ' 遍 · 点击停止' : '点击播放'}
+          <div className="flex-1 ml-3 text-left">
+            <div className="text-sm font-bold" style={{ color: '#1E293B' }}>
+              {loading ? '准备音频中...' : playing ? '正在播放' : (label || '播放听力原文')}
+            </div>
+            <div className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+              {playing ? '第 ' + (playRound + 1) + ' / ' + playCount + ' 遍 · 点击停止' : '点击播放'}
+            </div>
           </div>
-        </div>
-        {playing && <div className="rounded-full animate-rec-pulse" style={{ width: 6, height: 6, backgroundColor: color }} />}
-      </button>
+          {playing && <div className="rounded-full animate-rec-pulse" style={{ width: 6, height: 6, backgroundColor: color }} />}
+        </button>
+      )}
     </div>
   );
 }
@@ -3341,7 +3355,10 @@ var handleStopRecording = useCallback(async function() {
           {rType === 'read_aloud' && (
             <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.08)', boxShadow: '0 2px 8px rgba(99,102,241,0.03)' }}>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
+                <div className="flex items-center" style={{ gap: 8 }}>
+                  <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
+                  <TTSPlayer compact text={question.audio_script} color={config.color} label="标准朗读" playCount={1} words={passageWords} onWordIndex={setCurrentWordIndex} questionId={question.id} />
+                </div>
                 <button onClick={function(){navigate('/scoring-guide?type=read_aloud');}} className="text-xs font-medium" style={{ color: config.color }}>评分标准</button>
               </div>
               <p className="en-passage" style={{ color: "#334155", margin: '8px 0 0 0' }}>
@@ -3349,7 +3366,6 @@ var handleStopRecording = useCallback(async function() {
                   return <span key={idx} style={{ backgroundColor: idx === currentWordIndex ? config.color + '25' : 'transparent', borderRadius: 2, padding: '0 1px', transition: 'background-color 0.15s', display: 'inline-block' }}>{word} </span>;
                 })}
               </p>
-              <div className="mt-5"><TTSPlayer text={question.audio_script} color={config.color} label="播放标准朗读" playCount={1} words={passageWords} onWordIndex={setCurrentWordIndex} questionId={question.id} /></div>
             </div>
           )}
           {rType === 'listen_choose' && (
@@ -3974,11 +3990,11 @@ var handleSubmitExam = useCallback(async function() {
 
               {currentQuestion.type === 'read_aloud' && (
                 <div className="rounded-2xl p-6 mb-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(99,102,241,0.10)', boxShadow: '0 2px 12px rgba(99,102,241,0.04)' }}>
-                  <span className="text-slate-800 text-sm font-bold block mb-4">朗读以下短文</span>
-                  <p className="en-passage" style={{ color: "#334155", margin: '8px 0 0 0' }}>{currentQuestion.content.passage}</p>
-                  <div className="mt-5">
-                    <TTSPlayer text={currentQuestion.audio_script} color={currentSectionConfig.color} label="播放标准朗读" playCount={1} questionId={currentQuestion.id} />
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-slate-800 text-sm font-bold">朗读以下短文</span>
+                    <TTSPlayer compact text={currentQuestion.audio_script} color={currentSectionConfig.color} label="标准朗读" playCount={1} questionId={currentQuestion.id} />
                   </div>
+                  <p className="en-passage" style={{ color: "#334155", margin: '8px 0 0 0' }}>{currentQuestion.content.passage}</p>
                 </div>
               )}
 
