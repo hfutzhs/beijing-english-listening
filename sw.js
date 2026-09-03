@@ -1,6 +1,6 @@
-const CACHE_VERSION = 'beijing-english-v38';
+const CACHE_VERSION = 'beijing-english-v39';
 const AUDIO_CACHE = 'beijing-english-audio-v2';
-const PAGE_VERSION = 'v38';
+const PAGE_VERSION = 'v39';
 const APP_SHELL = [
   './',
   './index.html',
